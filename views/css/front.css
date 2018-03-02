@@ -1,0 +1,234 @@
+/**
+* 2007-2017 PrestaShop
+*
+* NOTICE OF LICENSE
+*
+* This source file is subject to the Academic Free License (AFL 3.0)
+* that is bundled with this package in the file LICENSE.txt.
+* It is also available through the world-wide-web at this URL:
+* http://opensource.org/licenses/afl-3.0.php
+* If you did not receive a copy of the license and are unable to
+* obtain it through the world-wide-web, please send an email
+* to license@prestashop.com so we can send you a copy immediately.
+*
+* DISCLAIMER
+*
+* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+* versions in the future. If you wish to customize PrestaShop for your
+* needs please refer to http://www.prestashop.com for more information.
+*
+*  @author    PrestaShop SA <contact@prestashop.com>
+*  @copyright 2007-2017 PrestaShop SA
+*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  International Registered Trademark & Property of PrestaShop SA
+*
+* Don't forget to prefix your containers with your own identifier
+* to avoid any conflicts with others containers.
+*/
+
+.pssocialfeed_hide {
+    display: none;
+}
+
+#pssocialfeed_block {
+    background: #fff;
+    border-radius: 2px;
+    margin-bottom: 1.5rem;
+    margin-top: 2.5rem;
+    padding: 3.125rem;
+}
+#pssocialfeed_block .custom_title {
+    text-align:center;
+    margin-bottom: 15px;
+}
+#pssocialfeed_block .desc {
+    color: #232323;
+    text-align: center;
+    margin-bottom: 40px;
+}
+.preload {
+    /*CSS transitions*/
+    -o-transition-property: none !important;
+    -moz-transition-property: none !important;
+    -ms-transition-property: none !important;
+    -webkit-transition-property: none !important;
+    transition-property: none !important;
+    /*CSS transforms*/
+    -o-transform: none !important;
+    -moz-transform: none !important;
+    -ms-transform: none !important;
+    -webkit-transform: none !important;
+    transform: none !important;
+    /*CSS animations*/
+    -webkit-animation: none !important;
+    -moz-animation: none !important;
+    -o-animation: none !important;
+    -ms-animation: none !important;
+    animation: none !important;
+}
+#pssocialfeed_block .insta-card {
+    transition: 0.3s;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+    padding-top: 100%;
+    margin-bottom: 30px;
+
+    /*-webkit-transform: scale(0.6);*/
+	/*transform: scale(0.6);*/
+	/*-webkit-animation: scaleUp 0.65s ease-in-out forwards;*/
+	/*animation: scaleUp 0.65s ease-in-out forwards;*/
+}
+@-webkit-keyframes scaleUp {
+	0% { }
+	100% { -webkit-transform: scale(1); opacity: 1; }
+}
+
+@keyframes scaleUp {
+	0% { }
+	100% { -webkit-transform: scale(1); transform: scale(1); opacity: 1; }
+}
+#pssocialfeed_block .insta-card:hover {
+    opacity: 0.5;
+}
+#pssocialfeed_block .insta-card-img {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+}
+#pssocialfeed_block .load-more {
+    text-align: center;
+}
+/* LIGHTBLOX */
+#pssocialfeed_block .lightbox {
+    position: fixed;
+    min-height: 500px;
+    top: 15%;
+    /* left: 20%; */
+    margin: auto;
+    width: 1000px;
+    background-color: white;
+    z-index: 99999;
+}
+/* LIGHTBOX CONTENT */
+#pssocialfeed_block .lightbox-content {
+    height: 500px;
+}
+/* LIGHTBOX CONTENT LEFT */
+#pssocialfeed_block .content-left {
+
+}
+
+#pssocialfeed_block .pssocialfeed-account-block-mobile{
+    padding: 10px;
+    display: none;
+}
+/* LIGHTBOX CONTENT RIGHT */
+#pssocialfeed_block .content-right {
+    padding: 20px;
+}
+
+#pssocialfeed_block .lightbox-img {
+    min-height: 500px;
+    background-position:center;
+    background-size:cover;
+}
+
+@media only screen and (max-width: 1200px) {
+    #pssocialfeed_block .lightbox {
+        left: 10%;
+        width: 80%;
+    }
+}
+@media only screen and (max-width: 991px) {
+    #pssocialfeed_block .lightbox {
+        left: 20%;
+        width: 60%;
+    }
+    #pssocialfeed_block .pssocialfeed-account-block-mobile {
+        display: block;
+    }
+    #pssocialfeed_block .pssocialfeed-account-block {
+        display: none;
+    }
+    #pssocialfeed_block .lightbox-content {
+        overflow-y: scroll;
+        height: 500px;
+    }
+    #pssocialfeed_block .lightbox-img {
+        min-height: 350px;
+    }
+}
+@media only screen and (max-width: 576px) {
+    #pssocialfeed_block .lightbox {
+        left: 10%;
+        width: 80%;
+    }
+}
+@media only screen and (max-width: 350px) {
+    #pssocialfeed_block .lightbox {
+        left: 5%;
+        width: 90%;
+    }
+}
+
+#pssocialfeed_block #overlay {
+    background-color: rgba(0,0,0,.8);
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 9999;
+}
+#pssocialfeed_block #close {
+    position: absolute;
+    font-size: 40px;
+    top: -30px;
+    right: 0;
+    color: white;
+    cursor: pointer;
+}
+
+#pssocialfeed_block .posted {
+    font-size: 14px;
+    color: #7a7a7a;
+}
+#pssocialfeed_block .author {
+    color: #232323;
+}
+#pssocialfeed_block .via {
+    font-size: 14px;
+    color: #7a7a7a;
+}
+#pssocialfeed_block .text {
+    display: -webkit-box;
+    margin-top: 20px;
+    max-height: 100px;
+    font-size: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: pre-line;
+}
+#pssocialfeed_block .custom-title {
+    text-align: center;
+}
+#pssocialfeed_block .product-image {
+    text-align: center;
+}
+#pssocialfeed_block .price {
+    font-size: 20px;
+    font-weight: bold;
+    color: #232323;
+    /*line-height: 35px;*/
+}
+#pssocialfeed_block .product-button {
+    /*text-align: right;*/
+}
+#pssocialfeed_block .product-name {
+    margin-top: 10px;
+    text-align: center;
+    /* height: 50px; */
+    max-height: 50px;
+}

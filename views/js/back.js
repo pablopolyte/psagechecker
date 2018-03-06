@@ -34,6 +34,17 @@ $(window).ready(function() {
         iso = 'en';
     }
 
+    $('#CB-OPACITY').bootstrapSlider();
+    $("#CB-OPACITY").on("slide", function(slideEvt) {
+        $(".cookiebanner-number").val(slideEvt.value);
+    });
+
+    $('.cookiebanner-number').bind('input', function() {
+        $('#CB-OPACITY').bootstrapSlider('setValue', $(this).val());
+    });
+
+
+
     tinySetup({
         editor_selector : "autoload_rte",
         plugins : 'code advlist autolink link lists charmap print textcolor colorpicker style',

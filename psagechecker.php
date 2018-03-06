@@ -32,13 +32,11 @@ class Psagechecker extends Module
 {
 
     private $settings_conf = array(
-        'show_album'                  => 'PS_INSTA_SHOW_ALBUM',
-        'album_custom_title'          => 'PS_INSTA_CUSTOM_TITLE',
-        'album_custom_title_color'    => 'PS_INSTA_TITLE_TEXT_COLOR',
-        'album_custom_title_size'     => 'PS_INSTA_TITLE_TEXT_SIZE',
-        'album_custom_desc'           => 'PS_INSTA_ALBUM_CUSTOM_DESC',
+        'show_popup'                  => 'PS_AGE_CHECKER_SHOW_POPUP',
+        'minimum_age'                 => 'PS_AGE_CHECKER_AGE_MINIMUM',
+        'verification_method'         => 'PS_AGE_CHECKER_VERIFICATION_METHOD',
+        'number_columns'              => 'PS_AGE_CHECKER_NUMBER_COLUMNS',
         'on_homepage'                 => 'PS_INSTA_ON_HOMEPAGE',
-        'number_columns'              => 'PS_INSTA_NUMBER_COLUMNS',
         'number_rows'                 => 'PS_INSTA_NUMBER_ROWS',
         'on_product_page'             => 'PS_INSTA_ON_PRODUCT_PAGE',
         'number_columns_product_page' => 'PS_INSTA_COLUMNS_PRODUCT',
@@ -217,6 +215,7 @@ class Psagechecker extends Module
             $this->css_path.'font-awesome.min.css',
             $this->css_path.'faq.css',
             $this->css_path.'menu.css',
+            $this->css_path.'bootstrap-slider.css',
             $this->css_path.'back.css',
             $this->css_path.'select2.min.css',
             $this->css_path.'select2-bootstrap.min.css',
@@ -231,6 +230,7 @@ class Psagechecker extends Module
             $this->js_path.'vue-paginate.min.js',
             $this->js_path.'faq.js',
             $this->js_path.'menu.js',
+            $this->js_path.'bootstrap-slider.js',
             $this->js_path.'back.js',
             $this->js_path.'sweetalert.min.js',
             $this->js_path.'select2.full.min.js',

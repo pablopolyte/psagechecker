@@ -49,6 +49,17 @@ class Psagechecker extends Module
         'custom_title_color'          => 'PS_INSTA_CUSTOM_TITLE_COLOR_BIS',
     );
 
+    public $fontsCss = array(
+        'https://fonts.googleapis.com/css?family=Roboto', // font-family: 'Roboto', sans-serif;
+        'https://fonts.googleapis.com/css?family=Hind', // font-family: 'Hind', sans-serif;
+        'https://fonts.googleapis.com/css?family=Maven+Pro', // font-family: 'Maven Pro', sans-serif;
+        'https://fonts.googleapis.com/css?family=Noto+Serif', // font-family: 'Noto Serif', serif;
+        'https://fonts.googleapis.com/css?family=Bitter', // font-family: 'Bitter', serif;
+        'https://fonts.googleapis.com/css?family=Forum', // font-family: 'Forum', serif;
+    );
+    public $fonts = array(1 => 'Roboto', 2 => 'Hind', 3 => 'Maven Pro', 4 => 'Noto Serif', 5 => 'Bitter', 6 => 'Forum');
+
+
     public function __construct()
     {
         // Settings
@@ -220,6 +231,7 @@ class Psagechecker extends Module
             $this->css_path.'select2.min.css',
             $this->css_path.'select2-bootstrap.min.css',
             $this->css_path.$this->name.'.css',
+            $this->fontsCss,
         );
 
         $this->context->controller->addCSS($css, 'all');
@@ -315,7 +327,7 @@ class Psagechecker extends Module
 
 
         // get current page
-        $currentPage = 'account';
+        $currentPage = 'conf';
         $page = Tools::getValue('page');
         if (!empty($page)) {
             $currentPage = Tools::getValue('page');
@@ -336,12 +348,6 @@ class Psagechecker extends Module
                     $this->context->smarty->assign($index, $tmp[$value]);
                 }
             } else {
-                $tmp[$value] = Configuration::get($value);
-                $this->context->smarty->assign($index, $tmp[$value]);
-            }
-        }
-        foreach ($this->settings_account as $index => $value) {
-            if ($value != 'PS_INSTA_TOKEN') {
                 $tmp[$value] = Configuration::get($value);
                 $this->context->smarty->assign($index, $tmp[$value]);
             }
@@ -373,6 +379,12 @@ class Psagechecker extends Module
             'ps_base_dir' => _PS_BASE_URL_,
             'ps_version' => _PS_VERSION_,
             'isPs17' => $this->ps_version,
+            'fonts' => $this->fonts,
+
+            'album_custom_desc' => 'test',
+            'PS_AGE_CHECKER_OPACITY' => 1,
+            'show_image' => 'test',
+            'CB_FONT_STYLE' => 'test',
         ));
 
         $this->output .= $this->context->smarty->fetch($this->local_path.'views/templates/admin/menu.tpl');

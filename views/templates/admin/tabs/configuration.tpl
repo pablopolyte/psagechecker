@@ -83,7 +83,7 @@
     </div>
     {* PS AGE CHECKER VERIFICATION METHOD *}
 
-    <div id="confirm_deny">
+    <div id="PS_AGE_CHECKER_SHOW_POPUP" class="hide">
         <h4>
             {l s='1/ Text settings'}
         </h4>
@@ -97,14 +97,11 @@
                 </div>
             </div>
             <div class="col-xs-6 col-sm-5 col-md-2 col-lg-1">
-                <select name="PS_AGE_CHECKER_NUMBER_COLUMNS">
-                    {*{foreach from=$cmspage item='page'}*}
-                        <option value="3" {if $number_columns eq 3}selected{/if}>3</option>
-                        <option value="4" {if $number_columns eq 4}selected{/if}>4</option>
-                        <option value="6" {if $number_columns eq 6}selected{/if}>6</option>
-                    {*{/foreach}*}
+                <select name="PS_AGE_CHECKER_FONTS">
+                    {foreach from=$fonts key='key' item='font'}
+                        <option style="font-family: '{$font|escape:'htmlall':'UTF-8'}'" value="{$font|escape:'htmlall':'UTF-8'}" {if $CB_FONT_STYLE eq $font}selected{/if}>{$font|escape:'htmlall':'UTF-8'}</option>
+                    {/foreach}
                 </select>
-                {*<input class="addons-number-fields addons-inline-block" required="required" value="{$number_columns|escape:'htmlall':'UTF-8'}" type="number" name="PS_AGE_CHECKER_NUMBER_COLUMNS">*}
             </div>
         </div>
         {* PS AGE CHECKER FONT *}

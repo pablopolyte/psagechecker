@@ -65,8 +65,8 @@
         </div>
         <div class="col-xs-12 col-sm-12 col-md-7 col-lg-3">
             <label>
-                <input type="radio" class="input_img" name="PS_AGE_CHECKER_VERIFICATION_METHOD" value="0" {if $show_popup eq 0}checked="checked"{/if}/>
-                <img src="{$img_path}birth.png">
+                <input type="radio" class="input_img js-show-all" name="PS_AGE_CHECKER_VERIFICATION_METHOD" value="0" {if $show_popup eq 0}checked="checked"{/if}/>
+                <img src="{$img_path}birth.png" width="150" height="150">
                 <div class="help-block">
                     <p>{l s='confirm/Deny buttons'}</p>
                 </div>
@@ -74,7 +74,7 @@
             </label>
             <label>
                 <input type="radio" class="input_img" name="PS_AGE_CHECKER_VERIFICATION_METHOD" value="1" {if $show_popup eq 1}checked="checked"{/if}/>
-                <img src="{$img_path}confirm.png">
+                <img src="{$img_path}confirm.png" width="150" height="150">
                 <div class="help-block">
                     <p>{l s='birth day check'}</p>
                 </div>
@@ -88,7 +88,7 @@
             {l s='1/ Text settings'}
         </h4>
         {* PS AGE CHECKER FONT *}
-        <div class="form-group">
+        <div class="form-group confirm_deny">
             <div class="col-xs-12 col-sm-12 col-md-5 col-lg-3">
                 <div class="text-right">
                     <label class="control-label">
@@ -229,7 +229,7 @@
             {if $languages|count > 1}
                 <div class="translatable-field lang-{$language.id_lang|escape:'htmlall':'UTF-8'}" {if $language.id_lang != $defaultFormLanguage}style="display:none"{/if}>
             {/if}
-            <div class="form-group">
+            <div class="form-group confirm_deny">
                 <div class="col-xs-12 col-sm-12 col-md-5 col-lg-3">
                     <div class="text-right">
                         <label class="control-label">
@@ -425,7 +425,7 @@
         {* PS AGE CHECKER CONFIRM BUTTON TXT COLOR *}
 
         {* PS AGE CHECKER DENY BUTTON BG COLOR *}
-        <div class="form-group">
+        <div class="form-group confirm_deny">
             <div class="col-xs-12 col-sm-12 col-md-5 col-lg-3">
                 <div class="text-right">
                     <label class="control-label">
@@ -442,7 +442,7 @@
         {* PS AGE CHECKER DENY BUTTON BG COLOR *}
 
         {* PS AGE CHECKER DENY BUTTON TXT COLOR *}
-        <div class="form-group">
+        <div class="form-group confirm_deny">
             <div class="col-xs-12 col-sm-12 col-md-5 col-lg-3">
                 <div class="text-right">
                     <label class="control-label">

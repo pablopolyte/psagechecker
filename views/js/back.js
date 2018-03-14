@@ -109,6 +109,14 @@ $(window).ready(function() {
         }
     });
 
+    $(document).on('click', '.input_img', function () {
+        if ($(this).hasClass('js-show-all')) {
+            $('.confirm_deny').slideDown();
+        } else {
+            $('.confirm_deny').slideUp();
+        }
+    });
+
     vImagePreselection = new Vue({
         el: '#image-preselection',
         delimiters: ["((","))"],

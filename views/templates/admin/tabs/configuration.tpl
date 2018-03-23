@@ -65,7 +65,7 @@
         </div>
         <div class="col-xs-12 col-sm-12 col-md-7 col-lg-3">
             <label>
-                <input type="radio" class="input_img js-show-all" name="PS_AGE_CHECKER_VERIFICATION_METHOD" value="0" {if $show_popup eq 0}checked="checked"{/if}/>
+                <input type="radio" class="input_img js-show-all" name="PS_AGE_CHECKER_VERIFICATION_METHOD" value="0" {if $verification_method eq 0}checked="checked"{/if}/>
                 <img src="{$img_path}birth.png" width="150" height="150">
                 <div class="help-block">
                     <p>{l s='confirm/Deny buttons'}</p>
@@ -73,7 +73,7 @@
 
             </label>
             <label>
-                <input type="radio" class="input_img" name="PS_AGE_CHECKER_VERIFICATION_METHOD" value="1" {if $show_popup eq 1}checked="checked"{/if}/>
+                <input type="radio" class="input_img" name="PS_AGE_CHECKER_VERIFICATION_METHOD" value="1" {if $verification_method eq 1}checked="checked"{/if}/>
                 <img src="{$img_path}confirm.png" width="150" height="150">
                 <div class="help-block">
                     <p>{l s='birth day check'}</p>
@@ -83,12 +83,12 @@
     </div>
     {* PS AGE CHECKER VERIFICATION METHOD *}
 
-    <div id="PS_AGE_CHECKER_SHOW_POPUP" class="hide">
+    <div id="PS_AGE_CHECKER_SHOW_POPUP" {if $show_popup eq 0}class="hide"{/if}>
         <h4>
             {l s='1/ Text settings'}
         </h4>
         {* PS AGE CHECKER FONT *}
-        <div class="form-group confirm_deny">
+        <div class="form-group">
             <div class="col-xs-12 col-sm-12 col-md-5 col-lg-3">
                 <div class="text-right">
                     <label class="control-label">
@@ -99,7 +99,7 @@
             <div class="col-xs-6 col-sm-5 col-md-2 col-lg-1">
                 <select name="PS_AGE_CHECKER_FONTS">
                     {foreach from=$fonts key='key' item='font'}
-                        <option style="font-family: '{$font|escape:'htmlall':'UTF-8'}'" value="{$font|escape:'htmlall':'UTF-8'}" {if $CB_FONT_STYLE eq $font}selected{/if}>{$font|escape:'htmlall':'UTF-8'}</option>
+                        <option style="font-family: '{$font|escape:'htmlall':'UTF-8'}'" value="{$font|escape:'htmlall':'UTF-8'}" {if $select_fonts eq $font}selected{/if}>{$font|escape:'htmlall':'UTF-8'}</option>
                     {/foreach}
                 </select>
             </div>
@@ -120,7 +120,7 @@
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-7 col-lg-6">
-                    <textarea class="autoload_rte" name="PS_AGE_CHECKER_CUSTOM_MSG_{$language.id_lang|escape:'htmlall':'UTF-8'}" text="" rows="4" cols="80">{$album_custom_desc[$language.id_lang]|escape:'htmlall':'UTF-8'}</textarea>
+                    <textarea class="autoload_rte" name="PS_AGE_CHECKER_CUSTOM_MSG_{$language.id_lang|escape:'htmlall':'UTF-8'}" text="" rows="4" cols="80">{$custom_msg[$language.id_lang]|escape:'htmlall':'UTF-8'}</textarea>
                 </div>
                 {if $languages|count > 1}
                     <div class="col-xs-12 col-sm-12 col-md-7 col-lg-3">
@@ -156,7 +156,7 @@
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-7 col-lg-6">
-                    <textarea class="autoload_rte" name="PS_AGE_CHECKER_DENY_MSG_{$language.id_lang|escape:'htmlall':'UTF-8'}" text="" rows="2" cols="80">{$album_custom_desc[$language.id_lang]|escape:'htmlall':'UTF-8'}</textarea>
+                    <textarea class="autoload_rte" name="PS_AGE_CHECKER_DENY_MSG_{$language.id_lang|escape:'htmlall':'UTF-8'}" text="" rows="2" cols="80">{$deny_msg[$language.id_lang]|escape:'htmlall':'UTF-8'}</textarea>
                     <div class="help-block">
                         <p>{l s='This message will appear if the minimum age is not acquired'}</p>
                     </div>
@@ -196,7 +196,7 @@
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-7 col-lg-2">
-                    <input class="" type="text" value="{if isset($custom_title)}{$custom_title[$language.id_lang]|escape:'htmlall':'UTF-8'}{/if}" name="PS_AGE_CHECKER_CONFIRM_BUTTON_TEXT_{$language.id_lang|escape:'htmlall':'UTF-8'}" placeholder="{l s='Title' mod='psagechecker'}">
+                    <input class="" type="text" value="{if isset($confirm_button_text)}{$confirm_button_text[$language.id_lang]|escape:'htmlall':'UTF-8'}{/if}" name="PS_AGE_CHECKER_CONFIRM_BUTTON_TEXT_{$language.id_lang|escape:'htmlall':'UTF-8'}" placeholder="{l s='Title' mod='psagechecker'}">
                     <div class="help-block">
                         <p>{l s='Character limit : X'}</p>
                     </div>
@@ -226,7 +226,7 @@
             {if $languages|count > 1}
                 <div class="translatable-field lang-{$language.id_lang|escape:'htmlall':'UTF-8'}" {if $language.id_lang != $defaultFormLanguage}style="display:none"{/if}>
             {/if}
-            <div class="form-group confirm_deny">
+            <div class="form-group confirm_deny ">
                 <div class="col-xs-12 col-sm-12 col-md-5 col-lg-3">
                     <div class="text-right">
                         <label class="control-label">
@@ -235,7 +235,7 @@
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-7 col-lg-2">
-                    <input class="" type="text" value="{if isset($custom_title)}{$custom_title[$language.id_lang]|escape:'htmlall':'UTF-8'}{/if}" name="PS_AGE_CHECKER_DENY_BUTTON_TEXT_{$language.id_lang|escape:'htmlall':'UTF-8'}" placeholder="{l s='Title' mod='psagechecker'}">
+                    <input class="" type="text" value="{if isset($deny_button_text)}{$deny_button_text[$language.id_lang]|escape:'htmlall':'UTF-8'}{/if}" name="PS_AGE_CHECKER_DENY_BUTTON_TEXT_{$language.id_lang|escape:'htmlall':'UTF-8'}" placeholder="{l s='Title' mod='psagechecker'}">
                     <div class="help-block">
                         <p>{l s='Character limit : X' mod='psagechecker'}</p>
                     </div>
@@ -274,7 +274,7 @@
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-7 col-lg-3">
-                <input class="addons-number-fields addons-inline-block" required="required" value="{$minimum_age|escape:'htmlall':'UTF-8'}" type="number" name="PS_AGE_CHECKER_POPUP_HEIGHT">
+                <input class="addons-number-fields addons-inline-block" required="required" value="{$popup_height|escape:'htmlall':'UTF-8'}" type="number" name="PS_AGE_CHECKER_POPUP_HEIGHT">
                 {l s='px'}
             </div>
         </div>
@@ -290,7 +290,7 @@
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-7 col-lg-3">
-                <input class="addons-number-fields addons-inline-block" required="required" value="{$minimum_age|escape:'htmlall':'UTF-8'}" type="number" name="PS_AGE_CHECKER_POPUP_WIDTH">
+                <input class="addons-number-fields addons-inline-block" required="required" value="{$popup_width|escape:'htmlall':'UTF-8'}" type="number" name="PS_AGE_CHECKER_POPUP_WIDTH">
                 {l s='px'}
             </div>
         </div>
@@ -307,7 +307,7 @@
             </div>
             <div class="col-xs-12 col-sm-12 col-md-7 col-lg-2">
                 <div class="input-group">
-                    <input type="text" data-hex="true" class="color mColorPickerInput mColorPicker" name="PS_AGE_CHECKER_BACKGROUND_COLOR" value="{if isset($album_custom_title_color)}{$album_custom_title_color|escape:'htmlall':'UTF-8'}{/if}" id="color_1" style="background-color:{if isset($album_custom_title_color)}{$album_custom_title_color|escape:'htmlall':'UTF-8'}{/if}; color: back;"><span style="cursor:pointer;" id="icp_color_1" class="mColorPickerTrigger input-group-addon" data-mcolorpicker="true"><img src="../img/admin/color.png" style="border:0;margin:0 0 0 3px" align="absmiddle"></span>
+                    <input type="text" data-hex="true" class="color mColorPickerInput mColorPicker" name="PS_AGE_CHECKER_BACKGROUND_COLOR" value="{if isset($background_color)}{$background_color|escape:'htmlall':'UTF-8'}{/if}" id="color_1" style="background-color:{if isset($background_color)}{$background_color|escape:'htmlall':'UTF-8'}{/if}; color: back;"><span style="cursor:pointer;" id="icp_color_1" class="mColorPickerTrigger input-group-addon" data-mcolorpicker="true"><img src="../img/admin/color.png" style="border:0;margin:0 0 0 3px" align="absmiddle"></span>
                 </div>
             </div>
         </div>
@@ -324,12 +324,12 @@
             </div>
             <div class="col-xs-12 col-sm-12 col-md-7 col-lg-3">
                 <div class="input-group">
-                    <input id="CB-OPACITY" name="CB-BG-OPACITY-SLIDER" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="{$PS_AGE_CHECKER_OPACITY|escape:'htmlall':'UTF-8'}"/>
+                    <input id="CB-OPACITY" name="CB-BG-OPACITY-SLIDER" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="{$opacity_slider|escape:'htmlall':'UTF-8'}"/>
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-5 col-lg-3">
                 <div class="input-group">
-                    <input class="cookiebanner-number" required="required" value="{$PS_AGE_CHECKER_OPACITY|escape:'htmlall':'UTF-8'}" type="number" name="PS_AGE_CHECKER_OPACITY" min="0" max="100">
+                    <input class="cookiebanner-number" required="required" value="{$opacity_slider|escape:'htmlall':'UTF-8'}" type="number" name="PS_AGE_CHECKER_OPACITY" min="0" max="100">
                 </div>
             </div>
         </div>
@@ -398,7 +398,7 @@
             </div>
             <div class="col-xs-12 col-sm-12 col-md-7 col-lg-2">
                 <div class="input-group">
-                    <input type="text" data-hex="true" class="color mColorPickerInput mColorPicker" name="PS_AGE_CHECKER_CONFIRM_BUTTON_BACKGROUND_COLOR" value="{if isset($album_custom_title_color)}{$album_custom_title_color|escape:'htmlall':'UTF-8'}{/if}" id="color_4" style="background-color:{if isset($album_custom_title_color)}{$album_custom_title_color|escape:'htmlall':'UTF-8'}{/if}; color: back;"><span style="cursor:pointer;" id="icp_color_4" class="mColorPickerTrigger input-group-addon" data-mcolorpicker="true"><img src="../img/admin/color.png" style="border:0;margin:0 0 0 3px" align="absmiddle"></span>
+                    <input type="text" data-hex="true" class="color mColorPickerInput mColorPicker" name="PS_AGE_CHECKER_CONFIRM_BUTTON_BACKGROUND_COLOR" value="{if isset($confirm_button_bground_color)}{$confirm_button_bground_color|escape:'htmlall':'UTF-8'}{/if}" id="color_4" style="background-color:{if isset($confirm_button_bground_color)}{$confirm_button_bground_color|escape:'htmlall':'UTF-8'}{/if}; color: back;"><span style="cursor:pointer;" id="icp_color_4" class="mColorPickerTrigger input-group-addon" data-mcolorpicker="true"><img src="../img/admin/color.png" style="border:0;margin:0 0 0 3px" align="absmiddle"></span>
                 </div>
             </div>
         </div>
@@ -415,7 +415,7 @@
             </div>
             <div class="col-xs-12 col-sm-12 col-md-7 col-lg-2">
                 <div class="input-group">
-                    <input type="text" data-hex="true" class="color mColorPickerInput mColorPicker" name="PS_AGE_CHECKER_CONFIRM_BUTTON_TXT_COLOR" value="{if isset($album_custom_title_color)}{$album_custom_title_color|escape:'htmlall':'UTF-8'}{/if}" id="color_2" style="background-color:{if isset($album_custom_title_color)}{$album_custom_title_color|escape:'htmlall':'UTF-8'}{/if}; color: back;"><span style="cursor:pointer;" id="icp_color_2" class="mColorPickerTrigger input-group-addon" data-mcolorpicker="true"><img src="../img/admin/color.png" style="border:0;margin:0 0 0 3px" align="absmiddle"></span>
+                    <input type="text" data-hex="true" class="color mColorPickerInput mColorPicker" name="PS_AGE_CHECKER_CONFIRM_BUTTON_TXT_COLOR" value="{if isset($confirm_button_text_color)}{$confirm_button_text_color|escape:'htmlall':'UTF-8'}{/if}" id="color_2" style="background-color:{if isset($confirm_button_text_color)}{$confirm_button_text_color|escape:'htmlall':'UTF-8'}{/if}; color: back;"><span style="cursor:pointer;" id="icp_color_2" class="mColorPickerTrigger input-group-addon" data-mcolorpicker="true"><img src="../img/admin/color.png" style="border:0;margin:0 0 0 3px" align="absmiddle"></span>
                 </div>
             </div>
         </div>
@@ -432,7 +432,7 @@
             </div>
             <div class="col-xs-12 col-sm-12 col-md-7 col-lg-2">
                 <div class="input-group">
-                    <input type="text" data-hex="true" class="color mColorPickerInput mColorPicker" name="PS_AGE_CHECKER_DENY_BUTTON_BACKGROUND_COLOR" value="{if isset($album_custom_title_color)}{$album_custom_title_color|escape:'htmlall':'UTF-8'}{/if}" id="color_3" style="background-color:{if isset($album_custom_title_color)}{$album_custom_title_color|escape:'htmlall':'UTF-8'}{/if}; color: back;"><span style="cursor:pointer;" id="icp_color_3" class="mColorPickerTrigger input-group-addon" data-mcolorpicker="true"><img src="../img/admin/color.png" style="border:0;margin:0 0 0 3px" align="absmiddle"></span>
+                    <input type="text" data-hex="true" class="color mColorPickerInput mColorPicker" name="PS_AGE_CHECKER_DENY_BUTTON_BACKGROUND_COLOR" value="{if isset($deny_button_bground_color)}{$deny_button_bground_color|escape:'htmlall':'UTF-8'}{/if}" id="color_3" style="background-color:{if isset($deny_button_bground_color)}{$deny_button_bground_color|escape:'htmlall':'UTF-8'}{/if}; color: back;"><span style="cursor:pointer;" id="icp_color_3" class="mColorPickerTrigger input-group-addon" data-mcolorpicker="true"><img src="../img/admin/color.png" style="border:0;margin:0 0 0 3px" align="absmiddle"></span>
                 </div>
             </div>
         </div>
@@ -449,20 +449,18 @@
             </div>
             <div class="col-xs-12 col-sm-12 col-md-7 col-lg-2">
                 <div class="input-group">
-                    <input type="text" data-hex="true" class="color mColorPickerInput mColorPicker" name="PS_AGE_CHECKER_DENY_BUTTON_TXT_COLOR" value="{if isset($album_custom_title_color)}{$album_custom_title_color|escape:'htmlall':'UTF-8'}{/if}" id="color_5" style="background-color:{if isset($album_custom_title_color)}{$album_custom_title_color|escape:'htmlall':'UTF-8'}{/if}; color: back;"><span style="cursor:pointer;" id="icp_color_5" class="mColorPickerTrigger input-group-addon" data-mcolorpicker="true"><img src="../img/admin/color.png" style="border:0;margin:0 0 0 3px" align="absmiddle"></span>
+                    <input type="text" data-hex="true" class="color mColorPickerInput mColorPicker" name="PS_AGE_CHECKER_DENY_BUTTON_TXT_COLOR" value="{if isset($deny_button_text_color)}{$deny_button_text_color|escape:'htmlall':'UTF-8'}{/if}" id="color_5" style="background-color:{if isset($deny_button_text_color)}{$deny_button_text_color|escape:'htmlall':'UTF-8'}{/if}; color: back;"><span style="cursor:pointer;" id="icp_color_5" class="mColorPickerTrigger input-group-addon" data-mcolorpicker="true"><img src="../img/admin/color.png" style="border:0;margin:0 0 0 3px" align="absmiddle"></span>
                 </div>
             </div>
         </div>
         {* PS AGE CHECKER DENY BUTTON TXT COLOR *}
-        
-        {* PS AGE CHECKER SUBMIT BUTTON *}
-        <div class="panel-footer">
-            <button type="submit" value="1" name="submitpsagecheckerModule" class="btn btn-default pull-right">
-                <i class="process-icon-save"></i> {l s='Save' mod='psagechecker'}
-            </button>
-        </div>
-        {* PS AGE CHECKER SUBMIT BUTTON *}
     </div>
-
+    {* PS AGE CHECKER SUBMIT BUTTON *}
+    <div class="panel-footer">
+        <button type="submit" value="1" name="submitpsagecheckerModule" class="btn btn-default pull-right">
+            <i class="process-icon-save"></i> {l s='Save' mod='psagechecker'}
+        </button>
+    </div>
+    {* PS AGE CHECKER SUBMIT BUTTON *}
 </div>
 </form>

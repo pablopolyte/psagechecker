@@ -36,17 +36,21 @@ class Psagechecker extends Module
         'minimum_age'                 => 'PS_AGE_CHECKER_AGE_MINIMUM',
         'verification_method'         => 'PS_AGE_CHECKER_VERIFICATION_METHOD',
         'number_columns'              => 'PS_AGE_CHECKER_NUMBER_COLUMNS',
-        'on_homepage'                 => 'PS_INSTA_ON_HOMEPAGE',
-        'number_rows'                 => 'PS_INSTA_NUMBER_ROWS',
-        'on_product_page'             => 'PS_INSTA_ON_PRODUCT_PAGE',
-        'number_columns_product_page' => 'PS_INSTA_COLUMNS_PRODUCT',
-        'number_rows_product_page'    => 'PS_INSTA_ROWS_PRODUCT',
-        'separated_cms'               => 'PS_INSTA_SEPARATED_CMS',
-        'cms'                         => 'PS_INSTA_CMS',
-        'max_product_sheets'          => 'PS_INSTA_MAXIMUM_PRODUCT_SHEETS',
-        'show_custom_title'           => 'PS_INSTA_SHOW_CUSTOM_TITLE_BIS',
-        'custom_title'                => 'PS_INSTA_CUSTOM_TITLE_BIS',
-        'custom_title_color'          => 'PS_INSTA_CUSTOM_TITLE_COLOR_BIS',
+        'select_fonts'                => 'PS_AGE_CHECKER_FONTS',
+        'custom_msg'                  => 'PS_AGE_CHECKER_CUSTOM_MSG',
+        'deny_msg'                    => 'PS_AGE_CHECKER_DENY_MSG',
+        'confirm_button_text'         => 'PS_AGE_CHECKER_CONFIRM_BUTTON_TEXT',
+        'deny_button_text'            => 'PS_AGE_CHECKER_DENY_BUTTON_TEXT',
+        'popup_height'                => 'PS_AGE_CHECKER_POPUP_HEIGHT',
+        'popup_width'                 => 'PS_AGE_CHECKER_POPUP_WIDTH',
+        'background_color'            => 'PS_AGE_CHECKER_BACKGROUND_COLOR',
+        'opacity_slider'              => 'PS_AGE_CHECKER_OPACITY',
+        'show_image'                  => 'PS_AGE_CHECKER_SHOW_IMAGE',
+        'image'                       => 'slide-image',
+        'confirm_button_bground_color'=> 'PS_AGE_CHECKER_CONFIRM_BUTTON_BACKGROUND_COLOR',
+        'confirm_button_text_color'   => 'PS_AGE_CHECKER_CONFIRM_BUTTON_TXT_COLOR',
+        'deny_button_bground_color'   => 'PS_AGE_CHECKER_DENY_BUTTON_BACKGROUND_COLOR',
+        'deny_button_text_color'      => 'PS_AGE_CHECKER_DENY_BUTTON_TXT_COLOR',
     );
 
     public $fontsCss = array(
@@ -106,9 +110,9 @@ class Psagechecker extends Module
     public function install()
     {
         // some stuff
-        Configuration::updateValue('PS_AGECHECKER_STATUS', 'no');
-        Configuration::updateValue('PS_AGECHECKER_AGE', '');
-        Configuration::updateValue('PS_AGECHECKER_MEthod', '0');
+        Configuration::updateValue('PS_AGE_CHECKER_STATUS', 'no');
+        Configuration::updateValue('PS_AGE_CHECKER_AGE', '');
+        Configuration::updateValue('PS_AGE_CHECKER_METHOD', '0');
 
         $values = array();
         $languages = Language::getLanguages(false);
@@ -342,7 +346,7 @@ class Psagechecker extends Module
         $tmp = array();
         $languages = Language::getLanguages(false);
         foreach ($this->settings_conf as $index => $value) {
-            if ($value === 'PS_INSTA_CUSTOM_TITLE' || $value === 'PS_INSTA_ALBUM_CUSTOM_DESC' || $value === 'PS_INSTA_CUSTOM_TITLE_BIS') {
+            if ($value === 'PS_AGE_CHECKER_CUSTOM_MSG' || $value === 'PS_AGE_CHECKER_DENY_MSG' || $value === 'PS_AGE_CHECKER_CONFIRM_BUTTON_TEXT' || $value === 'PS_AGE_CHECKER_DENY_BUTTON_TEXT') {
                 foreach ($languages as $lang) {
                     $tmp[$value][$lang['id_lang']] = Configuration::get($value, $lang['id_lang']);
                     $this->context->smarty->assign($index, $tmp[$value]);
@@ -392,48 +396,23 @@ class Psagechecker extends Module
         return $this->output;
     }
 
-    public function postProcess($apiCallback)
+    public function postProcess()
     {
-        // account form
-        if (Tools::isSubmit('submitAccount')) {
-            $errors = array();
-            $languages = Language::getLanguages(false);
-
-            $nbErrors = count($errors);
-            if ($nbErrors == 0) {
-                foreach ($this->settings_account as $value) {
-                    if ($value != 'access_token') {
-                        Configuration::updateValue($value, Tools::getValue($value));
-                    }
-                }
-                $this->output .= $this->displayConfirmation($this->l('Saved with success !'));
-            } else {
-                $this->output .= $this->displayError($errors);
-            }
-
-            $instagram = new Andreyco\Instagram\Client(array(
-                'apiKey'      => Configuration::get('PS_INSTA_ID'),
-                'apiSecret'   => Configuration::get('PS_INSTA_SECRET'),
-                'apiCallback' => $apiCallback,
-                'scope'       => array('public_content', 'basic'),
-            ));
-
-            Tools::redirect($instagram->getLoginUrl());
-        }
-
         // conf form
         if (Tools::isSubmit('submitpsagecheckerModule')) {
+
             $errors = array();
             $languages = Language::getLanguages(false);
 
-            $nbErrors = count($errors);
+            $nbErrors = 0;
             if ($nbErrors == 0) {
                 foreach ($this->settings_conf as $value) {
-                    if ($value === 'PS_INSTA_CUSTOM_TITLE' || $value === 'PS_INSTA_ALBUM_CUSTOM_DESC' || $value === 'PS_INSTA_CUSTOM_TITLE_BIS') {
+                    if ($value === 'PS_AGE_CHECKER_CUSTOM_MSG' || $value === 'PS_AGE_CHECKER_DENY_MSG' || $value === 'PS_AGE_CHECKER_CONFIRM_BUTTON_TEXT' || $value === 'PS_AGE_CHECKER_DENY_BUTTON_TEXT') {
                         $values = array();
                         foreach ($languages as $lang) {
                             $values[$value][$lang['id_lang']] = Tools::getValue($value.'_'.$lang['id_lang']);
                         }
+                        
                         Configuration::updateValue($value, $values[$value], true);
                         //p($values[$value]);
                     } else {

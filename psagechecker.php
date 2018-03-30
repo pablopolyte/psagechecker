@@ -157,10 +157,6 @@ class Psagechecker extends Module
             Configuration::deleteByName($value);
         }
 
-        foreach ($this->settings_account as $value) {
-            Configuration::deleteByName($value);
-        }
-
         include(dirname(__FILE__).'/sql/uninstall.php'); // sql querriers
 
         // unregister hook
@@ -430,48 +426,12 @@ class Psagechecker extends Module
 
     public function hookDisplayHome($params)
     {
-        if (Configuration::get('PS_INSTA_ON_HOMEPAGE')) {
+        //$currentCmsPage = Context::getContext()->controller->cms->id;
+        if (true) {
             $this->loadFrontAsset();
             $this->displayWall();
-            return $this->display(__FILE__, 'views/templates/hook/displayWall.tpl');
-        }
-    }
 
-    public function hookDisplayFooterProduct()
-    {
-        if (Configuration::get('PS_INSTA_ON_PRODUCT_PAGE')) {
-            $this->loadFrontAsset();
-            $this->displayWall();
-            $this->context->smarty->assign(array(
-                'row' => Configuration::get('PS_INSTA_ROWS_PRODUCT'),
-                'column' => Configuration::get('PS_INSTA_COLUMNS_PRODUCT'),
-            ));
             return $this->display(__FILE__, 'views/templates/hook/displayWall.tpl');
-        }
-    }
-
-    public function hookDisplayCMSDisputeInformation($params)
-    {
-        $currentCmsPage = Context::getContext()->controller->cms->id_cms;
-        if (Configuration::get('PS_INSTA_SEPARATED_CMS') && Configuration::get('PS_INSTA_CMS') == $currentCmsPage) {
-            $this->loadFrontAsset();
-            $this->displayWall();
-            return $this->display(__FILE__, 'views/templates/hook/displayWall.tpl');
-        }
-    }
-
-    public function hookHeader($params)
-    {
-        if ('cms' === $this->context->controller->php_self) {
-            $currentCmsPage = Context::getContext()->controller->cms->id;
-            if (Configuration::get('PS_INSTA_SEPARATED_CMS') && Configuration::get('PS_INSTA_CMS') == $currentCmsPage) {
-                $this->loadFrontAsset();
-                $this->displayWall();
-                $this->context->smarty->assign(array(
-                    'header' => 1,
-                ));
-                return $this->display(__FILE__, 'views/templates/hook/displayWall.tpl');
-            }
         }
     }
 

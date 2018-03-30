@@ -14,37 +14,6 @@
 -->
 
 <div id="pssocialfeed_block" class="preload">
-    {if $show_custom_title eq 1}
-    <h3 class="custom_title" style="color:{$custom_title_color};font-size:{$custom_title_font_size}px !important;">{$custom_title|escape:'htmlall':'UTF-8'}</h3>
-    {/if}
-    <div class="desc">{$desc nofilter}</div>
-    <div class="container">
-        <div class="grid">
-            <div v-if="column == 4" v-for="(image, index) in images" class="col-lg-3">
-                <div class="insta-card" @click="getInfoImage(index)">
-                    <div class="insta-card-img" :style="'background-position:center;background-size:cover;background-image:url('+image.url+')'"></div>
-                    <!-- <img class="insta-card-img" :src="image.url" style="width:100%;height:100%;"> -->
-                </div>
-            </div>
-            <div v-if="column == 3" v-for="(image, index) in images" class="col-lg-4">
-                <div class="insta-card" @click="getInfoImage(index)">
-                    <div class="insta-card-img" :style="'background-position:center;background-size:cover;background-image:url('+image.url+')'"></div>
-                    <!-- <img class="insta-card-img" :src="image.url" style="width:100%;height:100%;"> -->
-                </div>
-            </div>
-            <div v-if="column == 6" v-for="(image, index) in images" class="col-lg-2">
-                <div class="insta-card" @click="getInfoImage(index)">
-                    <div class="insta-card-img" :style="'background-position:center;background-size:cover;background-image:url('+image.url+')'"></div>
-                    <!-- <img class="insta-card-img" :src="image.url" style="width:100%;height:100%;"> -->
-                </div>
-            </div>
-        </div>
-    </div>
-    <div v-if="images" class="load-more">
-        <button v-if="noMoreResults === false" class="btn btn-primary" @click="loadMore(currentItems)">{l s='Load more' mod='pssocialfeed'}</button>
-        <!-- <button v-if="noMoreResults" class="btn btn-primary">{l s='No more results' mod='pssocialfeed'}</button> -->
-    </div>
-
     <div id="pssocialfeed-lightbox" class="lightbox pssocialfeed_hide">
         <div class="lightbox-content">
             <div style="height:100%">

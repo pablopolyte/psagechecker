@@ -26,6 +26,18 @@
 * to avoid any conflicts with others containers.
 */
 
+.deny_msg_age_verify{
+    text-align:center;
+    width: 230px;
+    margin: auto;
+    margin-top: 20px;
+}
+
+.age_verify_input{
+    margin-top: 20px;
+    text-align:center;
+}
+
 .logo_age_verify{
     margin-top: 20px;
     text-align:center;
@@ -37,8 +49,10 @@
 }
 
 .custom_msg_age_verify{
-    margin-top: 25px;
-    text-align:center; 
+    text-align:center;
+    width: 230px;
+    margin: auto;
+    margin-top: 20px;
 }
 
 .age_verify_buttons{

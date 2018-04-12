@@ -26,9 +26,22 @@
                 <div class="custom_msg_age_verify">
                     {$custom_msg nofilter}
                 </div>
-                <div class="age_verify_buttons">
-                    <button class="btn btn_deny" >{$deny_button|escape:'htmlall':'UTF-8'}</button>
-                    <button class="btn btn_confirm" >{$confirm_button|escape:'htmlall':'UTF-8'}</button>
+                {if $method == 0}
+                    <div class="age_verify_buttons">
+                        <button class="btn btn_deny" >{$deny_button|escape:'htmlall':'UTF-8'}</button>
+                        <button class="btn btn_confirm" >{$confirm_button|escape:'htmlall':'UTF-8'}</button>
+                    </div>
+                {else}
+                    <div class="age_verify_input">
+                        <input type="text" name="day" size="2" placeholder="DD">
+                        <input type="text" name="month" size="2" placeholder="MM">
+                        <input type="text" name="year" size="4" placeholder="YYYY">
+                        <br /><br />
+                        <button class="btn btn_confirm" >{$confirm_button|escape:'htmlall':'UTF-8'}</button>
+                    </div>
+                {/if}
+                <div class="deny_msg_age_verify">
+                    {$deny_msg nofilter}
                 </div>
             </div>
         </div>

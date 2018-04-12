@@ -25,6 +25,22 @@
 * Don't forget to prefix your containers with your own identifier
 * to avoid any conflicts with others containers.
 */
+.day{
+    width: 75px;
+    float: left;
+}
+
+.month{
+    width: 75px;
+    float: left;
+    margin-left: 5px;
+}
+
+.year{
+    width: 97px;
+    float: left;
+    margin-left: 5px;
+}
 
 .psagechecker-hide {
     display: none;
@@ -38,6 +54,8 @@
 }
 
 .age_verify_input{
+    margin: auto;
+    width:260px;
     margin-top: 20px;
     text-align:center;
 }

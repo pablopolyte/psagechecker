@@ -27,27 +27,37 @@
 */
 
 $(window).ready(function() {
-
-    if (header) {
-        $('#pssocialfeed_block').appendTo('#center_column');
+    var d = new Date();
+    d.setMonth(d.getMonth() + 1);
+    var c = getCookie('psagechecker');
+    if (c.length != 0)
+    {
+        $("#pssocialfeed_block").addClass('psagechecker-hide');
     }
-
-    $(document).on('click', '#overlay, #close', function (e) {
-        $("#overlay, #pssocialfeed-lightbox").addClass('pssocialfeed_hide');
-    });
-
-
     $(document).on('click', '#deny_button', function (e) {
         $(".deny_msg_age_verify").removeClass('psagechecker-hide');
         $(".blockAgeVerify").addClass('psagechecker-hide');
     });
 
-    $(document).on('click', '#submitAge', function (e) {
-        var day = $("#day");
-        var month = $("#month");
-        var year = $("#year");
+    $(document).on('click', '#confirm_button', function (e) {
+        setCookie("psagechecker", "on", d);
+        $("#pssocialfeed_block").addClass('psagechecker-hide');
+    });
 
-        console.log(getAge(year+'/'+month+'/'+day))
+    $(document).on('click', '#submitAge', function (event) {
+        event.preventDefault();
+        var day = $("#day").val();
+        var month = $("#month").val();
+        var year = $("#year").val();
+        var age = getAge(year+'/'+month+'/'+day);
+
+        if ( age < age_required) {
+            $(".deny_msg_age_verify").removeClass('psagechecker-hide');
+            $(".blockAgeVerify").addClass('psagechecker-hide');
+        } else {
+            setCookie("psagechecker", "on", d);
+            $("#pssocialfeed_block").addClass('psagechecker-hide');
+        }
     });
 
     function getAge(dateString) {
@@ -70,4 +80,23 @@ $(window).ready(function() {
             return string;
         }
     };
+
+    //function getCookie
+    function getCookie(cname) {
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') c = c.substring(1);
+            if (c.indexOf(name) != -1) return c.substring(name.length, c.length);
+        }
+        return "";
+    }
+
+    //function setcookie
+    function setCookie(cname, cvalue, exdays) {
+        document.cookie = cname + "=" + cvalue +"expire=" + exdays + "; path=/";
+        //$.cookie( cname, cvalue, { path: '/', expires: 30 });
+    }
+
 });

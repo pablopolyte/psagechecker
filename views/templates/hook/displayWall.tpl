@@ -30,13 +30,13 @@
                     {if $method == 0}
                         <div class="age_verify_buttons">
                             <button id="deny_button" class="btn btn_deny" >{$deny_button|escape:'htmlall':'UTF-8'}</button>
-                            <button class="btn btn_confirm" >{$confirm_button|escape:'htmlall':'UTF-8'}</button>
+                            <button id="confirm_button" class="btn btn_confirm" >{$confirm_button|escape:'htmlall':'UTF-8'}</button>
                         </div>
                     {else}
                         <div class="age_verify_input">
-                            <input id="day" type="text" name="day" size="2" placeholder="DD">
-                            <input id="month" type="text" name="month" size="2" placeholder="MM">
-                            <input id="year" type="text" name="year" size="4" placeholder="YYYY">
+                            <input id="day" class="form-control day" type="number" name="day" placeholder="DD" size="2" min="1" max="31" required>
+                            <input id="month" class="form-control month" type="number" name="month" size="2" placeholder="MM" min="1" max="12" required>
+                            <input id="year" class="form-control year" type="number" name="year" placeholder="YYYY" min="1940"required>
                             <br /><br />
                             <button id="submitAge" class="btn btn_confirm" >{$confirm_button|escape:'htmlall':'UTF-8'}</button>
                         </div>
@@ -75,5 +75,6 @@
     var row = "{/literal}{$row|escape:'htmlall':'UTF-8'}{literal}";
     var column = "{/literal}{$column|escape:'htmlall':'UTF-8'}{literal}";
     var base_url = "{/literal}{$base_url|escape:'htmlall':'UTF-8'}{literal}";
+    var age_required = "{/literal}{$age_required|escape:'htmlall':'UTF-8'}{literal}";
 </script>
 {/literal}

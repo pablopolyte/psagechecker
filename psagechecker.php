@@ -439,7 +439,22 @@ class Psagechecker extends Module
     {
         $id_lang = Context::getContext()->language->id;
 
+        $ps_url = 'http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'/img/';
+
         $this->context->smarty->assign(array(
+            'popup_width' => Configuration::get('PS_AGE_CHECKER_POPUP_WIDTH'),
+            'popup_height' => Configuration::get('PS_AGE_CHECKER_POPUP_HEIGHT'),
+            'deny_txt_color' => Configuration::get('PS_AGE_CHECKER_DENY_BUTTON_TXT_COLOR'),
+            'confirm_txt_color' => Configuration::get('PS_AGE_CHECKER_CONFIRM_BUTTON_TXT_COLOR'),
+            'deny_bg_color' => Configuration::get('PS_AGE_CHECKER_DENY_BUTTON_BACKGROUND_COLOR'),
+            'confirm_bg_color' => Configuration::get('PS_AGE_CHECKER_CONFIRM_BUTTON_BACKGROUND_COLOR'),
+            'font_family' => Configuration::get('PS_AGE_CHECKER_FONTS'),
+            'popup_bg_color' => Configuration::get('PS_AGE_CHECKER_BACKGROUND_COLOR'),
+            'custom_msg' => Configuration::get('PS_AGE_CHECKER_CUSTOM_MSG', $id_lang),
+            'deny_msg' => Configuration::get('PS_AGE_CHECKER_DENY_MSG', $id_lang),
+            'confirm_button' => Configuration::get('PS_AGE_CHECKER_CONFIRM_BUTTON_TEXT', $id_lang),
+            'deny_button' => Configuration::get('PS_AGE_CHECKER_DENY_BUTTON_TEXT', $id_lang),
+            'ps_url' => $ps_url,
             'show_custom_title' => Configuration::get('PS_INSTA_SHOW_ALBUM'),
             'custom_title' => Configuration::get('PS_INSTA_CUSTOM_TITLE', $id_lang),
             'custom_title_font_size' => Configuration::get('PS_INSTA_TITLE_TEXT_SIZE'),
@@ -484,6 +499,7 @@ class Psagechecker extends Module
             $this->context->controller->addCSS($this->css_path.'front.css');
             $this->context->controller->addJS($this->js_path.'vue.min.js');
             $this->context->controller->addJS($this->js_path.'front.js');
+            $this->context->controller->addJS($this->js_path.'bootstrap-slider.js');
         }
     }
 
@@ -492,25 +508,23 @@ class Psagechecker extends Module
     {
         if (version_compare(_PS_VERSION_, '1.7.0.0') >= 0) {
             $current_page = $this->context->controller->php_self;
-            $currentCmsPage = 0;
-            if ($current_page == 'cms') {
-                $currentCmsPage = Context::getContext()->controller->cms->id_cms;
-            }
 
-            if ((Configuration::get('PS_INSTA_ON_PRODUCT_PAGE') && $current_page == 'product') ||
-                (Configuration::get('PS_INSTA_SEPARATED_CMS') && Configuration::get('PS_INSTA_CMS') == $currentCmsPage) ||
-                (Configuration::get('PS_INSTA_ON_HOMEPAGE') && $current_page == 'index')) {
+            if (($current_page == 'index')) {
                 $this->context->controller->registerStylesheet(
-                    'pssocialmedia-front-css',
+                    'psageverifymedia-front-css',
                     'modules/'.$this->name.'/views/css/front.css'
                 );
                 $this->context->controller->registerJavascript(
-                    'pssocialmedia-vue-js',
+                    'psageverifymedia-vue-js',
                     'modules/'.$this->name.'/views/js/vue.min.js'
                 );
                 $this->context->controller->registerJavascript(
-                    'pssocialmedia-front-js',
+                    'psageverifymedia-front-js',
                     'modules/'.$this->name.'/views/js/front.js'
+                );
+                $this->context->controller->registerJavascript(
+                    'psageverifymedia-bootstrap-slider-js',
+                    'modules/'.$this->name.'/views/js/bootstrap-slider.js'
                 );
             }
         }

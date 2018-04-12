@@ -26,8 +26,28 @@
 * to avoid any conflicts with others containers.
 */
 
+.logo_age_verify{
+    margin-top: 20px;
+    text-align:center;
+}
+
+.age_verify{
+    margin-top: 25px;
+    text-align:center; 
+}
+
+.custom_msg_age_verify{
+    margin-top: 25px;
+    text-align:center; 
+}
+
+.age_verify_buttons{
+    margin-top: 25px;
+    text-align:center; 
+}
+
 .pssocialfeed_hide {
-    display: none;
+    display: block;
 }
 
 #pssocialfeed_block {
@@ -103,9 +123,11 @@
 /* LIGHTBLOX */
 #pssocialfeed_block .lightbox {
     position: fixed;
-    min-height: 500px;
+    min-width: 400px;
+    min-height: 300px;
     top: 15%;
-    /* left: 20%; */
+    left : 0;
+    right : 0;
     margin: auto;
     width: 1000px;
     background-color: white;

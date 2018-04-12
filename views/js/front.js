@@ -32,11 +32,36 @@ $(window).ready(function() {
         $('#pssocialfeed_block').appendTo('#center_column');
     }
 
-
-
     $(document).on('click', '#overlay, #close', function (e) {
         $("#overlay, #pssocialfeed-lightbox").addClass('pssocialfeed_hide');
     });
+
+
+    $(document).on('click', '#deny_button', function (e) {
+        $(".deny_msg_age_verify").removeClass('psagechecker-hide');
+        $(".blockAgeVerify").addClass('psagechecker-hide');
+    });
+
+    $(document).on('click', '#submitAge', function (e) {
+        var day = $("#day");
+        var month = $("#month");
+        var year = $("#year");
+
+        console.log(getAge(year+'/'+month+'/'+day))
+    });
+
+    function getAge(dateString) {
+        var today = new Date();
+        var birthDate = new Date(dateString);
+        var age = today.getFullYear() - birthDate.getFullYear();
+        var m = today.getMonth() - birthDate.getMonth();
+
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+
+        return age;
+    }
 
     function truncate(string){
         if (string.length > 35) {

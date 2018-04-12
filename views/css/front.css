@@ -26,6 +26,10 @@
 * to avoid any conflicts with others containers.
 */
 
+.psagechecker-hide {
+    display: none;
+}
+
 .deny_msg_age_verify{
     text-align:center;
     width: 230px;

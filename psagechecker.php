@@ -442,6 +442,7 @@ class Psagechecker extends Module
         $ps_url = 'http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'/img/';
 
         $this->context->smarty->assign(array(
+            'display_popup' => Configuration::get('PS_AGE_CHECKER_SHOW_POPUP'),
             'age_required' => Configuration::get('PS_AGE_CHECKER_AGE_MINIMUM'),
             'method' => Configuration::get('PS_AGE_CHECKER_VERIFICATION_METHOD'),
             'popup_width' => Configuration::get('PS_AGE_CHECKER_POPUP_WIDTH'),

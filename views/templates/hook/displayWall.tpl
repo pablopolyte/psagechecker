@@ -76,5 +76,7 @@
     var column = "{/literal}{$column|escape:'htmlall':'UTF-8'}{literal}";
     var base_url = "{/literal}{$base_url|escape:'htmlall':'UTF-8'}{literal}";
     var age_required = "{/literal}{$age_required|escape:'htmlall':'UTF-8'}{literal}";
+    var display_popup = "{/literal}{$display_popup|escape:'htmlall':'UTF-8'}{literal}";
+    
 </script>
 {/literal}

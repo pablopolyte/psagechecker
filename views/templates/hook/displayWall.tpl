@@ -18,10 +18,12 @@
         <div class="lightbox-content">
             <div style="height:100%">
                 <div class="logo_age_verify">
-                    <img src="{{$ps_url}}logo.png" height="50px"/><br />
+                    {if $show_img == 1}
+                        <img src="{{$base_url}}/{{$img_upload}}" /><br />
+                    {/if}
                 </div>
                 <div class="age_verify">
-                    {l s='Age Verification' mod='psagechecker'}
+                    {$custom_tit nofilter}
                 </div>
                 <div class="blockAgeVerify">
                     <div class="custom_msg_age_verify">

@@ -12,7 +12,7 @@
 * @license   http://addons.prestashop.com/en/content/12-terms-and-conditions-of-use
 * International Registered Trademark & Property of PrestaShop SA
 *}
-<form method="post" action="{$moduleAdminLink|escape:'htmlall':'UTF-8'}&page=conf" class="form-horizontal">
+<form method="post" action="{$moduleAdminLink|escape:'htmlall':'UTF-8'}&page=conf" class="form-horizontal" enctype="multipart/form-data">
 
 <div class="panel col-lg-10 right-panel">
     <h3>
@@ -105,6 +105,42 @@
             </div>
         </div>
         {* PS AGE CHECKER FONT *}
+
+        {* PS AGE CHECKER CUSTOM TITLE *}
+        {foreach from=$languages item=language}
+            {if $languages|count > 1}
+                <div class="translatable-field lang-{$language.id_lang|escape:'htmlall':'UTF-8'}" {if $language.id_lang != $defaultFormLanguage}style="display:none"{/if}>
+            {/if}
+            <div class="form-group">
+                <div class="col-xs-12 col-sm-12 col-md-5 col-lg-3">
+                    <div class="text-right">
+                        <label  class="control-label">
+                                {l s='Custom title' mod='psagechecker'}
+                        </label>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-7 col-lg-6">
+                    <textarea class="autoload_rte" name="PS_AGE_CHECKER_CUSTOM_TITLE_{$language.id_lang|escape:'htmlall':'UTF-8'}" text="" rows="4" cols="80">{$custom_title[$language.id_lang]|escape:'htmlall':'UTF-8'}</textarea>
+                </div>
+                {if $languages|count > 1}
+                    <div class="col-xs-12 col-sm-12 col-md-7 col-lg-3">
+                        <button type="button" class="btn btn-default dropdown-toggle" tabindex="-1" data-toggle="dropdown">
+                            {$language.iso_code|escape:'htmlall':'UTF-8'}
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            {foreach from=$languages item=lang}
+                            <li><a class="currentLang" data-id="{$lang.id_lang|escape:'htmlall':'UTF-8'}" href="javascript:hideOtherLanguage({$lang.id_lang|escape:'javascript'});" tabindex="-1">{$lang.name|escape:'htmlall':'UTF-8'}</a></li>
+                            {/foreach}
+                        </ul>
+                    </div>
+                {/if}
+            </div>
+            {if $languages|count > 1}
+                </div>
+            {/if}
+        {/foreach}
+        {* PS AGE CHECKER CUSTOM TITLE *}
 
         {* PS AGE CHECKER CUSTOM MESSAGE *}
         {foreach from=$languages item=language}
@@ -369,17 +405,17 @@
                             <i class="icon-file"></i>
                         </span>
                     </label>
-                    <input type="text" class="slide_url" value="{if isset($slide)}{$slide->image[$language.id_lang]|escape:'htmlall':'UTF-8'}{/if}" name="slide-image-{$language.id_lang|escape:'htmlall':'UTF-8'}" class="form-control" readonly>
+                    <input type="text" class="slide_url" value="{if isset($slide)}{$slide->image|escape:'htmlall':'UTF-8'}{/if}" name="slide-image" class="form-control" readonly>
                     <label class="input-group-btn">
                         <span class="btn btn-default">
-                            <i class="icon-folder-open"></i> {l s='Choose a file' mod='pshomeslider'}<input id="slide_image" class="slide_image" data-preview="image-preview-{$language.id_lang|escape:'htmlall':'UTF-8'}" type="file" name="image-{$language.id_lang|escape:'htmlall':'UTF-8'}" style="display: none;">
+                            <i class="icon-folder-open"></i> {l s='Choose a file' mod='psagechecker'}<input type="file" id="slide_image" class="slide_image" data-preview="image-preview" name="image" style="display: none;">
                         </span>
                     </label>
                 </div>
                 {if isset($slide)}
-                    <img id="image-preview-{$language.id_lang|escape:'htmlall':'UTF-8'}" class="img-thumbnail" src="{$baseUrl|escape:'htmlall':'UTF-8'}{$slide->image[$language.id_lang]|escape:'htmlall':'UTF-8'}" alt="" />
+                    <img id="image-preview" class="img-thumbnail" src="{$baseUrl|escape:'htmlall':'UTF-8'}{$slide->image}" alt="" />
                 {else}
-                    <img id="image-preview-{$language.id_lang|escape:'htmlall':'UTF-8'}" class="img-thumbnail hide" src="" alt=""/>
+                    <img id="image-preview" class="img-thumbnail hide" src="" alt=""/>
                 {/if}
 
 

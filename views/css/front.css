@@ -65,6 +65,10 @@
     text-align:center;
 }
 
+.logo_age_verify img{
+    height: 90px;
+}
+
 .age_verify{
     margin-top: 25px;
     text-align:center; 

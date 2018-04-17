@@ -29,8 +29,9 @@
 $(window).ready(function() {
     var d = new Date();
     d.setMonth(d.getMonth() + 1);
+
     var c = getCookie('psagechecker');
-    if (c.length != 0)
+    if (c.length != 0 || display_popup == "0")
     {
         $("#pssocialfeed_block").addClass('psagechecker-hide');
     }

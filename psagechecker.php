@@ -37,6 +37,7 @@ class Psagechecker extends Module
         'verification_method'         => 'PS_AGE_CHECKER_VERIFICATION_METHOD',
         'number_columns'              => 'PS_AGE_CHECKER_NUMBER_COLUMNS',
         'select_fonts'                => 'PS_AGE_CHECKER_FONTS',
+        'custom_title'                => 'PS_AGE_CHECKER_CUSTOM_TITLE',
         'custom_msg'                  => 'PS_AGE_CHECKER_CUSTOM_MSG',
         'deny_msg'                    => 'PS_AGE_CHECKER_DENY_MSG',
         'confirm_button_text'         => 'PS_AGE_CHECKER_CONFIRM_BUTTON_TEXT',
@@ -95,6 +96,9 @@ class Psagechecker extends Module
         $this->docs_path = $this->_path.'docs/';
         $this->logo_path = $this->_path.'logo.png';
         $this->module_path = $this->_path;
+        $this->slides_path = dirname(__FILE__).'/img/';
+		$this->slides_url = 'modules/'.$this->name.'/img/';
+
 
         // Confirm uninstall
         $this->confirmUninstall = $this->l('Are you sure you want to uninstall this module?');
@@ -125,8 +129,6 @@ class Psagechecker extends Module
         Configuration::updateValue('PS_INSTA_ALBUM_CUSTOM_DESC', $values['PS_INSTA_ALBUM_CUSTOM_DESC']);
         Configuration::updateValue('PS_INSTA_CUSTOM_TITLE_BIS', $values['PS_INSTA_CUSTOM_TITLE_BIS']);
 
-        include(dirname(__FILE__).'/sql/install.php'); // sql querries
-
         // register hook used by the module
         if (parent::install() &&
             $this->installTab() &&
@@ -156,8 +158,6 @@ class Psagechecker extends Module
         foreach ($this->settings_conf as $value) {
             Configuration::deleteByName($value);
         }
-
-        include(dirname(__FILE__).'/sql/uninstall.php'); // sql querriers
 
         // unregister hook
         if (parent::uninstall() &&
@@ -288,21 +288,6 @@ class Psagechecker extends Module
         $this->loadAsset();
         $this->postProcess($apiCallback);
 
-        $code = Tools::getValue('code');
-        if (!empty($code)) {
-            $instagram = new Andreyco\Instagram\Client(array(
-                'apiKey'      => Configuration::get('PS_INSTA_ID'),
-                'apiSecret'   => Configuration::get('PS_INSTA_SECRET'),
-                'apiCallback' => $apiCallback,
-            ));
-
-            $data = $instagram->getOAuthToken($code);
-
-            Configuration::updateValue('PS_INSTA_TOKEN', $data->access_token);
-
-            $this->output .= $this->displayConfirmation($this->l('Saved with success !'));
-        }
-
         // some stuff useful in smarty
         $context = Context::getContext();
         $id_lang = $this->context->language->id;
@@ -333,16 +318,10 @@ class Psagechecker extends Module
             $currentPage = Tools::getValue('page');
         }
 
-        $CMS = CMS::getCMSPages($id_lang, null, true, $id_shop);
-        $cmsConfPage = Context::getContext()->link->getAdminLink('AdminCmsContent');
-
-        $params = array('addproduct');
-        $productPage = Context::getContext()->link->getAdminLink('AdminProducts', true);
-
         $tmp = array();
         $languages = Language::getLanguages(false);
         foreach ($this->settings_conf as $index => $value) {
-            if ($value === 'PS_AGE_CHECKER_CUSTOM_MSG' || $value === 'PS_AGE_CHECKER_DENY_MSG' || $value === 'PS_AGE_CHECKER_CONFIRM_BUTTON_TEXT' || $value === 'PS_AGE_CHECKER_DENY_BUTTON_TEXT') {
+            if ($value === 'PS_AGE_CHECKER_CUSTOM_TITLE' || $value === 'PS_AGE_CHECKER_CUSTOM_MSG' || $value === 'PS_AGE_CHECKER_DENY_MSG' || $value === 'PS_AGE_CHECKER_CONFIRM_BUTTON_TEXT' || $value === 'PS_AGE_CHECKER_DENY_BUTTON_TEXT') {
                 foreach ($languages as $lang) {
                     $tmp[$value][$lang['id_lang']] = Configuration::get($value, $lang['id_lang']);
                     $this->context->smarty->assign($index, $tmp[$value]);
@@ -365,15 +344,12 @@ class Psagechecker extends Module
             'apifaq' => $faq,
             'doc' => $doc,
             'tuto' => $tuto,
-            'cmspage' => $CMS,
-            'cmsConfPage' => $cmsConfPage,
             'module_display' => $this->displayName,
             'module_path' => $this->module_path,
             'logo_path' => $this->logo_path,
             'img_path' => $this->img_path,
             'languages' => $this->context->controller->getLanguages(),
             'defaultFormLanguage' => (int) $this->context->employee->id_lang,
-            'productPage' => $productPage,
             'currentPage' => $currentPage,
             'products' => $this->getProducts(),
             'ps_base_dir' => _PS_BASE_URL_,
@@ -383,7 +359,6 @@ class Psagechecker extends Module
 
             'album_custom_desc' => 'test',
             'PS_AGE_CHECKER_OPACITY' => 1,
-            'show_image' => 'test',
             'CB_FONT_STYLE' => 'test',
         ));
 
@@ -403,7 +378,7 @@ class Psagechecker extends Module
             $nbErrors = 0;
             if ($nbErrors == 0) {
                 foreach ($this->settings_conf as $value) {
-                    if ($value === 'PS_AGE_CHECKER_CUSTOM_MSG' || $value === 'PS_AGE_CHECKER_DENY_MSG' || $value === 'PS_AGE_CHECKER_CONFIRM_BUTTON_TEXT' || $value === 'PS_AGE_CHECKER_DENY_BUTTON_TEXT') {
+                    if ($value === 'PS_AGE_CHECKER_CUSTOM_TITLE' || $value === 'PS_AGE_CHECKER_CUSTOM_MSG' || $value === 'PS_AGE_CHECKER_DENY_MSG' || $value === 'PS_AGE_CHECKER_CONFIRM_BUTTON_TEXT' || $value === 'PS_AGE_CHECKER_DENY_BUTTON_TEXT') {
                         $values = array();
                         foreach ($languages as $lang) {
                             $values[$value][$lang['id_lang']] = Tools::getValue($value.'_'.$lang['id_lang']);
@@ -420,7 +395,35 @@ class Psagechecker extends Module
             } else {
                 $this->output .= $this->displayError($errors);
             }
-            //$errors[] = $this->l('Gift card validity period is required');
+            //dump($_FILES);
+            if (empty($_FILES['image']['name'] && $_FILES['image']['size'])) {
+                $errors[] = $this->l('You need to upload an image before saving the slide').' ('.$lang['iso_code'].')';
+            } elseif (empty(Tools::getValue('slide-image'))) {
+                $errors[] = $this->l('You need to upload an image before saving the slide').' ('.$lang['iso_code'].')';
+            }else{
+                $filename = str_replace(' ', '', $_FILES['image']['name']);
+                $type = Tools::strtolower(Tools::substr(strrchr($filename, '.'), 1));
+                $imagesize = @getimagesize($_FILES['image']['tmp_name']);
+                if (isset($_FILES['image']) &&
+                    isset($_FILES['image']['tmp_name']) &&
+                    !empty($_FILES['image']['tmp_name']) &&
+                    !empty($imagesize) &&
+                    in_array(Tools::strtolower(Tools::substr(strrchr($imagesize['mime'], '/'), 1)), array('jpg','gif','jpeg','png')) &&
+                    in_array($type, array('jpg', 'gif', 'jpeg', 'png'))
+                ) {
+                    if ($error = ImageManager::validateUpload($_FILES['image'])) {
+                        $errors[] = $error;
+                    } elseif (!move_uploaded_file($_FILES['image']['tmp_name'], $this->slides_path.$filename)) {
+                        $errors[] = $this->l('Error on upload.');
+                    }
+                    Configuration::updateValue('PS_AGE_CHECKER_IMG', $filename);
+                    //dump($this->slides_url.$salt.'_'.$filename);
+                } else {
+                    if (!empty($_FILES['image']['tmp_name'])) {
+                        $errors[] = $this->l('Only .jpg .gif .jpeg .png formats are allowed');
+                    }
+                }
+            }
         }
     }
 
@@ -438,10 +441,11 @@ class Psagechecker extends Module
     public function displayWall()
     {
         $id_lang = Context::getContext()->language->id;
-
-        $ps_url = 'http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'/img/';
+        $img = $this->slides_url .'/'. Configuration::get('PS_AGE_CHECKER_IMG');
 
         $this->context->smarty->assign(array(
+            'show_img' => Configuration::get('PS_AGE_CHECKER_SHOW_IMAGE'),
+            'img_upload' => $img,
             'display_popup' => Configuration::get('PS_AGE_CHECKER_SHOW_POPUP'),
             'age_required' => Configuration::get('PS_AGE_CHECKER_AGE_MINIMUM'),
             'method' => Configuration::get('PS_AGE_CHECKER_VERIFICATION_METHOD'),
@@ -453,11 +457,11 @@ class Psagechecker extends Module
             'confirm_bg_color' => Configuration::get('PS_AGE_CHECKER_CONFIRM_BUTTON_BACKGROUND_COLOR'),
             'font_family' => Configuration::get('PS_AGE_CHECKER_FONTS'),
             'popup_bg_color' => Configuration::get('PS_AGE_CHECKER_BACKGROUND_COLOR'),
+            'custom_tit' => Configuration::get('PS_AGE_CHECKER_CUSTOM_TITLE', $id_lang),
             'custom_msg' => Configuration::get('PS_AGE_CHECKER_CUSTOM_MSG', $id_lang),
             'deny_msg' => Configuration::get('PS_AGE_CHECKER_DENY_MSG', $id_lang),
             'confirm_button' => Configuration::get('PS_AGE_CHECKER_CONFIRM_BUTTON_TEXT', $id_lang),
             'deny_button' => Configuration::get('PS_AGE_CHECKER_DENY_BUTTON_TEXT', $id_lang),
-            'ps_url' => $ps_url,
             'show_custom_title' => Configuration::get('PS_INSTA_SHOW_ALBUM'),
             'custom_title' => Configuration::get('PS_INSTA_CUSTOM_TITLE', $id_lang),
             'custom_title_font_size' => Configuration::get('PS_INSTA_TITLE_TEXT_SIZE'),

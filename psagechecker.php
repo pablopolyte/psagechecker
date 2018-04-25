@@ -243,6 +243,7 @@ class Psagechecker extends Module
             $this->js_path.'vue-paginate.min.js',
             $this->js_path.'faq.js',
             $this->js_path.'menu.js',
+            $this->js_path.'bootstrap-slider.js',
             $this->js_path.'back.js',
             $this->js_path.'sweetalert.min.js',
             $this->js_path.'select2.full.min.js',
@@ -372,7 +373,6 @@ class Psagechecker extends Module
         if (Tools::isSubmit('submitpsagecheckerModule')) {
             $errors = array();
             $languages = Language::getLanguages(false);
-
             $nbErrors = 0;
             if ($nbErrors == 0) {
                 foreach ($this->settings_conf as $value) {
@@ -388,7 +388,6 @@ class Psagechecker extends Module
                         Configuration::updateValue($value, Tools::getValue($value));
                     }
                 }
-                //die('-');
                 $this->output .= $this->displayConfirmation($this->l('Saved with success !'));
             } else {
                 $this->output .= $this->displayError($errors);
@@ -419,6 +418,11 @@ class Psagechecker extends Module
                     if (!empty($_FILES['image']['tmp_name'])) {
                         $errors[] = $this->l('Only .jpg .gif .jpeg .png formats are allowed');
                     }
+                }
+                if (empty($errors)) {
+                    $this->output .= $this->displayConfirmation($this->l('Saved with success !'));
+                } else {
+                    $this->output .= $this->displayError($errors);
                 }
             }
         }
@@ -486,6 +490,7 @@ class Psagechecker extends Module
             $this->context->controller->addCSS($this->css_path.'front.css');
             $this->context->controller->addJS($this->js_path.'vue.min.js');
             $this->context->controller->addJS($this->js_path.'front.js');
+            $this->context->controller->addJS($this->js_path.'bootstrap-slider.js');
         }
     }
 
@@ -507,6 +512,10 @@ class Psagechecker extends Module
                 $this->context->controller->registerJavascript(
                     'psageverifymedia-front-js',
                     'modules/'.$this->name.'/views/js/front.js'
+                );
+                $this->context->controller->registerJavascript(
+                    'psageverifymedia-bootstrap-slider-js',
+                    'modules/'.$this->name.'/views/js/bootstrap-slider.js'
                 );
             }
         }

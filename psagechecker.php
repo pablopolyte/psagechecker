@@ -74,7 +74,7 @@ class Psagechecker extends Module
         $this->author = 'PrestaShop';
         $this->need_instance = 0;
 
-        $this->module_key = '';
+        $this->module_key = 'eed93aa31215a587fa9f9584f6f9105a';
 
         $this->controller_name = 'AdminAjaxpsagechecker';
 

@@ -349,21 +349,21 @@ $(window).ready(function() {
     }
 
     $(document).on('change', '.slide_image', function (e) {
-        console.log('change');
+
         readURL(this, $(this).attr('data-preview'));
     });
     function readURL(input, id) {
         if (input.files && input.files[0]) {
-            console.log('here');
+
             var reader = new FileReader();
-            console.log(reader);
+ 
             reader.onload = function (e) {
                 if ($('#'+id).hasClass('hide')) {
                     $('#'+id).removeClass('hide');
                 }
                 $('#'+id).attr('src', e.target.result);
             }
-            console.log(input.files);
+
             reader.readAsDataURL(input.files[0]);
             $(".slide_url").attr('value', input.files[0].name);
         }

@@ -1,6 +1,6 @@
 /*!
  * Vue.js v2.5.8
- * (c) 2014-2017 Evan You
+ * (c) 2014-2018 Evan You
  * Released under the MIT License.
  */
 (function (global, factory) {
@@ -238,7 +238,7 @@ function toObject (arr) {
 /**
  * Perform no operation.
  * Stubbing args to make Flow happy without leaving useless transpiled code
- * with ...rest (https://flow.org/blog/2017/05/07/Strict-Function-Call-Arity/)
+ * with ...rest (https://flow.org/blog/2018/05/07/Strict-Function-Call-Arity/)
  */
 function noop (a, b, c) {}
 

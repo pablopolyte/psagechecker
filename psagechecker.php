@@ -1,6 +1,6 @@
 <?php
 /**
-* 2007-2017 PrestaShop
+* 2007-2018 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2017 PrestaShop SA
+*  @copyright 2007-2018 PrestaShop SA
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -97,7 +97,7 @@ class Psagechecker extends Module
         $this->logo_path = $this->_path.'logo.png';
         $this->module_path = $this->_path;
         $this->slides_path = dirname(__FILE__).'/img/';
-		$this->slides_url = 'modules/'.$this->name.'/img/';
+        $this->slides_url = 'modules/'.$this->name.'/img/';
 
         // Confirm uninstall
         $this->confirmUninstall = $this->l('Are you sure you want to uninstall this module?');
@@ -243,7 +243,6 @@ class Psagechecker extends Module
             $this->js_path.'vue-paginate.min.js',
             $this->js_path.'faq.js',
             $this->js_path.'menu.js',
-            $this->js_path.'bootstrap-slider.js',
             $this->js_path.'back.js',
             $this->js_path.'sweetalert.min.js',
             $this->js_path.'select2.full.min.js',
@@ -352,7 +351,6 @@ class Psagechecker extends Module
             'languages' => $this->context->controller->getLanguages(),
             'defaultFormLanguage' => (int) $this->context->employee->id_lang,
             'currentPage' => $currentPage,
-            'products' => $this->getProducts(),
             'ps_base_dir' => _PS_BASE_URL_,
             'ps_version' => _PS_VERSION_,
             'isPs17' => $this->ps_version,
@@ -372,7 +370,6 @@ class Psagechecker extends Module
     {
         // conf form
         if (Tools::isSubmit('submitpsagecheckerModule')) {
-
             $errors = array();
             $languages = Language::getLanguages(false);
 
@@ -384,7 +381,7 @@ class Psagechecker extends Module
                         foreach ($languages as $lang) {
                             $values[$value][$lang['id_lang']] = Tools::getValue($value.'_'.$lang['id_lang']);
                         }
-                        
+
                         Configuration::updateValue($value, $values[$value], true);
                         //p($values[$value]);
                     } else {
@@ -396,7 +393,7 @@ class Psagechecker extends Module
             } else {
                 $this->output .= $this->displayError($errors);
             }
-            //dump($_FILES);
+
             if (empty($_FILES['image']['name'] && $_FILES['image']['size'])) {
                 $errors[] = $this->l('You need to upload an image before saving the slide').' ('.$lang['iso_code'].')';
             } elseif (empty(Tools::getValue('slide-image'))) {
@@ -418,7 +415,6 @@ class Psagechecker extends Module
                         $errors[] = $this->l('Error on upload.');
                     }
                     Configuration::updateValue('PS_AGE_CHECKER_IMG', $filename);
-                    //dump($this->slides_url.$salt.'_'.$filename);
                 } else {
                     if (!empty($_FILES['image']['tmp_name'])) {
                         $errors[] = $this->l('Only .jpg .gif .jpeg .png formats are allowed');
@@ -483,27 +479,6 @@ class Psagechecker extends Module
         ));
     }
 
-    public function getProducts()
-    {
-        $id_lang = (int)Context::getContext()->language->id;
-        $link = new Link();
-
-        $products = Product::getProducts($id_lang, 0, 'all', 'name', 'ASC');
-
-        $select2list = array();
-        foreach ($products as $product) {
-            $cover = Product::getCover($product['id_product']);
-            $productCover = $link->getImageLink($product['name'], $product['id_product'].'-'.$cover['id_image']);
-            array_push($select2list, array(
-                'id_product' => $product['id_product'],
-                'productName' => $product['name'],
-                'imgUrl' => $productCover
-            ));
-        }
-
-        return $select2list;
-    }
-
     // load css and js in front -> ps16 only
     public function loadFrontAsset()
     {
@@ -511,7 +486,6 @@ class Psagechecker extends Module
             $this->context->controller->addCSS($this->css_path.'front.css');
             $this->context->controller->addJS($this->js_path.'vue.min.js');
             $this->context->controller->addJS($this->js_path.'front.js');
-            $this->context->controller->addJS($this->js_path.'bootstrap-slider.js');
         }
     }
 
@@ -533,10 +507,6 @@ class Psagechecker extends Module
                 $this->context->controller->registerJavascript(
                     'psageverifymedia-front-js',
                     'modules/'.$this->name.'/views/js/front.js'
-                );
-                $this->context->controller->registerJavascript(
-                    'psageverifymedia-bootstrap-slider-js',
-                    'modules/'.$this->name.'/views/js/bootstrap-slider.js'
                 );
             }
         }

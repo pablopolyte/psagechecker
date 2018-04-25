@@ -1,5 +1,5 @@
 {*
-* 2007-2017 PrestaShop
+* 2007-2018 PrestaShop
 *
 * DISCLAIMER
 *
@@ -8,7 +8,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 * @author    PrestaShop SA <contact@prestashop.com>
-* @copyright 2007-2017 PrestaShop SA
+* @copyright 2007-2018 PrestaShop SA
 * @license   http://addons.prestashop.com/en/content/12-terms-and-conditions-of-use
 * International Registered Trademark & Property of PrestaShop SA
 *}
@@ -68,7 +68,7 @@
                 <input type="radio" class="input_img js-show-all" name="PS_AGE_CHECKER_VERIFICATION_METHOD" value="0" {if $verification_method eq 0}checked="checked"{/if}/>
                 <img src="{$img_path}birth.png" width="150" height="150">
                 <div class="help-block">
-                    <p>{l s='confirm/Deny buttons'}</p>
+                    <p>{l s='confirm/Deny buttons' mod='psagechecker'}</p>
                 </div>
 
             </label>
@@ -76,7 +76,7 @@
                 <input type="radio" class="input_img" name="PS_AGE_CHECKER_VERIFICATION_METHOD" value="1" {if $verification_method eq 1}checked="checked"{/if}/>
                 <img src="{$img_path}confirm.png" width="150" height="150">
                 <div class="help-block">
-                    <p>{l s='birth date check'}</p>
+                    <p>{l s='birth date check' mod='psagechecker'}</p>
                 </div>
             </label>
         </div>
@@ -85,7 +85,7 @@
 
     <div id="PS_AGE_CHECKER_SHOW_POPUP" {if $show_popup eq 0}class="hide"{/if}>
         <h4>
-            {l s='1/ Text settings'}
+            {l s='1/ Text settings' mod='psagechecker'}
         </h4>
         {* PS AGE CHECKER FONT *}
         <div class="form-group">
@@ -194,7 +194,7 @@
                 <div class="col-xs-12 col-sm-12 col-md-7 col-lg-6">
                     <textarea class="autoload_rte" name="PS_AGE_CHECKER_DENY_MSG_{$language.id_lang|escape:'htmlall':'UTF-8'}" text="" rows="2" cols="80">{$deny_msg[$language.id_lang]|escape:'htmlall':'UTF-8'}</textarea>
                     <div class="help-block">
-                        <p>{l s='This message will appear if the minimum age is not acquired'}</p>
+                        <p>{l s='This message will appear if the minimum age is not acquired' mod='psagechecker'}</p>
                     </div>
                 </div>
                 {if $languages|count > 1}
@@ -234,7 +234,7 @@
                 <div class="col-xs-12 col-sm-12 col-md-7 col-lg-2">
                     <input class="" type="text" value="{if isset($confirm_button_text)}{$confirm_button_text[$language.id_lang]|escape:'htmlall':'UTF-8'}{/if}" name="PS_AGE_CHECKER_CONFIRM_BUTTON_TEXT_{$language.id_lang|escape:'htmlall':'UTF-8'}" placeholder="{l s='Title' mod='psagechecker'}">
                     <div class="help-block">
-                        <p>{l s='Character limit : 20'}</p>
+                        <p>{l s='Character limit : 20' mod='psagechecker'}</p>
                     </div>
                 </div>
                 {if $languages|count > 1}
@@ -297,7 +297,7 @@
         {* PS AGE CHECHER DENY BUTTON *}
 
         <h4>
-            {l s='2/ Design setup'}
+            {l s='2/ Design setup' mod='psagechecker'}
         </h4>
 
         {* PS AGE CHECKER POP UP HEIGHT *}
@@ -311,7 +311,7 @@
             </div>
             <div class="col-xs-12 col-sm-12 col-md-7 col-lg-3">
                 <input class="addons-number-fields addons-inline-block" required="required" value="{$popup_height|escape:'htmlall':'UTF-8'}" type="number" name="PS_AGE_CHECKER_POPUP_HEIGHT">
-                {l s='px'}
+                {l s='px' mod='psagechecker'}
             </div>
         </div>
         {* PS AGE CHECKER POP UP HEIGHT *}
@@ -327,7 +327,7 @@
             </div>
             <div class="col-xs-12 col-sm-12 col-md-7 col-lg-3">
                 <input class="addons-number-fields addons-inline-block" required="required" value="{$popup_width|escape:'htmlall':'UTF-8'}" type="number" name="PS_AGE_CHECKER_POPUP_WIDTH">
-                {l s='px'}
+                {l s='px' mod='psagechecker'}
             </div>
         </div>
         {* PS AGE CHECKER POP UP WIDTH *}

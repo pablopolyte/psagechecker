@@ -85,8 +85,8 @@ class Psagechecker extends Module
 
         $this->output = '';
 
-        $this->displayName = $this->l('Psagechecker - Check customer age');
-        $this->description = $this->l('This module allows you to ...');
+        $this->displayName = $this->l('Age Verification Popup');
+        $this->description = $this->l('This module allows you to check your visitors age by displaying an age verification popup as soon as they reach your store');
         $this->ps_version = (bool)version_compare(_PS_VERSION_, '1.7', '>=');
 
         // Settings paths
@@ -98,7 +98,6 @@ class Psagechecker extends Module
         $this->module_path = $this->_path;
         $this->slides_path = dirname(__FILE__).'/img/';
 		$this->slides_url = 'modules/'.$this->name.'/img/';
-
 
         // Confirm uninstall
         $this->confirmUninstall = $this->l('Are you sure you want to uninstall this module?');
@@ -114,9 +113,12 @@ class Psagechecker extends Module
     public function install()
     {
         // some stuff
-        Configuration::updateValue('PS_AGE_CHECKER_STATUS', 'no');
-        Configuration::updateValue('PS_AGE_CHECKER_AGE', '');
+        Configuration::updateValue('PS_AGE_CHECKER_SHOW_POPUP', '0');
+        Configuration::updateValue('PS_AGE_CHECKER_AGE_MINIMUM', '18');
         Configuration::updateValue('PS_AGE_CHECKER_METHOD', '0');
+        Configuration::updateValue('PS_AGE_CHECKER_POPUP_HEIGHT', '500');
+        Configuration::updateValue('PS_AGE_CHECKER_POPUP_WIDTH', '1000');
+        Configuration::updateValue('PS_AGE_CHECKER_OPACITY', '0');
 
         $values = array();
         $languages = Language::getLanguages(false);
@@ -136,7 +138,6 @@ class Psagechecker extends Module
             $this->registerHook('displayFooterProduct')) {
             if (version_compare(_PS_VERSION_, '1.7', '>=')) {
                 $this->registerHook('actionFrontControllerSetMedia');
-                $this->registerHook('displayCMSDisputeInformation');
             } else {
                 $this->registerHook('header');
             }
@@ -400,7 +401,7 @@ class Psagechecker extends Module
                 $errors[] = $this->l('You need to upload an image before saving the slide').' ('.$lang['iso_code'].')';
             } elseif (empty(Tools::getValue('slide-image'))) {
                 $errors[] = $this->l('You need to upload an image before saving the slide').' ('.$lang['iso_code'].')';
-            }else{
+            } else {
                 $filename = str_replace(' ', '', $_FILES['image']['name']);
                 $type = Tools::strtolower(Tools::substr(strrchr($filename, '.'), 1));
                 $imagesize = @getimagesize($_FILES['image']['tmp_name']);
@@ -429,8 +430,8 @@ class Psagechecker extends Module
 
     public function hookDisplayHome($params)
     {
-        //$currentCmsPage = Context::getContext()->controller->cms->id;
-        if (true) {
+        $actif = Configuration::get('PS_AGE_CHECKER_SHOW_POPUP');
+        if ($actif != 0) {
             $this->loadFrontAsset();
             $this->displayWall();
 
@@ -440,10 +441,14 @@ class Psagechecker extends Module
 
     public function displayWall()
     {
+        $shop = new Shop((int)$this->context->shop->id);
         $id_lang = Context::getContext()->language->id;
         $img = $this->slides_url .'/'. Configuration::get('PS_AGE_CHECKER_IMG');
-
+        /*if (validate::isCleanHtml(Configuration::get('PS_AGE_CHECKER_CUSTOM_TITLE', $id_lang))) {
+            $assign = 'custom_tit' => Configuration::get('PS_AGE_CHECKER_CUSTOM_TITLE', $id_lang);
+        }*/
         $this->context->smarty->assign(array(
+            'opacity' => Configuration::get('PS_AGE_CHECKER_OPACITY')/100,
             'show_img' => Configuration::get('PS_AGE_CHECKER_SHOW_IMAGE'),
             'img_upload' => $img,
             'display_popup' => Configuration::get('PS_AGE_CHECKER_SHOW_POPUP'),
@@ -473,7 +478,7 @@ class Psagechecker extends Module
             'number_columns' => Configuration::get('PS_INSTA_NUMBER_COLUMNS'),
             'row' => Configuration::get('PS_INSTA_NUMBER_ROWS'),
             'column' => Configuration::get('PS_INSTA_NUMBER_COLUMNS'),
-            'base_url' => Tools::getHttpHost(true),
+            'base_url' => $shop->getBaseURL(),
             'header' => 0,
         ));
     }

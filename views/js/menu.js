@@ -36,7 +36,7 @@ $(window).ready(function() {
                 if (ps_version) { // if on 1.7
                     window.history.pushState({} , '', moduleAdminLink+'&page='+item );
                 } else { // if on 1.6
-                    window.history.pushState({} , '', moduleAdminLink+'&configure=pssocialfeed&module_name=pssocialfeed&page='+item );
+                    window.history.pushState({} , '', moduleAdminLink+'&configure=psagechecker&module_name=psagechecker&page='+item );
                 }
             },
             isActive : function(item){

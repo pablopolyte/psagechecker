@@ -28,7 +28,6 @@
         <div class="col-lg-2">
             <div class="list-group" v-on:click.prevent>
                 <a href="#" class="list-group-item" v-bind:class="{ 'active': isActive('conf') }" v-on:click="makeActive('conf')"><i class="fa fa-picture-o"></i> {l s='Configuration' mod='psagechecker'}</a>
-                <a href="#" class="list-group-item" v-bind:class="{ 'active': isActive('manager') }" v-on:click="makeActive('manager')"><i class="fa fa-cogs"></i> {l s='Image manager' mod='psagechecker'}</a>
                 {if ($apifaq != '')}
                     <a href="#" class="list-group-item" v-bind:class="{ 'active': isActive('faq') }" v-on:click="makeActive('faq')"><i class="fa fa-question-circle"></i> {l s='Help' mod='psagechecker'}</a>
                 {/if}
@@ -41,10 +40,6 @@
 
     <div id="conf" class="giftcards_menu addons-hide">
         {include file="./tabs/configuration.tpl"}
-    </div>
-
-    <div id="manager" class="giftcards_menu addons-hide">
-        {include file="./tabs/imageManager.tpl"}
     </div>
 
     <div id="faq" class="giftcards_menu addons-hide">

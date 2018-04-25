@@ -13,8 +13,8 @@
 * International Registered Trademark & Property of PrestaShop SA
 -->
 
-<div id="pssocialfeed_block" class="preload">
-    <div id="pssocialfeed-lightbox" class="lightbox pssocialfeed_hide">
+<div id="psagechecker_block" class="preload psagechecker-hide">
+    <div id="psagechecker-lightbox" class="lightbox">
         <div class="lightbox-content">
             <div style="height:100%">
                 <div class="logo_age_verify">
@@ -50,7 +50,7 @@
             </div>
         </div>
     </div>
-    <div id="overlay" class="pssocialfeed_hide"></div>
+    <div id="overlay" class="psagechecker-hide"></div>
 
 </div>
 <style>
@@ -66,9 +66,18 @@
         background-color: {$confirm_bg_color|escape:'htmlall':'UTF-8'} !important;
         color: {$confirm_txt_color|escape:'htmlall':'UTF-8'} !important;
     }
-    #pssocialfeed_block .lightbox{
-        width : {$popup_width|escape:'htmlall':'UTF-8'}px !important;
+    #psagechecker_block .lightbox{
+        width : {$popup_width|escape:'htmlall':'UTF-8'}px ;
         height : {$popup_height|escape:'htmlall':'UTF-8'}px !important;
+    }
+    #psagechecker_block #overlay {
+        background-color: rgba(0,0,0,{$opacity|escape:'htmlall':'UTF-8'});
+        height: 100%;
+        left: 0;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 9999;
     }
 </style>
 {literal}
@@ -79,6 +88,6 @@
     var base_url = "{/literal}{$base_url|escape:'htmlall':'UTF-8'}{literal}";
     var age_required = "{/literal}{$age_required|escape:'htmlall':'UTF-8'}{literal}";
     var display_popup = "{/literal}{$display_popup|escape:'htmlall':'UTF-8'}{literal}";
-    
+
 </script>
 {/literal}

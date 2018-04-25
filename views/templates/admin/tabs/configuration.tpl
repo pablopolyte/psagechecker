@@ -76,7 +76,7 @@
                 <input type="radio" class="input_img" name="PS_AGE_CHECKER_VERIFICATION_METHOD" value="1" {if $verification_method eq 1}checked="checked"{/if}/>
                 <img src="{$img_path}confirm.png" width="150" height="150">
                 <div class="help-block">
-                    <p>{l s='birth day check'}</p>
+                    <p>{l s='birth date check'}</p>
                 </div>
             </label>
         </div>
@@ -120,7 +120,7 @@
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-7 col-lg-6">
-                    <textarea class="autoload_rte" name="PS_AGE_CHECKER_CUSTOM_TITLE_{$language.id_lang|escape:'htmlall':'UTF-8'}" text="" rows="4" cols="80">{$custom_title[$language.id_lang]|escape:'htmlall':'UTF-8'}</textarea>
+                    <textarea class="autoload_rte" name="PS_AGE_CHECKER_CUSTOM_TITLE_{$language.id_lang|escape:'htmlall':'UTF-8'}" text="" cols="80">{$custom_title[$language.id_lang]|escape:'htmlall':'UTF-8'}</textarea>
                 </div>
                 {if $languages|count > 1}
                     <div class="col-xs-12 col-sm-12 col-md-7 col-lg-3">
@@ -130,7 +130,7 @@
                         </button>
                         <ul class="dropdown-menu">
                             {foreach from=$languages item=lang}
-                            <li><a class="currentLang" data-id="{$lang.id_lang|escape:'htmlall':'UTF-8'}" href="javascript:hideOtherLanguage({$lang.id_lang|escape:'javascript'});" tabindex="-1">{$lang.name|escape:'htmlall':'UTF-8'}</a></li>
+                            <li><a class="currentLang" data-id="{$lang.id_lang|escape:'htmlall':'UTF-8'}" href="javascript:hideOtherLanguage('{$lang.id_lang|escape:'javascript'}');" tabindex="-1">{$lang.name|escape:'htmlall':'UTF-8'}</a></li>
                             {/foreach}
                         </ul>
                     </div>
@@ -166,7 +166,7 @@
                         </button>
                         <ul class="dropdown-menu">
                             {foreach from=$languages item=lang}
-                            <li><a class="currentLang" data-id="{$lang.id_lang|escape:'htmlall':'UTF-8'}" href="javascript:hideOtherLanguage({$lang.id_lang|escape:'javascript'});" tabindex="-1">{$lang.name|escape:'htmlall':'UTF-8'}</a></li>
+                            <li><a class="currentLang" data-id="{$lang.id_lang|escape:'htmlall':'UTF-8'}" href="javascript:hideOtherLanguage('{$lang.id_lang|escape:'javascript'}');" tabindex="-1">{$lang.name|escape:'htmlall':'UTF-8'}</a></li>
                             {/foreach}
                         </ul>
                     </div>
@@ -205,7 +205,7 @@
                         </button>
                         <ul class="dropdown-menu">
                             {foreach from=$languages item=lang}
-                            <li><a class="currentLang" data-id="{$lang.id_lang|escape:'htmlall':'UTF-8'}" href="javascript:hideOtherLanguage({$lang.id_lang|escape:'javascript'});" tabindex="-1">{$lang.name|escape:'htmlall':'UTF-8'}</a></li>
+                            <li><a class="currentLang" data-id="{$lang.id_lang|escape:'htmlall':'UTF-8'}" href="javascript:hideOtherLanguage('{$lang.id_lang|escape:'javascript'}');" tabindex="-1">{$lang.name|escape:'htmlall':'UTF-8'}</a></li>
                             {/foreach}
                         </ul>
                     </div>
@@ -234,7 +234,7 @@
                 <div class="col-xs-12 col-sm-12 col-md-7 col-lg-2">
                     <input class="" type="text" value="{if isset($confirm_button_text)}{$confirm_button_text[$language.id_lang]|escape:'htmlall':'UTF-8'}{/if}" name="PS_AGE_CHECKER_CONFIRM_BUTTON_TEXT_{$language.id_lang|escape:'htmlall':'UTF-8'}" placeholder="{l s='Title' mod='psagechecker'}">
                     <div class="help-block">
-                        <p>{l s='Character limit : X'}</p>
+                        <p>{l s='Character limit : 20'}</p>
                     </div>
                 </div>
                 {if $languages|count > 1}
@@ -245,7 +245,7 @@
                         </button>
                         <ul class="dropdown-menu">
                             {foreach from=$languages item=lang}
-                            <li><a class="currentLang" data-id="{$lang.id_lang|escape:'htmlall':'UTF-8'}" href="javascript:hideOtherLanguage({$lang.id_lang|escape:'javascript'});" tabindex="-1">{$lang.name|escape:'htmlall':'UTF-8'}</a></li>
+                            <li><a class="currentLang" data-id="{$lang.id_lang|escape:'htmlall':'UTF-8'}" href="javascript:hideOtherLanguage('{$lang.id_lang|escape:'javascript'}');" tabindex="-1">{$lang.name|escape:'htmlall':'UTF-8'}</a></li>
                             {/foreach}
                         </ul>
                     </div>
@@ -273,7 +273,7 @@
                 <div class="col-xs-12 col-sm-12 col-md-7 col-lg-2">
                     <input class="" type="text" value="{if isset($deny_button_text)}{$deny_button_text[$language.id_lang]|escape:'htmlall':'UTF-8'}{/if}" name="PS_AGE_CHECKER_DENY_BUTTON_TEXT_{$language.id_lang|escape:'htmlall':'UTF-8'}" placeholder="{l s='Title' mod='psagechecker'}">
                     <div class="help-block">
-                        <p>{l s='Character limit : X' mod='psagechecker'}</p>
+                        <p>{l s='Character limit : 20' mod='psagechecker'}</p>
                     </div>
                 </div>
                 {if $languages|count > 1}
@@ -284,7 +284,7 @@
                         </button>
                         <ul class="dropdown-menu">
                             {foreach from=$languages item=lang}
-                            <li><a class="currentLang" data-id="{$lang.id_lang|escape:'htmlall':'UTF-8'}" href="javascript:hideOtherLanguage({$lang.id_lang|escape:'javascript'});" tabindex="-1">{$lang.name|escape:'htmlall':'UTF-8'}</a></li>
+                            <li><a class="currentLang" data-id="{$lang.id_lang|escape:'htmlall':'UTF-8'}" href="javascript:hideOtherLanguage('{$lang.id_lang|escape:'javascript'}');" tabindex="-1">{$lang.name|escape:'htmlall':'UTF-8'}</a></li>
                             {/foreach}
                         </ul>
                     </div>

@@ -31,9 +31,10 @@ $(window).ready(function() {
     d.setMonth(d.getMonth() + 1);
 
     var c = getCookie('psagechecker');
-    if (c.length != 0 || display_popup == "0")
+    if (c.length == 0)
     {
-        $("#pssocialfeed_block").addClass('psagechecker-hide');
+        $("#psagechecker_block").removeClass('psagechecker-hide');
+        $("#overlay").removeClass('psagechecker-hide');
     }
     $(document).on('click', '#deny_button', function (e) {
         $(".deny_msg_age_verify").removeClass('psagechecker-hide');
@@ -42,7 +43,7 @@ $(window).ready(function() {
 
     $(document).on('click', '#confirm_button', function (e) {
         setCookie("psagechecker", "on", d);
-        $("#pssocialfeed_block").addClass('psagechecker-hide');
+        $("#psagechecker_block").addClass('psagechecker-hide');
     });
 
     $(document).on('click', '#submitAge', function (event) {
@@ -57,7 +58,7 @@ $(window).ready(function() {
             $(".blockAgeVerify").addClass('psagechecker-hide');
         } else {
             setCookie("psagechecker", "on", d);
-            $("#pssocialfeed_block").addClass('psagechecker-hide');
+            $("#psagechecker_block").addClass('psagechecker-hide');
         }
     });
 

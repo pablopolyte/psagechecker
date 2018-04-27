@@ -1912,7 +1912,7 @@ var windowIsDefined = (typeof window === "undefined" ? "undefined" : _typeof(win
                 autoRegisterNamespace = NAMESPACE_MAIN;
             } else {
                 if (windowIsDefined) {
-                    
+
                 }
                 autoRegisterNamespace = NAMESPACE_ALTERNATE;
             }

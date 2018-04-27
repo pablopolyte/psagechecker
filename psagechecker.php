@@ -119,6 +119,8 @@ class Psagechecker extends Module
         Configuration::updateValue('PS_AGE_CHECKER_POPUP_HEIGHT', '500');
         Configuration::updateValue('PS_AGE_CHECKER_POPUP_WIDTH', '1000');
         Configuration::updateValue('PS_AGE_CHECKER_OPACITY', '0');
+        Configuration::updateValue('PS_AGE_CHECKER_SHOW_IMAGE', '1');
+        
 
         $values = array();
         $languages = Language::getLanguages(false);

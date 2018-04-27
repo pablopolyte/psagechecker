@@ -232,7 +232,7 @@
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-7 col-lg-2">
-                    <input class="" type="text" value="{if isset($confirm_button_text)}{$confirm_button_text[$language.id_lang]|escape:'htmlall':'UTF-8'}{/if}" name="PS_AGE_CHECKER_CONFIRM_BUTTON_TEXT_{$language.id_lang|escape:'htmlall':'UTF-8'}" placeholder="{l s='Title' mod='psagechecker'}">
+                    <input class="" maxlength="20" type="text" value="{if isset($confirm_button_text)}{$confirm_button_text[$language.id_lang]|escape:'htmlall':'UTF-8'}{/if}" name="PS_AGE_CHECKER_CONFIRM_BUTTON_TEXT_{$language.id_lang|escape:'htmlall':'UTF-8'}" placeholder="{l s='Title' mod='psagechecker'}">
                     <div class="help-block">
                         <p>{l s='Character limit : 20' mod='psagechecker'}</p>
                     </div>
@@ -271,7 +271,7 @@
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-7 col-lg-2">
-                    <input class="" type="text" value="{if isset($deny_button_text)}{$deny_button_text[$language.id_lang]|escape:'htmlall':'UTF-8'}{/if}" name="PS_AGE_CHECKER_DENY_BUTTON_TEXT_{$language.id_lang|escape:'htmlall':'UTF-8'}" placeholder="{l s='Title' mod='psagechecker'}">
+                    <input class="" maxlength="20" type="text" value="{if isset($deny_button_text)}{$deny_button_text[$language.id_lang]|escape:'htmlall':'UTF-8'}{/if}" name="PS_AGE_CHECKER_DENY_BUTTON_TEXT_{$language.id_lang|escape:'htmlall':'UTF-8'}" placeholder="{l s='Title' mod='psagechecker'}">
                     <div class="help-block">
                         <p>{l s='Character limit : 20' mod='psagechecker'}</p>
                     </div>
@@ -380,10 +380,10 @@
             </div>
             <div class="col-xs-12 col-sm-12 col-md-7 col-lg-7">
                 <span class="switch prestashop-switch fixed-width-lg">
-                    <input class="yes" type="radio" name="PS_AGE_CHECKER_SHOW_IMAGE" id="display_image_on" data-toggle="collapse" data-target="#" value="1" {if $show_image eq 1}checked="checked"{/if}>
+                    <input class="yes input_upload_img js-upload-img" type="radio" name="PS_AGE_CHECKER_SHOW_IMAGE" id="display_image_on" data-toggle="collapse" data-target="#" value="1" {if $show_image eq 1}checked="checked"{/if}>
                     <label for="display_image_on" class="radioCheck">{l s='YES' mod='psagechecker'}</label>
 
-                    <input class="no" type="radio" name="PS_AGE_CHECKER_SHOW_IMAGE" id="display_image_off" data-toggle="collapse" data-target="#" value="0" {if $show_image eq 0}checked="checked"{/if}>
+                    <input class="no input_upload_img" type="radio" name="PS_AGE_CHECKER_SHOW_IMAGE" id="display_image_off" data-toggle="collapse" data-target="#" value="0" {if $show_image eq 0}checked="checked"{/if}>
                     <label for="display_image_off" class="radioCheck">{l s='NO' mod='psagechecker'}</label>
                     <a class="slide-button btn"></a>
                 </span>
@@ -392,7 +392,7 @@
         {* PS AGE CHECKER DISPLAY IMAGE *}
 
         {* PS AGE CHECKER UPLOAD IMAGE *}
-        <div class="form-group">
+        <div id="upload-image" class="form-group">
             <div class="col-xs-12 col-sm-12 col-md-5 col-lg-3">
                 <div class="text-right">
                     <label class="boldtext control-label">{l s='Upload an image' mod='psagechecker'}</label>

@@ -53,12 +53,17 @@ $(window).ready(function() {
         var year = $("#year").val();
         var age = getAge(year+'/'+month+'/'+day);
 
-        if ( age < age_required) {
+        if (day != '' && month != '' && year != '') {
+            if ( age < age_required) {
+                $(".deny_msg_age_verify").removeClass('psagechecker-hide');
+                $(".blockAgeVerify").addClass('psagechecker-hide');
+            } else {
+                setCookie("psagechecker", "on", d);
+                $("#psagechecker_block").addClass('psagechecker-hide');
+            }
+        } else {
             $(".deny_msg_age_verify").removeClass('psagechecker-hide');
             $(".blockAgeVerify").addClass('psagechecker-hide');
-        } else {
-            setCookie("psagechecker", "on", d);
-            $("#psagechecker_block").addClass('psagechecker-hide');
         }
     });
 

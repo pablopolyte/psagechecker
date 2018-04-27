@@ -22,7 +22,7 @@
                         <img src="{{$base_url}}/{{$img_upload}}" /><br />
                     {/if}
                 </div>
-                <div class="age_verify">
+                <div class="age_verify" style="font-family: {$font_family|escape:'htmlall':'UTF-8'} !important;">
                     {$custom_tit nofilter}
                 </div>
                 <div class="blockAgeVerify">
@@ -54,9 +54,9 @@
 
 </div>
 <style>
-    .lightbox{
+    #psagechecker-lightbox, #psagechecker-lightbox h1{
         background-color: {$popup_bg_color|escape:'htmlall':'UTF-8'} !important;
-        font-family: {$font_family|escape:'htmlall':'UTF-8'} !important;;
+        font-family: {$font_family|escape:'htmlall':'UTF-8'} !important;
     }
     .btn_deny{
         background-color: {$deny_bg_color|escape:'htmlall':'UTF-8'} !important;

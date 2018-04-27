@@ -26,6 +26,10 @@
 * to avoid any conflicts with others containers.
 */
 
+#submitAge{
+    margin-top:20px;
+}
+
 .btn_confirm{
     margin-left: 20px;
 }

@@ -449,6 +449,7 @@ class Psagechecker extends Module
         /*if (validate::isCleanHtml(Configuration::get('PS_AGE_CHECKER_CUSTOM_TITLE', $id_lang))) {
             $assign = 'custom_tit' => Configuration::get('PS_AGE_CHECKER_CUSTOM_TITLE', $id_lang);
         }*/
+
         $this->context->smarty->assign(array(
             'opacity' => Configuration::get('PS_AGE_CHECKER_OPACITY')/100,
             'show_img' => Configuration::get('PS_AGE_CHECKER_SHOW_IMAGE'),

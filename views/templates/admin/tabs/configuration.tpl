@@ -120,7 +120,7 @@
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-7 col-lg-6">
-                    <textarea class="autoload_rte" name="PS_AGE_CHECKER_CUSTOM_TITLE_{$language.id_lang|escape:'htmlall':'UTF-8'}" text="" cols="80">{$custom_title[$language.id_lang]|escape:'htmlall':'UTF-8'}</textarea>
+                    <textarea class="autoload_rte" name="PS_AGE_CHECKER_CUSTOM_TITLE_{$language.id_lang|escape:'htmlall':'UTF-8'}" text="" cols="80" rows="1">{$custom_title[$language.id_lang]|escape:'htmlall':'UTF-8'}</textarea>
                 </div>
                 {if $languages|count > 1}
                     <div class="col-xs-12 col-sm-12 col-md-7 col-lg-3">

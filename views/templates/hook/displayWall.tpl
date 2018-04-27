@@ -18,7 +18,7 @@
         <div class="lightbox-content">
             <div style="height:100%">
                 <div class="logo_age_verify">
-                    {if $show_img == 1}
+                    {if $show_img != 1}
                         <img src="{{$base_url}}/{{$img_upload}}" /><br />
                     {/if}
                 </div>
@@ -54,10 +54,14 @@
 
 </div>
 <style>
-    #psagechecker-lightbox, #psagechecker-lightbox h1{
+
+    #psagechecker-lightbox{
         background-color: {$popup_bg_color|escape:'htmlall':'UTF-8'} !important;
+    }
+    #psagechecker-lightbox, #psagechecker-lightbox *{
         font-family: {$font_family|escape:'htmlall':'UTF-8'} !important;
     }
+
     .btn_deny{
         background-color: {$deny_bg_color|escape:'htmlall':'UTF-8'} !important;
         color: {$deny_txt_color|escape:'htmlall':'UTF-8'} !important;

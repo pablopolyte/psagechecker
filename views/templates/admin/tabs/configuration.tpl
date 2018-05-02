@@ -82,11 +82,19 @@
         </div>
     </div>
     {* PS AGE CHECKER VERIFICATION METHOD *}
-
     <div id="PS_AGE_CHECKER_SHOW_POPUP" {if $show_popup eq 0}class="hide"{/if}>
-        <h4>
-            {l s='1/ Text settings' mod='psagechecker'}
-        </h4>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="jason-tab" data-toggle="tab" href="#jason" role="tab" aria-controls="jason" aria-selected="true">{l s='Text settings' mod='psagechecker'}</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="billy-tab" data-toggle="tab" href="#billy" role="tab" aria-controls="billy" aria-selected="false">{l s='Design setup' mod='psagechecker'}</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+    
+    <div id="jason" class="tab-pane active" role="tabpanel" aria-labelledby="jason-tab">
+
         {* PS AGE CHECKER FONT *}
         <div class="form-group">
             <div class="col-xs-12 col-sm-12 col-md-5 col-lg-3">
@@ -295,10 +303,8 @@
             {/if}
         {/foreach}
         {* PS AGE CHECHER DENY BUTTON *}
-
-        <h4>
-            {l s='2/ Design setup' mod='psagechecker'}
-        </h4>
+    </div>
+    <div class="tab-pane fade" id="billy" role="tabpanel" aria-labelledby="billy-tab">
 
         {* PS AGE CHECKER POP UP HEIGHT *}
         <div class="form-group">
@@ -490,6 +496,8 @@
             </div>
         </div>
         {* PS AGE CHECKER DENY BUTTON TXT COLOR *}
+    </div>
+    </div>
     </div>
     {* PS AGE CHECKER SUBMIT BUTTON *}
     <div class="panel-footer">

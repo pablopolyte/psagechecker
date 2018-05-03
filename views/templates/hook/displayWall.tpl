@@ -12,6 +12,12 @@
 * @license   http://addons.prestashop.com/en/content/12-terms-and-conditions-of-use
 * International Registered Trademark & Property of PrestaShop SA
 -->
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css" media="all">
+<link href="https://fonts.googleapis.com/css?family=Hind" rel="stylesheet" type="text/css" media="all">
+<link href="https://fonts.googleapis.com/css?family=Maven+Pro" rel="stylesheet" type="text/css" media="all">
+<link href="https://fonts.googleapis.com/css?family=Noto+Serif" rel="stylesheet" type="text/css" media="all">
+<link href="https://fonts.googleapis.com/css?family=Bitter" rel="stylesheet" type="text/css" media="all">
+<link href="https://fonts.googleapis.com/css?family=Forum" rel="stylesheet" type="text/css" media="all">
 
 <div id="psagechecker_block" class="preload psagechecker-hide">
     <div id="psagechecker-lightbox" class="lightbox">
@@ -51,7 +57,6 @@
         </div>
     </div>
     <div id="overlay" class="psagechecker-hide"></div>
-
 </div>
 <style>
 

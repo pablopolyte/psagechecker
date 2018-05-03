@@ -443,6 +443,7 @@ class Psagechecker extends Module
 
     public function displayWall()
     {
+        $this->context->controller->addCSS($this->fontsCss);
         $shop = new Shop((int)$this->context->shop->id);
         $id_lang = Context::getContext()->language->id;
         $img = $this->slides_url .'/'. Configuration::get('PS_AGE_CHECKER_IMG');
@@ -489,6 +490,7 @@ class Psagechecker extends Module
     // load css and js in front -> ps16 only
     public function loadFrontAsset()
     {
+        
         if (version_compare(_PS_VERSION_, '1.7.0.0') < 1) {
             $this->context->controller->addCSS($this->css_path.'front.css');
             $this->context->controller->addJS($this->js_path.'vue.min.js');

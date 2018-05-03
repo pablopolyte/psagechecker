@@ -72,20 +72,24 @@
 .logo_age_verify{
     margin-top: 20px;
     text-align:center;
+    height: 40%;
 }
 
 .logo_age_verify img{
-    height: 90px;
+    height: 100%;
 }
 
 .age_verify{
     margin-top: 25px;
     text-align:center;
 }
+.age_verify_text_content {
+    padding-top:14%;
+}
 
 .custom_msg_age_verify{
     text-align:center;
-    width: 230px;
+    width: 70%;
     margin: auto;
     margin-top: 20px;
 }

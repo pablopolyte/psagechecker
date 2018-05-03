@@ -256,7 +256,6 @@ class Psagechecker extends Module
         // prestashop plugin
         //$controller->addJqueryPlugin('select2');
         $controller->addJqueryPlugin('colorpicker');
-        $controller->addJqueryUI('ui.sortable');
 
         $this->context->controller->addJS($jss);
 
@@ -471,16 +470,16 @@ class Psagechecker extends Module
             'deny_msg' => Configuration::get('PS_AGE_CHECKER_DENY_MSG', $id_lang),
             'confirm_button' => Configuration::get('PS_AGE_CHECKER_CONFIRM_BUTTON_TEXT', $id_lang),
             'deny_button' => Configuration::get('PS_AGE_CHECKER_DENY_BUTTON_TEXT', $id_lang),
-            'show_custom_title' => Configuration::get('PS_INSTA_SHOW_ALBUM'),
-            'custom_title' => Configuration::get('PS_INSTA_CUSTOM_TITLE', $id_lang),
-            'custom_title_font_size' => Configuration::get('PS_INSTA_TITLE_TEXT_SIZE'),
-            'custom_title_color' => Configuration::get('PS_INSTA_TITLE_TEXT_COLOR'),
-            'desc' => Configuration::get('PS_INSTA_ALBUM_CUSTOM_DESC', $id_lang),
-            'show_custom_title_bis' => Configuration::get('PS_INSTA_SHOW_CUSTOM_TITLE_BIS'),
-            'custom_title_bis' => Configuration::get('PS_INSTA_CUSTOM_TITLE_BIS', $id_lang),
-            'custom_title_bis_font_text' => Configuration::get('PS_INSTA_CUSTOM_TITLE_COLOR_BIS'),
-            'number_columns' => Configuration::get('PS_INSTA_NUMBER_COLUMNS'),
-            'row' => Configuration::get('PS_INSTA_NUMBER_ROWS'),
+            // 'show_custom_title' => Configuration::get('PS_INSTA_SHOW_ALBUM'),
+            // 'custom_title' => Configuration::get('PS_INSTA_CUSTOM_TITLE', $id_lang),
+            // 'custom_title_font_size' => Configuration::get('PS_INSTA_TITLE_TEXT_SIZE'),
+            // 'custom_title_color' => Configuration::get('PS_INSTA_TITLE_TEXT_COLOR'),
+            // 'desc' => Configuration::get('PS_INSTA_ALBUM_CUSTOM_DESC', $id_lang),
+            // 'show_custom_title_bis' => Configuration::get('PS_INSTA_SHOW_CUSTOM_TITLE_BIS'),
+            // 'custom_title_bis' => Configuration::get('PS_INSTA_CUSTOM_TITLE_BIS', $id_lang),
+            // 'custom_title_bis_font_text' => Configuration::get('PS_INSTA_CUSTOM_TITLE_COLOR_BIS'),
+            // 'number_columns' => Configuration::get('PS_INSTA_NUMBER_COLUMNS'),
+            // 'row' => Configuration::get('PS_INSTA_NUMBER_ROWS'),
             'column' => Configuration::get('PS_INSTA_NUMBER_COLUMNS'),
             'base_url' => $shop->getBaseURL(),
             'header' => 0,
@@ -493,7 +492,6 @@ class Psagechecker extends Module
         
         if (version_compare(_PS_VERSION_, '1.7.0.0') < 1) {
             $this->context->controller->addCSS($this->css_path.'front.css');
-            $this->context->controller->addJS($this->js_path.'vue.min.js');
             $this->context->controller->addJS($this->js_path.'front.js');
             $this->context->controller->addJS($this->js_path.'bootstrap-slider.js');
         }
@@ -511,16 +509,8 @@ class Psagechecker extends Module
                     'modules/'.$this->name.'/views/css/front.css'
                 );
                 $this->context->controller->registerJavascript(
-                    'psageverifymedia-vue-js',
-                    'modules/'.$this->name.'/views/js/vue.min.js'
-                );
-                $this->context->controller->registerJavascript(
                     'psageverifymedia-front-js',
                     'modules/'.$this->name.'/views/js/front.js'
-                );
-                $this->context->controller->registerJavascript(
-                    'psageverifymedia-bootstrap-slider-js',
-                    'modules/'.$this->name.'/views/js/bootstrap-slider.js'
                 );
             }
         }

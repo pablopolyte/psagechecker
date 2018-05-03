@@ -25,12 +25,18 @@
 * Don't forget to prefix your containers with your own identifier
 * to avoid any conflicts with others containers.
 */
+#jason, #billy {
+    border-top: solid 1px lightgrey;
+}
 
 .api-redirect-url {
     margin-top: 5px !important;
     font-weight: bold;
 }
 
+#myTab{
+    margin-left: 138px;
+}
 #image-preselection .tag-card {
     width: 100%;
     position: relative;

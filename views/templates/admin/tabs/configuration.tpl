@@ -84,7 +84,7 @@
     {* PS AGE CHECKER VERIFICATION METHOD *}
     <div id="PS_AGE_CHECKER_SHOW_POPUP" {if $show_popup eq 0}class="hide"{/if}>
     <ul class="nav nav-tabs" id="myTab" role="tablist">
-        <li class="nav-item">
+        <li class="nav-item active">
             <a class="nav-link active" id="jason-tab" data-toggle="tab" href="#jason" role="tab" aria-controls="jason" aria-selected="true">{l s='Text settings' mod='psagechecker'}</a>
         </li>
         <li class="nav-item">
@@ -96,7 +96,7 @@
     <div id="jason" class="tab-pane active" role="tabpanel" aria-labelledby="jason-tab">
 
         {* PS AGE CHECKER FONT *}
-        <div class="form-group">
+        <div class="form-group" style="margin-top:20px;">
             <div class="col-xs-12 col-sm-12 col-md-5 col-lg-3">
                 <div class="text-right">
                     <label class="control-label">
@@ -128,7 +128,7 @@
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-7 col-lg-6">
-                    <textarea class="autoload_rte" name="PS_AGE_CHECKER_CUSTOM_TITLE_{$language.id_lang|escape:'htmlall':'UTF-8'}" text="" cols="80" rows="1">{$custom_title[$language.id_lang]|escape:'htmlall':'UTF-8'}</textarea>
+                    <textarea class="autoload_rte" name="PS_AGE_CHECKER_CUSTOM_TITLE_{$language.id_lang|escape:'htmlall':'UTF-8'}" text="" cols="80" rows="2">{$custom_title[$language.id_lang]|escape:'htmlall':'UTF-8'}</textarea>
                 </div>
                 {if $languages|count > 1}
                     <div class="col-xs-12 col-sm-12 col-md-7 col-lg-3">
@@ -304,10 +304,10 @@
         {/foreach}
         {* PS AGE CHECHER DENY BUTTON *}
     </div>
-    <div class="tab-pane fade" id="billy" role="tabpanel" aria-labelledby="billy-tab">
+    <div class="tab-pane" id="billy" role="tabpanel" aria-labelledby="billy-tab">
 
         {* PS AGE CHECKER POP UP HEIGHT *}
-        <div class="form-group">
+        <div class="form-group" style="margin-top:20px">
             <div class="col-xs-12 col-sm-12 col-md-5 col-lg-3">
                 <div class="text-right">
                     <label class="control-label">

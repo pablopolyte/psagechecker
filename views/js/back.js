@@ -44,8 +44,8 @@ $(window).ready(function() {
     });
 
 
-
     tinySetup({
+        height: 100,
         editor_selector : "autoload_rte",
         plugins : 'code advlist autolink link lists charmap print textcolor colorpicker style',
     });

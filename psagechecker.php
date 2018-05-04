@@ -116,22 +116,30 @@ class Psagechecker extends Module
         Configuration::updateValue('PS_AGE_CHECKER_SHOW_POPUP', '0');
         Configuration::updateValue('PS_AGE_CHECKER_AGE_MINIMUM', '18');
         Configuration::updateValue('PS_AGE_CHECKER_METHOD', '0');
-        Configuration::updateValue('PS_AGE_CHECKER_POPUP_HEIGHT', '500');
-        Configuration::updateValue('PS_AGE_CHECKER_POPUP_WIDTH', '1000');
-        Configuration::updateValue('PS_AGE_CHECKER_OPACITY', '0');
-        Configuration::updateValue('PS_AGE_CHECKER_SHOW_IMAGE', '1');
+        Configuration::updateValue('PS_AGE_CHECKER_POPUP_HEIGHT', '400');
+        Configuration::updateValue('PS_AGE_CHECKER_POPUP_WIDTH', '500');
+        Configuration::updateValue('PS_AGE_CHECKER_OPACITY', '70');
+        Configuration::updateValue('PS_AGE_CHECKER_CONFIRM_BUTTON_BACKGROUND_COLOR', '#006211');
+        Configuration::updateValue('PS_AGE_CHECKER_DENY_BUTTON_BACKGROUND_COLOR', '#686868');
+        Configuration::updateValue('PS_AGE_CHECKER_BACKGROUND_COLOR', '#3b3b3b');
+        Configuration::updateValue('PS_AGE_CHECKER_SHOW_IMAGE', '0');
+        Configuration::updateValue('PS_AGE_CHECKER_SHOW_IMAGE', '0');
         
 
         $values = array();
         $languages = Language::getLanguages(false);
         foreach ($languages as $lang) {
-            $values['PS_INSTA_CUSTOM_TILTE'][$lang['id_lang']] = '#prestashop';
-            $values['PS_INSTA_ALBUM_CUSTOM_DESC'][$lang['id_lang']] = '';
-            $values['PS_INSTA_CUSTOM_TITLE_BIS'][$lang['id_lang']] = 'Shop this style';
+            $values['PS_AGE_CHECKER_CUSTOM_TITLE'][$lang['id_lang']] = '<h1>The access of this website is not granted to underage users</h1>';
+            $values['PS_AGE_CHECKER_CUSTOM_MSG'][$lang['id_lang']] = 'In order to enter this site, please certify that you are of legal age to access a shop selling age restricted products';
+            $values['PS_AGE_CHECKER_DENY_MSG'][$lang['id_lang']] = "SORRY, you don't have legal age to access to our website";
+            $values['PS_AGE_CHECKER_CONFIRM_BUTTON_TEXT'][$lang['id_lang']] = 'I’m over 18, enter';
+            $values['PS_AGE_CHECKER_DENY_BUTTON_TEXT'][$lang['id_lang']] = 'I’m underrage';
         }
-        Configuration::updateValue('PS_INSTA_CUSTOM_TILTE', $values['PS_INSTA_CUSTOM_TILTE']);
-        Configuration::updateValue('PS_INSTA_ALBUM_CUSTOM_DESC', $values['PS_INSTA_ALBUM_CUSTOM_DESC']);
-        Configuration::updateValue('PS_INSTA_CUSTOM_TITLE_BIS', $values['PS_INSTA_CUSTOM_TITLE_BIS']);
+        Configuration::updateValue('PS_AGE_CHECKER_CUSTOM_TITLE', $values['PS_AGE_CHECKER_CUSTOM_TITLE']);
+        Configuration::updateValue('PS_AGE_CHECKER_CUSTOM_MSG', $values['PS_AGE_CHECKER_CUSTOM_MSG']);
+        Configuration::updateValue('PS_AGE_CHECKER_DENY_MSG', $values['PS_AGE_CHECKER_DENY_MSG']);
+        Configuration::updateValue('PS_AGE_CHECKER_CONFIRM_BUTTON_TEXT', $values['PS_AGE_CHECKER_CONFIRM_BUTTON_TEXT']);
+        Configuration::updateValue('PS_AGE_CHECKER_DENY_BUTTON_TEXT', $values['PS_AGE_CHECKER_DENY_BUTTON_TEXT']);
 
         // register hook used by the module
         if (parent::install() &&

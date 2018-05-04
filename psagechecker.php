@@ -122,7 +122,8 @@ class Psagechecker extends Module
         Configuration::updateValue('PS_AGE_CHECKER_CONFIRM_BUTTON_BACKGROUND_COLOR', '#006211');
         Configuration::updateValue('PS_AGE_CHECKER_DENY_BUTTON_BACKGROUND_COLOR', '#686868');
         Configuration::updateValue('PS_AGE_CHECKER_BACKGROUND_COLOR', '#3b3b3b');
-        Configuration::updateValue('PS_AGE_CHECKER_SHOW_IMAGE', '0');
+        Configuration::updateValue('PS_AGE_CHECKER_CONFIRM_BUTTON_TXT_COLOR', '#ffffff');
+        Configuration::updateValue('PS_AGE_CHECKER_DENY_BUTTON_TXT_COLOR', '#ffffff');
         Configuration::updateValue('PS_AGE_CHECKER_SHOW_IMAGE', '0');
         
 

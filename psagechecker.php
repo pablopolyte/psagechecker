@@ -130,11 +130,11 @@ class Psagechecker extends Module
         $values = array();
         $languages = Language::getLanguages(false);
         foreach ($languages as $lang) {
-            $values['PS_AGE_CHECKER_CUSTOM_TITLE'][$lang['id_lang']] = '<h1>The access of this website is not granted to underage users</h1>';
-            $values['PS_AGE_CHECKER_CUSTOM_MSG'][$lang['id_lang']] = 'In order to enter this site, please certify that you are of legal age to access a shop selling age restricted products';
-            $values['PS_AGE_CHECKER_DENY_MSG'][$lang['id_lang']] = "SORRY, you don't have legal age to access to our website";
+            $values['PS_AGE_CHECKER_CUSTOM_TITLE'][$lang['id_lang']] = '<h1 style="#7d7d7d">The access of this website is not granted to underage users</h1>';
+            $values['PS_AGE_CHECKER_CUSTOM_MSG'][$lang['id_lang']] = '<p><span style="color:#7d7d7d">In order to enter this site, please certify that you are of legal age to access a shop selling age restricted products</p></span>';
+            $values['PS_AGE_CHECKER_DENY_MSG'][$lang['id_lang']] = '<p><span style="color:#7d7d7d">SORRY, you don\'t have legal age to access to our website</p></span>';
             $values['PS_AGE_CHECKER_CONFIRM_BUTTON_TEXT'][$lang['id_lang']] = 'I’m over 18, enter';
-            $values['PS_AGE_CHECKER_DENY_BUTTON_TEXT'][$lang['id_lang']] = 'I’m underrage';
+            $values['PS_AGE_CHECKER_DENY_BUTTON_TEXT'][$lang['id_lang']] = 'I’m underage';
         }
         Configuration::updateValue('PS_AGE_CHECKER_CUSTOM_TITLE', $values['PS_AGE_CHECKER_CUSTOM_TITLE']);
         Configuration::updateValue('PS_AGE_CHECKER_CUSTOM_MSG', $values['PS_AGE_CHECKER_CUSTOM_MSG']);

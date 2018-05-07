@@ -75,6 +75,7 @@ class Psagechecker extends Module
         $this->need_instance = 0;
 
         $this->module_key = 'eed93aa31215a587fa9f9584f6f9105a';
+        $this->author_address = '0x64aa3c1e4034d07015f639b0e171b0d7b27d01aa';
 
         $this->controller_name = 'AdminAjaxpsagechecker';
 

@@ -72,7 +72,7 @@
 .logo_age_verify{
     margin-top: 20px;
     text-align:center;
-    height: 40%;
+    height: 20%;
 }
 
 .logo_age_verify img{
@@ -82,6 +82,9 @@
 .age_verify{
     margin-top: 25px;
     text-align:center;
+	margin-left:auto;
+	margin-right:auto;
+	width:70%
 }
 .age_verify_text_content {
     padding-top:14%;
@@ -185,6 +188,7 @@
     width: 1000px;
     background-color: white;
     z-index: 99999;
+	border-radius:4px;
 }
 /* LIGHTBOX CONTENT */
 #psagechecker_block .lightbox-content {

@@ -126,7 +126,7 @@ class Psagechecker extends Module
         Configuration::updateValue('PS_AGE_CHECKER_CONFIRM_BUTTON_TXT_COLOR', '#ffffff');
         Configuration::updateValue('PS_AGE_CHECKER_DENY_BUTTON_TXT_COLOR', '#ffffff');
         Configuration::updateValue('PS_AGE_CHECKER_SHOW_IMAGE', '0');
-        
+
 
         $values = array();
         $languages = Language::getLanguages(false);
@@ -146,7 +146,7 @@ class Psagechecker extends Module
         // register hook used by the module
         if (parent::install() &&
             $this->installTab() &&
-            $this->registerHook('displayHome') &&
+            $this->registerHook('displayTop') &&
             $this->registerHook('displayFooterProduct')) {
             if (version_compare(_PS_VERSION_, '1.7', '>=')) {
                 $this->registerHook('actionFrontControllerSetMedia');
@@ -245,6 +245,7 @@ class Psagechecker extends Module
             $this->css_path.'select2-bootstrap.min.css',
             $this->css_path.$this->name.'.css',
             $this->fontsCss,
+            $this->css_path.'front.css',
         );
 
         $this->context->controller->addCSS($css, 'all');
@@ -439,7 +440,7 @@ class Psagechecker extends Module
         }
     }
 
-    public function hookDisplayHome($params)
+    public function hookdisplayTop($params)
     {
         $actif = Configuration::get('PS_AGE_CHECKER_SHOW_POPUP');
         if ($actif != 0) {
@@ -499,7 +500,6 @@ class Psagechecker extends Module
     // load css and js in front -> ps16 only
     public function loadFrontAsset()
     {
-        
         if (version_compare(_PS_VERSION_, '1.7.0.0') < 1) {
             $this->context->controller->addCSS($this->css_path.'front.css');
             $this->context->controller->addJS($this->js_path.'front.js');
@@ -511,18 +511,16 @@ class Psagechecker extends Module
     public function hookActionFrontControllerSetMedia()
     {
         if (version_compare(_PS_VERSION_, '1.7.0.0') >= 0) {
-            $current_page = $this->context->controller->php_self;
 
-            if (($current_page == 'index')) {
-                $this->context->controller->registerStylesheet(
-                    'psageverifymedia-front-css',
-                    'modules/'.$this->name.'/views/css/front.css'
-                );
-                $this->context->controller->registerJavascript(
-                    'psageverifymedia-front-js',
-                    'modules/'.$this->name.'/views/js/front.js'
-                );
-            }
+            $this->context->controller->registerStylesheet(
+                'psageverifymedia-front-css',
+                'modules/'.$this->name.'/views/css/front.css'
+            );
+            $this->context->controller->registerJavascript(
+                'psageverifymedia-front-js',
+                'modules/'.$this->name.'/views/js/front.js'
+            );
+
         }
     }
 }

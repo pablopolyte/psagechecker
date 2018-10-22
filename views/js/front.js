@@ -33,9 +33,13 @@ $(window).ready(function() {
     var c = getCookie('psagechecker');
     if (c.length == 0)
     {
+        $('body').css('overflow', 'hidden');
         $("#psagechecker_block").removeClass('psagechecker-hide');
         $("#overlay").removeClass('psagechecker-hide');
+    } else {
+        $('body').css('overflow', 'initial');
     }
+
     $(document).on('click', '#deny_button', function (e) {
         $(".deny_msg_age_verify").removeClass('psagechecker-hide');
         $(".blockAgeVerify").addClass('psagechecker-hide');
@@ -44,6 +48,7 @@ $(window).ready(function() {
     $(document).on('click', '#confirm_button', function (e) {
         setCookie("psagechecker", "on", d);
         $("#psagechecker_block").addClass('psagechecker-hide');
+        $('body').css('overflow', 'initial');
     });
 
     $(document).on('click', '#submitAge', function (event) {

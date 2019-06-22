@@ -1,34 +1,34 @@
 <?php
 /**
-* 2007-2018 PrestaShop
-*
-* NOTICE OF LICENSE
-*
-* This source file is subject to the Academic Free License (AFL 3.0)
-* that is bundled with this package in the file LICENSE.txt.
-* It is also available through the world-wide-web at this URL:
-* http://opensource.org/licenses/afl-3.0.php
-* If you did not receive a copy of the license and are unable to
-* obtain it through the world-wide-web, please send an email
-* to license@prestashop.com so we can send you a copy immediately.
-*
-* DISCLAIMER
-*
-* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
-* versions in the future. If you wish to customize PrestaShop for your
-* needs please refer to http://www.prestashop.com for more information.
-*
-*  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2018 PrestaShop SA
-*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
-*  International Registered Trademark & Property of PrestaShop SA
-*/
+ * 2007-2018 PrestaShop
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to http://www.prestashop.com for more information.
+ *
+ *  @author    PrestaShop SA <contact@prestashop.com>
+ *  @copyright 2007-2018 PrestaShop SA
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  International Registered Trademark & Property of PrestaShop SA
+ */
 
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class Psagechecker extends Module
+class PsAgeChecker extends Module
 {
 
     private $settings_conf = array(
@@ -62,6 +62,7 @@ class Psagechecker extends Module
         'https://fonts.googleapis.com/css?family=Bitter', // font-family: 'Bitter', serif;
         'https://fonts.googleapis.com/css?family=Forum', // font-family: 'Forum', serif;
     );
+
     public $fonts = array(1 => 'Roboto', 2 => 'Hind', 3 => 'Maven Pro', 4 => 'Noto Serif', 5 => 'Bitter', 6 => 'Forum');
 
 
@@ -103,6 +104,7 @@ class Psagechecker extends Module
         // Confirm uninstall
         $this->confirmUninstall = $this->l('Are you sure you want to uninstall this module?');
         $this->ps_versions_compliancy = array('min' => '1.6', 'max' => _PS_VERSION_);
+        $this->controller_name = 'AdminAjaxPsAgeChecker';
     }
 
     /**
@@ -126,7 +128,8 @@ class Psagechecker extends Module
         Configuration::updateValue('PS_AGE_CHECKER_CONFIRM_BUTTON_TXT_COLOR', '#ffffff');
         Configuration::updateValue('PS_AGE_CHECKER_DENY_BUTTON_TXT_COLOR', '#ffffff');
         Configuration::updateValue('PS_AGE_CHECKER_SHOW_IMAGE', '0');
-
+        Configuration::updateValue('PS_AGE_CHECKER_DATE_INSTALL', (new DateTime('now'))->format('Y-m-d H:i:s'));
+        Configuration::updateValue('PS_AGE_CHECKER_POPUP_DISPLAY', 'everywhere');
 
         $values = array();
         $languages = Language::getLanguages(false);
@@ -153,9 +156,11 @@ class Psagechecker extends Module
             } else {
                 $this->registerHook('header');
             }
+
             return true;
         } else { // if something wrong return false
             $this->_errors[] = $this->l('There was an error during the uninstallation. Please contact us through Addons website.');
+
             return false;
         }
     }
@@ -175,11 +180,14 @@ class Psagechecker extends Module
         // unregister hook
         if (parent::uninstall() &&
             $this->uninstallTab()) {
+
             return true;
         } else {
             $this->_errors[] = $this->l('There was an error during the desinstallation. Please contact us through Addons website');
+
             return false;
         }
+
         return parent::uninstall();
     }
 
@@ -214,8 +222,10 @@ class Psagechecker extends Module
     public function uninstallTab()
     {
         $id_tab = (int)Tab::getIdFromClassName($this->controller_name);
+
         if ($id_tab) {
             $tab = new Tab($id_tab);
+
             if (Validate::isLoadedObject($tab)) {
                 return ($tab->delete());
             } else {
@@ -272,6 +282,10 @@ class Psagechecker extends Module
 
         // Clean memory
         unset($jss, $css);
+
+        Media::addJsDef(array(
+            'AjaxPsAgeCheckerController' => $this->context->link->getAdminLink('AdminAjaxPsAgeChecker')
+        ));
     }
 
     /**
@@ -279,9 +293,10 @@ class Psagechecker extends Module
      */
     public function loadFaq()
     {
-        include_once('classes/APIFAQClass.php');
-        $api = new APIFAQ();
+        require_once('classes/ApiFaq.php');
+        $api = new ApiFaq();
         $faq = $api->getData($this->module_key, $this->version);
+
         return $faq;
     }
 
@@ -368,7 +383,6 @@ class Psagechecker extends Module
             'ps_version' => _PS_VERSION_,
             'isPs17' => $this->ps_version,
             'fonts' => $this->fonts,
-
             'album_custom_desc' => 'test',
             'PS_AGE_CHECKER_OPACITY' => 1,
             'CB_FONT_STYLE' => 'test',
@@ -443,6 +457,7 @@ class Psagechecker extends Module
     public function hookdisplayTop($params)
     {
         $actif = Configuration::get('PS_AGE_CHECKER_SHOW_POPUP');
+
         if ($actif != 0) {
             $this->loadFrontAsset();
             $this->displayWall();

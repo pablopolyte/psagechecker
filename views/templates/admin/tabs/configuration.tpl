@@ -39,12 +39,74 @@
     </div>
     {* PS AGE CHECKER STATUS *}
 
+    {* PS AGE CHECKER POPUP DISPLAY LOCATION *}
+    <div class="form-group">
+        <div class="col-xs-12 col-sm-12 col-md-5 col-lg-3">
+            <div class="text-right">
+                <label class="control-label">
+                    {l s='Where do you want to display your popup' mod='psagechecker'}
+                </label>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-7 col-lg-3">
+            <input class="PopupDisplaySelector" type="checkbox" name="{l s='All shop' mod='psagechecker'}" value="all">
+            {l s='All shop' mod='psagechecker'}
+            <br/>
+
+            <input class="PopupDisplaySelector" type="checkbox" name="{l s='Specific Category' mod='psagechecker'}" value="categories">
+            {l s='Specific Category' mod='psagechecker'}
+            <br/>
+
+            <div id="catree" class="hide">
+                <div>
+                    <div id="button_tree" class="btn-group pull-left">
+                        <button id="expandall"type="button" class="btn btn-xs btn-default"> {l s='Expand All' mod='seoexpert'}</button>
+                        <button id="collapseall"type="button" class="btn btn-xs btn-default"> {l s='Collapse All' mod='seoexpert'}</button>
+                        <button id="checkall" type="button" class="btn btn-xs btn-default"> {l s='Check All' mod='seoexpert'}</button>
+                        <button id="uncheckall" type="button" class="btn btn-xs btn-default"> {l s='Uncheck All' mod='seoexpert'}</button>
+                    </div>
+                </div>
+
+                <div id="jstree" class="clear">
+                    <ul>
+                        <li id="category_{$blockCategTree.id|intval}" class="jstree-open">
+                            {foreach from=$default_category item=def}
+                                {if $def['id_obj'] == $blockCategTree.id}
+                                    <a class="jstree-clicked">{$blockCategTree.name|escape:'htmlall':'UTF-8'}</a>
+                                {else}
+                                    {$blockCategTree.name|escape:'htmlall':'UTF-8'}
+                                {/if}
+                            {/foreach}
+                            <ul>
+                                {foreach from=$blockCategTree.children item=child name=blockCategTree}
+                                    {if $smarty.foreach.blockCategTree.last}
+                                        {include file="$branche_tpl_path" node=$child last='true'}
+                                    {else}
+                                        {include file="$branche_tpl_path" node=$child}
+                                    {/if}
+                                {/foreach}
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <input type="hidden" name="category_id" id="category_id" value="" />
+            </div>
+
+            <input class="PopupDisplaySelector" type="checkbox" name="{l s='Specific Product' mod='psagechecker'}" value="products">
+            {l s='Specific Product' mod='psagechecker'}
+            <br/>
+            <select multiple id="PopupDisplaySelectProducts" class="hide"></select>
+        </div>
+    </div>
+    {* PS AGE CHECKER POPUP DISPLAY LOCATION *}
+
     {* PS AGE CHECKER MINIMUM AGE *}
     <div class="form-group">
         <div class="col-xs-12 col-sm-12 col-md-5 col-lg-3">
             <div class="text-right">
                 <label class="control-label">
-                        {l s='Minimum age' mod='psagechecker'}
+                    {l s='Minimum age' mod='psagechecker'}
                 </label>
             </div>
         </div>
@@ -59,7 +121,7 @@
         <div class="col-xs-12 col-sm-12 col-md-5 col-lg-3">
             <div class="text-right">
                 <label class="control-label">
-                        {l s='Verification method' mod='psagechecker'}
+                    {l s='Verification method' mod='psagechecker'}
                 </label>
             </div>
         </div>
@@ -92,7 +154,7 @@
         </li>
     </ul>
     <div class="tab-content" id="myTabContent">
-    
+
     <div id="jason" class="tab-pane active" role="tabpanel" aria-labelledby="jason-tab">
 
         {* PS AGE CHECKER FONT *}

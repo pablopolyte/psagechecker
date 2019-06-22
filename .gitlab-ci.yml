@@ -1,0 +1,58 @@
+stages:
+  - tests
+
+php-cs-fixer-sf-classes:
+  image: jakzal/phpqa:1.21.3
+  stage: tests
+  script: php-cs-fixer fix --dry-run --diff --rules=@Symfony ./classes
+  allow_failure: true
+
+php-cs-fixer-sf-controllers:
+  image: jakzal/phpqa:1.21.3
+  stage: tests
+  script: php-cs-fixer fix --dry-run --diff --rules=@Symfony ./controllers
+  allow_failure: true
+
+phpcs-PSR2-classes:
+  image: jakzal/phpqa:1.21.3
+  stage: tests
+  script: phpcs --standard=PSR2 ./classes
+  allow_failure: false
+
+phpcs-PSR2-controllers:
+  image: jakzal/phpqa:1.21.3
+  stage: tests
+  script: phpcs --standard=PSR2 ./controllers
+  allow_failure: false
+
+# Unusable until namespace and autoloading is implemented
+
+# phpstan-classes:
+#   image: jakzal/phpqa:1.21.3
+#   stage: tests
+#   script: phpstan analyse --level 1 ./classes/
+#   allow_failure: true
+
+# phpstan-controllers:
+#   image: jakzal/phpqa:1.21.3
+#   stage: tests
+#   script: phpstan analyse --level 1 ./controllers/
+#   allow_failure: true
+
+php-metrics-classes:
+  image: jakzal/phpqa:1.21.3
+  stage: tests
+  script: phpmetrics --report-html=var/php-metrics ./classes/
+  artifacts:
+    paths:
+      - var/php-metrics/
+  allow_failure: true
+
+php-metrics-controllers:
+  image: jakzal/phpqa:1.21.3
+  stage: tests
+  script: phpmetrics --report-html=var/php-metrics ./controllers/
+  artifacts:
+    paths:
+      - var/php-metrics/
+  allow_failure: true

@@ -43,17 +43,19 @@ $(window).ready(function() {
         $('#CB-OPACITY').bootstrapSlider('setValue', $(this).val());
     });
 
-
-    tinySetup({
-        height: 100,
-        editor_selector : "autoload_rte",
-        plugins : 'code advlist autolink link lists charmap print textcolor colorpicker style',
-    });
+    // TODO: check why this is so slow AND fucking blocking ...
+    // this need to not load tiny mce on hidden textareas ...
+    // tinySetup({
+    //     height: 100,
+    //     editor_selector : "autoload_rte",
+    //     plugins : 'code advlist autolink link lists charmap print textcolor colorpicker style',
+    // });
 
     $('#product1').select2({
         placeholder: select2placeholder,
         allowClear: true
     });
+
     $('#product2').select2({
         placeholder: select2placeholder,
         allowClear: true
@@ -145,7 +147,6 @@ $(window).ready(function() {
             },
         }
     });
-
 
     function getObjects(obj, key, val, index) {
         var objects = [];
@@ -331,14 +332,14 @@ $(window).ready(function() {
     }
 
     $(document).on('change', '.slide_image', function (e) {
-
         readURL(this, $(this).attr('data-preview'));
     });
+
     function readURL(input, id) {
         if (input.files && input.files[0]) {
 
             var reader = new FileReader();
- 
+
             reader.onload = function (e) {
                 if ($('#'+id).hasClass('hide')) {
                     $('#'+id).removeClass('hide');
@@ -377,5 +378,71 @@ $(window).ready(function() {
         }
     });
 
+    // Retrieve data depending on where popup should be displayed
+    $(document).on('change', '.PopupDisplaySelector', function(event){
+        if ($(this).prop("value") == 'all') {
+            $('.PopupDisplaySelector').each(function( index ) {
+                if ($(this).prop("value") == 'all') { return; }
+                $(this).prop("checked", false);
+            });
+            $('#PopupDisplaySelectCategories').addClass('hide');
+            $('#PopupDisplaySelectProducts').addClass('hide');
 
+            // call controller to set popup everywhere ... somehow . . .
+        };
+
+        if ($(this).prop("value") != 'all') {
+            $('input.PopupDisplaySelector[value="all"]').prop("checked", false);
+
+            if ($(this).prop("value") == 'categories' && $(this).prop("checked") == true) {
+                $.ajax({
+                    type: 'GET',
+                    url: AjaxPsAgeCheckerController,
+                    data: {
+                        ajax: true,
+                        action: 'GetCategories',
+                    },
+                    success: function(response) {
+                        var html = '',
+                            categories = JSON.parse(response);
+
+                        categories.forEach(category => {
+                            html += '<option value="'+ category.id +'">'+ category.name +'</option>';
+                        });
+
+                        $('#PopupDisplaySelectCategories').append(html);
+                        $('#PopupDisplaySelectCategories').removeClass('hide');
+                    },
+                    error: function(err) {
+                        // show some error popup msg ?
+                    }
+                });
+            }
+
+            if ($(this).prop("value") == 'products' && $(this).prop("checked") == true) {
+                $.ajax({
+                    type: 'GET',
+                    url: AjaxPsAgeCheckerController,
+                    data: {
+                        ajax: true,
+                        action: 'GetPaginatedProducts'
+                    },
+                    success: function(response) {
+                        var html = '',
+                            products = JSON.parse(response);
+
+                            products.forEach(product => {
+                            html += '<option value="'+ product.id +'">'+ product.name +'</option>';
+                        });
+
+                        $('#PopupDisplaySelectProducts').append(html);
+                        $('#PopupDisplaySelectProducts').removeClass('hide');
+                    },
+                    error: function(err) {
+                        // show some error popup msg ?
+                    }
+                });
+            }
+        };
+    });
 });

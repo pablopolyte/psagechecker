@@ -16,7 +16,7 @@
 
 include_once(dirname(__FILE__).'/../../../config/config.inc.php');
 
-class APIFAQ
+class ApiFaq
 {
     public function getData($module_key, $version)
     {
@@ -25,7 +25,7 @@ class APIFAQ
         }
         $context = Context::getContext();
         $iso_code = Language::getIsoById($context->language->id);
-        $url = 'http://api.addons.prestashop.com/request/faq/'.$module_key.'/'.$version.'/'.$iso_code;
+        $url = "http://api.addons.prestashop.com/request/faq/$module_key/$version/$iso_code";
         $options = array(
             CURLOPT_URL            => $url,
             CURLOPT_RETURNTRANSFER => true,

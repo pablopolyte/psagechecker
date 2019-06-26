@@ -26,6 +26,27 @@
 * to avoid any conflicts with others containers.
 */
 
+const throttle = (func, limit) => {
+    let lastFunc
+    let lastRan
+    return function() {
+        const context = this
+        const args = arguments
+        if (!lastRan) {
+        func.apply(context, args)
+        lastRan = Date.now()
+        } else {
+        clearTimeout(lastFunc)
+        lastFunc = setTimeout(function() {
+            if ((Date.now() - lastRan) >= limit) {
+            func.apply(context, args)
+            lastRan = Date.now()
+            }
+        }, limit - (Date.now() - lastRan))
+        }
+    }
+}
+
 $(window).ready(function() {
     controller_url = controller_url.replace(/\amp;/g,'');
 
@@ -45,6 +66,8 @@ $(window).ready(function() {
 
     // TODO: check why this is so slow AND fucking blocking ...
     // this need to not load tiny mce on hidden textareas ...
+    // and also need to launch when lang is unhidden
+
     // tinySetup({
     //     height: 100,
     //     editor_selector : "autoload_rte",
@@ -309,7 +332,7 @@ $(window).ready(function() {
                 $('#product2').val(data[0].product2).trigger('change');
             },
             error: function(err) {
-                console.log(err);
+                showErrorMessage('Something wrong happened. Please retry.');
             }
         });
     }
@@ -326,7 +349,7 @@ $(window).ready(function() {
             success: function(data) {
             },
             error: function(err) {
-                console.log(err);
+                showErrorMessage('Something wrong happened. Please retry.');
             }
         });
     }
@@ -378,71 +401,221 @@ $(window).ready(function() {
         }
     });
 
-    // Retrieve data depending on where popup should be displayed
-    $(document).on('change', '.PopupDisplaySelector', function(event){
-        if ($(this).prop("value") == 'all') {
-            $('.PopupDisplaySelector').each(function( index ) {
-                if ($(this).prop("value") == 'all') { return; }
-                $(this).prop("checked", false);
-            });
-            $('#PopupDisplaySelectCategories').addClass('hide');
-            $('#PopupDisplaySelectProducts').addClass('hide');
+    function ajaxUnselectAllShop() {
+        $.ajax({
+            type: 'POST',
+            url: AjaxPsAgeCheckerController,
+            data: {
+                ajax: true,
+                action: 'UnselectedAllShop'
+            },
+            success: function(response) {
+                if ('true' != response) {
+                    showErrorMessage('Something wrong happened. Please retry.');
+                }
+            },
+            error: function(err) {
+                showErrorMessage('Something wrong happened. Please retry.');
+            }
+        });
+    }
 
-            // call controller to set popup everywhere ... somehow . . .
+    function ajaxSelectAllShop() {
+        $.ajax({
+            type: 'POST',
+            url: AjaxPsAgeCheckerController,
+            data: {
+                ajax: true,
+                action: 'SelectedAllShop'
+            },
+            success: function(response) {
+                if ('true' != response) {
+                    showErrorMessage('Something wrong happened. Please retry.');
+                }
+            },
+            error: function(err) {
+                showErrorMessage('Something wrong happened. Please retry.');
+            }
+        });
+    }
+
+    function handleClickOnAllShop(context) {
+        $('.PopupDisplaySelector').each(function(index) {
+            if ($(this).prop("value") == 'all') { return; }
+            $(this).prop("checked", false);
+        });
+
+        $('#PopupDisplaySelectCategories').addClass('hide');
+        $('#PopupDisplaySelectProducts').addClass('hide');
+        $('#jstreecategories ul').empty();
+
+        var jsTreeCategories = $.jstree.reference('#jstreecategories');
+        if (null != jsTreeCategories) {
+            jsTreeCategories.destroy();
+        }
+
+        if ($(context).prop("checked") == true) { ajaxSelectAllShop(); }
+        if ($(context).prop("checked") == false) { ajaxUnselectAllShop(); }
+    }
+
+    function handleSuccessGetCategories(response) {
+        var html = '',
+            categories = JSON.parse(response);
+
+        function handleNestedCategories(category) {
+            for (key in categories[category]) {
+                html += '<ul>'
+                html += '<li id="category_'+ categories[category][key].id +'" >' + categories[category][key].name;
+                handleNestedCategories(categories[category][key].id);
+                html += '</li>';
+                html += '</ul>'
+            }
+        };
+
+        for (key in categories) {
+            categories[key].forEach(category => {
+                // show only child of Home category
+                if (category.id_parent == PS_HOME_CATEGORY) {
+                    html += '<li id="category_'+ category.id +'" >' + category.name;
+                    handleNestedCategories(category.id);
+                    html += '</li>';
+                };
+            });
+        }
+
+        $('#jstreecategories ul')
+            .empty()
+            .promise( $('#jstreecategories ul').append(html) )
+            .done(function() {
+                $('#jstreecategories').jstree({
+                    "checkbox" : {
+                        "three_state" : false,
+                        "keep_selected_style" : false
+                    },
+                    "plugins" : ["checkbox"]
+                });
+            });
+
+        $('#PopupDisplaySelectCategories').removeClass('hide');
+    }
+
+    function onChangePopupDisplaySelector(event) {
+
+        // Clicked on all shop
+        if ($(this).prop("value") == 'all' ) {
+            handleClickOnAllShop(this);
         };
 
         if ($(this).prop("value") != 'all') {
             $('input.PopupDisplaySelector[value="all"]').prop("checked", false);
+            ajaxUnselectAllShop();
 
-            if ($(this).prop("value") == 'categories' && $(this).prop("checked") == true) {
-                $.ajax({
-                    type: 'GET',
-                    url: AjaxPsAgeCheckerController,
-                    data: {
-                        ajax: true,
-                        action: 'GetCategories',
-                    },
-                    success: function(response) {
-                        var html = '',
-                            categories = JSON.parse(response);
-
-                        categories.forEach(category => {
-                            html += '<option value="'+ category.id +'">'+ category.name +'</option>';
-                        });
-
-                        $('#PopupDisplaySelectCategories').append(html);
-                        $('#PopupDisplaySelectCategories').removeClass('hide');
-                    },
-                    error: function(err) {
-                        // show some error popup msg ?
-                    }
-                });
+            // Handle click on categories
+            if ($(this).prop("value") == 'categories') {
+                if ($(this).prop("checked") == true) {
+                    $.ajax({
+                        type: 'GET',
+                        url: AjaxPsAgeCheckerController,
+                        data: {
+                            ajax: true,
+                            action: 'GetCategories',
+                        },
+                        success: handleSuccessGetCategories,
+                        error: function(err) {
+                            jAlert('Something wrong happened. Please retry.');
+                        }
+                    });
+                } else {
+                    $('#PopupDisplaySelectCategories').addClass('hide');
+                    $.jstree.reference('#jstreecategories').destroy();
+                    $('#jstreecategories ul').empty();
+                }
             }
 
-            if ($(this).prop("value") == 'products' && $(this).prop("checked") == true) {
-                $.ajax({
-                    type: 'GET',
-                    url: AjaxPsAgeCheckerController,
-                    data: {
-                        ajax: true,
-                        action: 'GetPaginatedProducts'
-                    },
-                    success: function(response) {
-                        var html = '',
-                            products = JSON.parse(response);
-
-                            products.forEach(product => {
-                            html += '<option value="'+ product.id +'">'+ product.name +'</option>';
-                        });
-
-                        $('#PopupDisplaySelectProducts').append(html);
-                        $('#PopupDisplaySelectProducts').removeClass('hide');
-                    },
-                    error: function(err) {
-                        // show some error popup msg ?
-                    }
-                });
+            // Handle click on products
+            if ($(this).prop("value") == 'products') {
+                if ($(this).prop("checked") == true) {
+                    $('#PopupDisplaySelectProducts').removeClass('hide');
+                } else {
+                    $('#PopupDisplaySelectProducts').addClass('hide');
+                }
             }
         };
-    });
+    };
+
+    function onClickPopupDisplaySelectProduct(event) {
+        var html = '',
+            id = $(event.target).attr('id'),
+            name = $(event.target).text();
+
+        $.ajax({
+            type: 'GET',
+            url: AjaxPsAgeCheckerController,
+            data: {
+                ajax: true,
+                action: 'AddProduct',
+                productId: id
+            },
+            success: function(response) {
+                console.log(response);
+            },
+            error: function(err) {
+                showErrorMessage('Something wrong happened. Please retry.');
+            }
+        });
+
+        html = '<li id="'+ id +'">'+ name +'</li>';
+
+        $('#PopupDisplaySelectProducts ul#selectedProducts').append(html);
+        $(event.target).remove();
+    }
+
+    function onMouseEnterPopupDisplaySelectProduct(event) {
+        $(event.target).css("background-color", "#25B9D7");
+    }
+
+    function onMouseLeavePopupDisplaySelectProduct(event) {
+        $(event.target).css("background-color", "none");
+    }
+
+    $(document)
+        .on('mouseenter', '#PopupDisplaySelectProducts ul#resultProducts li', onMouseEnterPopupDisplaySelectProduct)
+        .on('mouseleave', '#PopupDisplaySelectProducts ul#resultProducts li', onMouseLeavePopupDisplaySelectProduct)
+        .on('click', '#PopupDisplaySelectProducts ul#resultProducts li', onClickPopupDisplaySelectProduct)
+        .on('change', '.PopupDisplaySelector', onChangePopupDisplaySelector);
+        // .on('keyup', '#PopupDisplaySelectProducts input[type="text"]', throttle(onKeyUpPopupDisplaySelectProducts(event), 1000));
+
+    $(document).on('keyup', '#PopupDisplaySelectProducts input[type="text"]', throttle(function(event) {
+        var $inputText = $('#PopupDisplaySelectProducts input[type="text"]');
+        if ($inputText.val().length > 2) {
+            $.ajax({
+                type: 'GET',
+                url: AjaxPsAgeCheckerController,
+                data: {
+                    ajax: true,
+                    action: 'GetProductsByNameLike',
+                    searchTerm: $inputText.val()
+                },
+                success: function(response) {
+                    var html = '',
+                    products = JSON.parse(response);
+
+                    $('#PopupDisplaySelectProducts ul#resultProducts').empty();
+
+                    if (Array.isArray(products)) {
+                        products.forEach(product => {
+                            html += '<li id="'+ product.id_product +'">'+ product.name +'</li>';
+                        });
+                    } else {
+                        html = '<li>No products found for '+ $('#PopupDisplaySelectProducts input[type="text"]').val() +'</li>';
+                    }
+
+                    $('#PopupDisplaySelectProducts ul#resultProducts').append(html);
+                },
+                error: function(err) {
+                    showErrorMessage('Something wrong happened. Please retry.');
+                }
+            });
+        }
+    }, 1000));
 });

@@ -30,7 +30,6 @@ if (!defined('_PS_VERSION_')) {
 
 class PsAgeChecker extends Module
 {
-
     private $settings_conf = array(
         'show_popup'                  => 'PS_AGE_CHECKER_SHOW_POPUP',
         'minimum_age'                 => 'PS_AGE_CHECKER_AGE_MINIMUM',
@@ -64,7 +63,6 @@ class PsAgeChecker extends Module
     );
 
     public $fonts = array(1 => 'Roboto', 2 => 'Hind', 3 => 'Maven Pro', 4 => 'Noto Serif', 5 => 'Bitter', 6 => 'Forum');
-
 
     public function __construct()
     {
@@ -129,7 +127,9 @@ class PsAgeChecker extends Module
         Configuration::updateValue('PS_AGE_CHECKER_DENY_BUTTON_TXT_COLOR', '#ffffff');
         Configuration::updateValue('PS_AGE_CHECKER_SHOW_IMAGE', '0');
         Configuration::updateValue('PS_AGE_CHECKER_DATE_INSTALL', (new DateTime('now'))->format('Y-m-d H:i:s'));
-        Configuration::updateValue('PS_AGE_CHECKER_POPUP_DISPLAY', 'everywhere');
+        Configuration::updateValue('PS_AGE_CHECKER_POPUP_DISPLAY_EVERYWHERE', 'false');
+        Configuration::updateValue('PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES', '');
+        Configuration::updateValue('PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS', '');
 
         $values = array();
         $languages = Language::getLanguages(false);
@@ -256,6 +256,7 @@ class PsAgeChecker extends Module
             $this->css_path.$this->name.'.css',
             $this->fontsCss,
             $this->css_path.'front.css',
+            $this->css_path.'jstree.min.css',
         );
 
         $this->context->controller->addCSS($css, 'all');
@@ -270,6 +271,7 @@ class PsAgeChecker extends Module
             $this->js_path.'back.js',
             $this->js_path.'sweetalert.min.js',
             $this->js_path.'select2.full.min.js',
+            $this->js_path.'jstree.min.js',
             _PS_ROOT_DIR_.'js/tiny_mce/tiny_mce.js',
             _PS_ROOT_DIR_.'js/admin/tinymce.inc.js',
         );
@@ -284,7 +286,8 @@ class PsAgeChecker extends Module
         unset($jss, $css);
 
         Media::addJsDef(array(
-            'AjaxPsAgeCheckerController' => $this->context->link->getAdminLink('AdminAjaxPsAgeChecker')
+            'AjaxPsAgeCheckerController' => $this->context->link->getAdminLink('AdminAjaxPsAgeChecker'),
+            'PS_HOME_CATEGORY' => Configuration::get('PS_HOME_CATEGORY')
         ));
     }
 
@@ -349,7 +352,12 @@ class PsAgeChecker extends Module
         $tmp = array();
         $languages = Language::getLanguages(false);
         foreach ($this->settings_conf as $index => $value) {
-            if ($value === 'PS_AGE_CHECKER_CUSTOM_TITLE' || $value === 'PS_AGE_CHECKER_CUSTOM_MSG' || $value === 'PS_AGE_CHECKER_DENY_MSG' || $value === 'PS_AGE_CHECKER_CONFIRM_BUTTON_TEXT' || $value === 'PS_AGE_CHECKER_DENY_BUTTON_TEXT') {
+            if ($value === 'PS_AGE_CHECKER_CUSTOM_TITLE'
+                || $value === 'PS_AGE_CHECKER_CUSTOM_MSG'
+                || $value === 'PS_AGE_CHECKER_DENY_MSG'
+                || $value === 'PS_AGE_CHECKER_CONFIRM_BUTTON_TEXT'
+                || $value === 'PS_AGE_CHECKER_DENY_BUTTON_TEXT'
+            ) {
                 foreach ($languages as $lang) {
                     $tmp[$value][$lang['id_lang']] = Configuration::get($value, $lang['id_lang']);
                     $this->context->smarty->assign($index, $tmp[$value]);
@@ -359,6 +367,15 @@ class PsAgeChecker extends Module
                 $this->context->smarty->assign($index, $tmp[$value]);
             }
         }
+
+        $selectedProducts = array();
+        $configSelectedProducts = Configuration::get('PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS');
+
+        foreach (explode(',', $selectedProducts)) {
+
+        }
+
+        $selectedCategories = Configuration::get('PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES');
 
         // assign var to smarty
         $this->context->smarty->assign(array(
@@ -386,6 +403,9 @@ class PsAgeChecker extends Module
             'album_custom_desc' => 'test',
             'PS_AGE_CHECKER_OPACITY' => 1,
             'CB_FONT_STYLE' => 'test',
+            'PS_AGE_CHECKER_POPUP_DISPLAY_EVERYWHERE' => Configuration::get('PS_AGE_CHECKER_POPUP_DISPLAY_EVERYWHERE'),
+            'selectedProducts' => $selectedProducts,
+            'selectedCategories' => $selectedCategories,
         ));
 
         $this->output .= $this->context->smarty->fetch($this->local_path.'views/templates/admin/menu.tpl');

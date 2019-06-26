@@ -40,7 +40,7 @@
     {* PS AGE CHECKER STATUS *}
 
     {* PS AGE CHECKER POPUP DISPLAY LOCATION *}
-    <div class="form-group">
+    <div id="PsAgeCheckerPopupDisplayLocation" class="form-group">
         <div class="col-xs-12 col-sm-12 col-md-5 col-lg-3">
             <div class="text-right">
                 <label class="control-label">
@@ -49,54 +49,34 @@
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-7 col-lg-3">
-            <input class="PopupDisplaySelector" type="checkbox" name="{l s='All shop' mod='psagechecker'}" value="all">
-            {l s='All shop' mod='psagechecker'}
-            <br/>
+            <label>
+                <input {if $PS_AGE_CHECKER_POPUP_DISPLAY_EVERYWHERE=='true'}checked{/if} class="PopupDisplaySelector" type="checkbox" name="{l s='All shop' mod='psagechecker'}" value="all">
+                {l s='All shop' mod='psagechecker'}
+            </label>
+            <br>
 
-            <input class="PopupDisplaySelector" type="checkbox" name="{l s='Specific Category' mod='psagechecker'}" value="categories">
-            {l s='Specific Category' mod='psagechecker'}
-            <br/>
-
-            <div id="catree" class="hide">
-                <div>
-                    <div id="button_tree" class="btn-group pull-left">
-                        <button id="expandall"type="button" class="btn btn-xs btn-default"> {l s='Expand All' mod='seoexpert'}</button>
-                        <button id="collapseall"type="button" class="btn btn-xs btn-default"> {l s='Collapse All' mod='seoexpert'}</button>
-                        <button id="checkall" type="button" class="btn btn-xs btn-default"> {l s='Check All' mod='seoexpert'}</button>
-                        <button id="uncheckall" type="button" class="btn btn-xs btn-default"> {l s='Uncheck All' mod='seoexpert'}</button>
-                    </div>
-                </div>
-
-                <div id="jstree" class="clear">
-                    <ul>
-                        <li id="category_{$blockCategTree.id|intval}" class="jstree-open">
-                            {foreach from=$default_category item=def}
-                                {if $def['id_obj'] == $blockCategTree.id}
-                                    <a class="jstree-clicked">{$blockCategTree.name|escape:'htmlall':'UTF-8'}</a>
-                                {else}
-                                    {$blockCategTree.name|escape:'htmlall':'UTF-8'}
-                                {/if}
-                            {/foreach}
-                            <ul>
-                                {foreach from=$blockCategTree.children item=child name=blockCategTree}
-                                    {if $smarty.foreach.blockCategTree.last}
-                                        {include file="$branche_tpl_path" node=$child last='true'}
-                                    {else}
-                                        {include file="$branche_tpl_path" node=$child}
-                                    {/if}
-                                {/foreach}
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-
-                <input type="hidden" name="category_id" id="category_id" value="" />
+            <label>
+                <input class="PopupDisplaySelector" type="checkbox" name="{l s='Specific Category' mod='psagechecker'}" value="categories">
+                {l s='Specific Category' mod='psagechecker'}
+            </label>
+            <div id="PopupDisplaySelectCategories" class="hide">
+                <div id="jstreecategories"><ul></ul></div>
             </div>
+            <br>
 
-            <input class="PopupDisplaySelector" type="checkbox" name="{l s='Specific Product' mod='psagechecker'}" value="products">
-            {l s='Specific Product' mod='psagechecker'}
-            <br/>
-            <select multiple id="PopupDisplaySelectProducts" class="hide"></select>
+            <label>
+                <input class="PopupDisplaySelector" type="checkbox" name="{l s='Specific Product' mod='psagechecker'}" value="products">
+                {l s='Specific Product' mod='psagechecker'}
+            </label>
+            <div id="PopupDisplaySelectProducts" class="hide">
+                <input type="text" name="{l s='Specific Product' mod='psagechecker'}" value="">
+                <ul id="selectedProducts">
+                    {* {foreach from=$PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS key='key' item='product'}
+                        <li id="{$product.id}">{$product.name}</li>
+                    {/foreach} *}
+                </ul>
+                <ul id="resultProducts"></ul>
+            </div>
         </div>
     </div>
     {* PS AGE CHECKER POPUP DISPLAY LOCATION *}

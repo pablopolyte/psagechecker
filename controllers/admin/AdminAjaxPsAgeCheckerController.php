@@ -42,10 +42,12 @@ class AdminAjaxPsAgeCheckerController extends ModuleAdminController
         $homeCategory = Configuration::get('PS_HOME_CATEGORY');
 
         foreach ($categories as $category) {
-            if (current($category) === $rootCategory || current($category) === $homeCategory) { continue; };
+            if (current($category)['infos']['id_category'] === $rootCategory
+                || current($category)['infos']['id_category'] === $homeCategory
+            ) { continue; };
 
             foreach ($category as $cat) {
-                $cleanedCategories[] = array(
+                $cleanedCategories[$cat['infos']['id_parent']][] = array(
                     'id' => $cat['infos']['id_category'],
                     'id_parent' => $cat['infos']['id_parent'],
                     'name' => $cat['infos']['name'],
@@ -57,31 +59,124 @@ class AdminAjaxPsAgeCheckerController extends ModuleAdminController
     }
 
     /**
-     * ajaxProcessGetPaginatedProducts
+     * ajaxProcessGetProductsByNameLike
+     * Return all products with the term in the name or reference
      *
-     * @param int $offset
      * @return string
      */
-    public function ajaxProcessGetPaginatedProducts($offset = 0)
+    public function ajaxProcessGetProductsByNameLike()
     {
         $currentIdLang = $this->context->language->id;
-        $allProducts=Product::getProducts($currentIdLang, $offset, '50', 'id_product','DESC');
-        $paginatedProducts = array();
+        $searchTerm = Tools::getValue('searchTerm');
+        $results = Product::searchByName($currentIdLang, $searchTerm);
 
-        foreach ($allProducts as $product) {
-            dump($product);
-            // $isHomeOrRootCategories = array_key_exists('1', $category) || array_key_exists('2', $category);
-            // if ($isHomeOrRootCategories) { continue; };
+        $this->ajaxDie(json_encode($results));
+    }
 
-            // foreach ($category as $cat) {
-            //     $trimmedCategories[] = array(
-            //         'id' => $cat['infos']['id_category'],
-            //         'id_parent' => $cat['infos']['id_parent'],
-            //         'name' => $cat['infos']['name'],
-            //     );
-            // }
-        }
+    /**
+     * ajaxProcessSelectedAllShop
+     *
+     * @return string
+     */
+    public function ajaxProcessSelectedAllShop()
+    {
+        $result = Configuration::updateValue('PS_AGE_CHECKER_POPUP_DISPLAY_EVERYWHERE', 'true');
+        $this->ajaxDie(json_encode((bool)$result));
+    }
 
-        $this->ajaxDie(json_encode($paginatedProducts));
+    /**
+     * ajaxProcessUnselectedAllShop
+     *
+     * @return string
+     */
+    public function ajaxProcessUnselectedAllShop()
+    {
+        $result = Configuration::updateValue('PS_AGE_CHECKER_POPUP_DISPLAY_EVERYWHERE', 'false');
+        $this->ajaxDie(json_encode((bool)$result));
+    }
+
+    /**
+     * ajaxProcessAddProduct
+     *
+     * @return string
+     */
+    public function ajaxProcessAddProduct()
+    {
+        $response = true;
+        $productId = Tools::getValue('productId');
+        $products = Configuration::get('PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS');
+        $arrayCurrentProducts = explode(',', $products);
+
+        $isAlreadyPresent = array_search($productId, $arrayCurrentProducts);
+
+        if ($isAlreadyPresent == false || empty($isAlreadyPresent)) {
+            $products = "$products,$productId";
+            $response = Configuration::updateValue('PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS', $products);
+        };
+
+        $this->ajaxDie(json_encode($response));
+    }
+
+    /**
+     * ajaxProcessRemoveProduct
+     *
+     * @return string
+     */
+    public function ajaxProcessRemoveProduct()
+    {
+        $response = true;
+        $productId = Tools::getValue('productId');
+        $products = Configuration::get('PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS');
+        $arrayCurrentProducts = explode(',', $products);
+
+        $key = array_search($productId, $arrayCurrentProducts);
+        if ($key != false) { unset($arrayCurrentProducts[$key]); }
+
+        $products = implode(',', $products);
+        $response = Configuration::updateValue('PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS', 'false');
+
+        $this->ajaxDie(json_encode((bool)$response));
+    }
+
+    /**
+     * ajaxProcessAddCategory
+     *
+     * @return string
+     */
+    public function ajaxProcessAddCategory()
+    {
+        $response = true;
+        $categoryId = Tools::getValue('categoryId');
+        $categories = Configuration::get('PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES');
+        $arrayCurrentCategories = explode(',', $categories);
+        $isAlreadyPresent = array_search($categoryId, $arrayCurrentCategories);
+
+        if ($isAlreadyPresent == false || empty($isAlreadyPresent)) {
+            $categories = "$categories,$categoryId";
+            $response = Configuration::updateValue('PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES', $categories);
+        };
+
+        $this->ajaxDie(json_encode($response));
+    }
+
+    /**
+     * ajaxProcessRemoveCategory
+     *
+     * @return string
+     */
+    public function ajaxProcessRemoveCategory()
+    {
+        $response = true;
+        $categoryId = Tools::getValue('categoryId');
+        $categories = Configuration::get('PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES');
+        $arrayCurrentCategories = explode(',', $categories);
+
+        $key = array_search($categoryId, $arrayCurrentCategories);
+        if ($key != false) { unset($arrayCurrentCategories[$key]); }
+
+        $categories = implode(',', $categories);
+        $result = Configuration::updateValue('PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES', 'false');
+
+        $this->ajaxDie(json_encode((bool)$result));
     }
 }

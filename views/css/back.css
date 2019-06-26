@@ -345,3 +345,11 @@ label > .input_img:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     -o-transition: border-color ease-in-out 0.15s,box-shadow ease-in-out 0.15s;
     transition: border-color ease-in-out 0.15s,box-shadow ease-in-out 0.15s
 }
+
+#PsAgeCheckerPopupDisplayLocation label{
+    font-weight: normal;
+}
+
+#PopupDisplaySelectProducts #selectedProducts{
+    color: #25B9D7;
+}

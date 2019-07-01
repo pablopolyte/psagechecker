@@ -80,6 +80,8 @@ class AdminAjaxPsAgeCheckerController extends ModuleAdminController
      */
     public function ajaxProcessSelectedAllShop()
     {
+        Configuration::updateValue('PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES', '');
+        Configuration::updateValue('PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS', '');
         $result = Configuration::updateValue('PS_AGE_CHECKER_POPUP_DISPLAY_EVERYWHERE', 'true');
         $this->ajaxDie(json_encode((bool)$result));
     }
@@ -132,9 +134,32 @@ class AdminAjaxPsAgeCheckerController extends ModuleAdminController
         $key = array_search($productId, $arrayCurrentProducts);
         if ($key != false) { unset($arrayCurrentProducts[$key]); }
 
+        $products = array_filter($arrayCurrentProducts, 'strlen');
         $products = implode(',', $products);
-        $response = Configuration::updateValue('PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS', 'false');
+        $response = Configuration::updateValue('PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS', $products);
 
+        $this->ajaxDie(json_encode((bool)$response));
+    }
+
+    /**
+     * ajaxProcessRemoveAllProducts
+     *
+     * @return string
+     */
+    public function ajaxProcessRemoveAllProducts()
+    {
+        $response = Configuration::updateValue('PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS', '');
+        $this->ajaxDie(json_encode((bool)$response));
+    }
+
+    /**
+     * ajaxProcessRemoveAllCategories
+     *
+     * @return string
+     */
+    public function ajaxProcessRemoveAllCategories()
+    {
+        $response = Configuration::updateValue('PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES', '');
         $this->ajaxDie(json_encode((bool)$response));
     }
 
@@ -150,13 +175,12 @@ class AdminAjaxPsAgeCheckerController extends ModuleAdminController
         $categories = Configuration::get('PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES');
         $arrayCurrentCategories = explode(',', $categories);
         $isAlreadyPresent = array_search($categoryId, $arrayCurrentCategories);
-
         if ($isAlreadyPresent == false || empty($isAlreadyPresent)) {
             $categories = "$categories,$categoryId";
             $response = Configuration::updateValue('PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES', $categories);
         };
 
-        $this->ajaxDie(json_encode($response));
+        $this->ajaxDie(json_encode((bool)$response));
     }
 
     /**
@@ -173,9 +197,9 @@ class AdminAjaxPsAgeCheckerController extends ModuleAdminController
 
         $key = array_search($categoryId, $arrayCurrentCategories);
         if ($key != false) { unset($arrayCurrentCategories[$key]); }
-
-        $categories = implode(',', $categories);
-        $result = Configuration::updateValue('PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES', 'false');
+        $categories = array_filter($arrayCurrentCategories, 'strlen');
+        $categories = implode(',', $arrayCurrentCategories);
+        $result = Configuration::updateValue('PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES', $categories);
 
         $this->ajaxDie(json_encode((bool)$result));
     }

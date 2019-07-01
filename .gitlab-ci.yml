@@ -1,6 +1,9 @@
 stages:
   - tests
 
+# Unusable until namespace and autoloading is implemented
+# Use prestashop eslint and custom phpstan
+
 php-cs-fixer-sf-classes:
   image: jakzal/phpqa:1.21.3
   stage: tests
@@ -17,27 +20,26 @@ phpcs-PSR2-classes:
   image: jakzal/phpqa:1.21.3
   stage: tests
   script: phpcs --standard=PSR2 ./classes
-  allow_failure: false
+  allow_failure: true
 
 phpcs-PSR2-controllers:
   image: jakzal/phpqa:1.21.3
   stage: tests
   script: phpcs --standard=PSR2 ./controllers
-  allow_failure: false
+  allow_failure: true
 
-# Unusable until namespace and autoloading is implemented
 
-# phpstan-classes:
-#   image: jakzal/phpqa:1.21.3
-#   stage: tests
-#   script: phpstan analyse --level 1 ./classes/
-#   allow_failure: true
+phpstan-classes:
+  image: jakzal/phpqa:1.21.3
+  stage: tests
+  script: phpstan analyse --level 1 ./classes/
+  allow_failure: true
 
-# phpstan-controllers:
-#   image: jakzal/phpqa:1.21.3
-#   stage: tests
-#   script: phpstan analyse --level 1 ./controllers/
-#   allow_failure: true
+phpstan-controllers:
+  image: jakzal/phpqa:1.21.3
+  stage: tests
+  script: phpstan analyse --level 1 ./controllers/
+  allow_failure: true
 
 php-metrics-classes:
   image: jakzal/phpqa:1.21.3

@@ -12,6 +12,11 @@
 * @license   http://addons.prestashop.com/en/content/12-terms-and-conditions-of-use
 * International Registered Trademark & Property of PrestaShop SA
 *}
+
+<script type="text/javascript">
+    var popupDisplaySelectedCategories = {$popupDisplaySelectedCategories|@json_encode};
+</script>
+
 <form method="post" action="{$moduleAdminLink|escape:'htmlall':'UTF-8'}&page=conf" class="form-horizontal" enctype="multipart/form-data">
 
 <div class="panel col-lg-10 right-panel">
@@ -50,30 +55,30 @@
         </div>
         <div class="col-xs-12 col-sm-12 col-md-7 col-lg-3">
             <label>
-                <input {if $PS_AGE_CHECKER_POPUP_DISPLAY_EVERYWHERE=='true'}checked{/if} class="PopupDisplaySelector" type="checkbox" name="{l s='All shop' mod='psagechecker'}" value="all">
+                <input {if $popupDisplaySelectedEverywhere == 'true'}checked{/if} class="PopupDisplaySelector" type="checkbox" name="{l s='All shop' mod='psagechecker'}" value="all">
                 {l s='All shop' mod='psagechecker'}
             </label>
             <br>
 
             <label>
-                <input class="PopupDisplaySelector" type="checkbox" name="{l s='Specific Category' mod='psagechecker'}" value="categories">
+                <input {if $popupDisplaySelectedCategories|@count > 0}checked{/if} class="PopupDisplaySelector" type="checkbox" name="{l s='Specific Category' mod='psagechecker'}" value="categories">
                 {l s='Specific Category' mod='psagechecker'}
             </label>
-            <div id="PopupDisplaySelectCategories" class="hide">
+            <div id="PopupDisplaySelectCategories" {if $popupDisplaySelectedCategories|@count == 0}class="hide"{/if}>
                 <div id="jstreecategories"><ul></ul></div>
             </div>
             <br>
 
             <label>
-                <input class="PopupDisplaySelector" type="checkbox" name="{l s='Specific Product' mod='psagechecker'}" value="products">
+                <input {if $popupDisplaySelectedProducts|@count > 0}checked{/if} class="PopupDisplaySelector" type="checkbox" name="{l s='Specific Product' mod='psagechecker'}" value="products">
                 {l s='Specific Product' mod='psagechecker'}
             </label>
-            <div id="PopupDisplaySelectProducts" class="hide">
+            <div id="PopupDisplaySelectProducts" {if $popupDisplaySelectedProducts|@count == 0}class="hide"{/if} >
                 <input type="text" name="{l s='Specific Product' mod='psagechecker'}" value="">
                 <ul id="selectedProducts">
-                    {* {foreach from=$PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS key='key' item='product'}
-                        <li id="{$product.id}">{$product.name}</li>
-                    {/foreach} *}
+                    {foreach from=$popupDisplaySelectedProducts key='key' item='product'}
+                        <li id="{$product->id}">{$product->name}</li>
+                    {/foreach}
                 </ul>
                 <ul id="resultProducts"></ul>
             </div>

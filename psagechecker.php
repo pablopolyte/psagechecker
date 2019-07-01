@@ -150,7 +150,8 @@ class PsAgeChecker extends Module
         if (parent::install() &&
             $this->installTab() &&
             $this->registerHook('displayTop') &&
-            $this->registerHook('displayFooterProduct')) {
+            $this->registerHook('displayFooterProduct')
+        ) {
             if (version_compare(_PS_VERSION_, '1.7', '>=')) {
                 $this->registerHook('actionFrontControllerSetMedia');
             } else {
@@ -158,7 +159,7 @@ class PsAgeChecker extends Module
             }
 
             return true;
-        } else { // if something wrong return false
+        } else {
             $this->_errors[] = $this->l('There was an error during the uninstallation. Please contact us through Addons website.');
 
             return false;
@@ -341,7 +342,6 @@ class PsAgeChecker extends Module
         $iso_lang = Language::getIsoById($id_lang);
         $tuto = $this->docs_path.'tuto/tuto_'.$iso_lang.'.pdf';
 
-
         // get current page
         $currentPage = 'conf';
         $page = Tools::getValue('page');
@@ -368,14 +368,28 @@ class PsAgeChecker extends Module
             }
         }
 
-        $selectedProducts = array();
+        $popupDisplaySelectedProducts = array();
         $configSelectedProducts = Configuration::get('PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS');
 
-        foreach (explode(',', $selectedProducts)) {
-
+        foreach (explode(',', $configSelectedProducts) as $idProduct) {
+            $product = new PrestaShopCollection('Product', $id_lang);
+            $product->where('id_product', '=', $idProduct);
+            $product = $product->getFirst();
+            if ($product) {
+                $popupDisplaySelectedProducts[] = $product;
+            }
         }
 
-        $selectedCategories = Configuration::get('PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES');
+        $popupDisplaySelectedCategories = array();
+        $configDisplaySelectedCategories = Configuration::get('PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES');
+        foreach (explode(',', $configDisplaySelectedCategories) as $idCategory) {
+            $category = new PrestaShopCollection('Category', $id_lang);
+            $category->where('id_category', '=', $idCategory);
+            $category = $category->getFirst();
+            if ($category) {
+                $popupDisplaySelectedCategories[] = $category;
+            }
+        }
 
         // assign var to smarty
         $this->context->smarty->assign(array(
@@ -400,12 +414,10 @@ class PsAgeChecker extends Module
             'ps_version' => _PS_VERSION_,
             'isPs17' => $this->ps_version,
             'fonts' => $this->fonts,
-            'album_custom_desc' => 'test',
             'PS_AGE_CHECKER_OPACITY' => 1,
-            'CB_FONT_STYLE' => 'test',
-            'PS_AGE_CHECKER_POPUP_DISPLAY_EVERYWHERE' => Configuration::get('PS_AGE_CHECKER_POPUP_DISPLAY_EVERYWHERE'),
-            'selectedProducts' => $selectedProducts,
-            'selectedCategories' => $selectedCategories,
+            'popupDisplaySelectedEverywhere' => Configuration::get('PS_AGE_CHECKER_POPUP_DISPLAY_EVERYWHERE'),
+            'popupDisplaySelectedProducts' => $popupDisplaySelectedProducts,
+            'popupDisplaySelectedCategories' => $popupDisplaySelectedCategories,
         ));
 
         $this->output .= $this->context->smarty->fetch($this->local_path.'views/templates/admin/menu.tpl');
@@ -427,9 +439,7 @@ class PsAgeChecker extends Module
                         foreach ($languages as $lang) {
                             $values[$value][$lang['id_lang']] = Tools::getValue($value.'_'.$lang['id_lang']);
                         }
-
                         Configuration::updateValue($value, $values[$value], true);
-                        //p($values[$value]);
                     } else {
                         Configuration::updateValue($value, Tools::getValue($value));
                     }
@@ -474,16 +484,72 @@ class PsAgeChecker extends Module
         }
     }
 
+    /**
+     * hookdisplayTop
+     *
+     * @param mixed $params
+     * @return void|string
+     */
     public function hookdisplayTop($params)
     {
+        if ($this->currentPageIsUnderAgeChecker()) {
+            return $this->showPopupInHook();
+        }
+    }
+
+    /**
+     * currentPageIsUnderAgeChecker
+     * check if current page need to load the age checker popin
+     *
+     * @return bool
+     */
+    private function currentPageIsUnderAgeChecker() {
         $actif = Configuration::get('PS_AGE_CHECKER_SHOW_POPUP');
 
         if ($actif != 0) {
-            $this->loadFrontAsset();
-            $this->displayWall();
+            if (Configuration::get('PS_AGE_CHECKER_POPUP_DISPLAY_EVERYWHERE') == 'true') {
+                return true;
+            } else {
+                $controllerType = $this->context->controller->php_self;
 
-            return $this->display(__FILE__, 'views/templates/hook/displayWall.tpl');
+                if ($controllerType == 'category') {
+                    $categories = Configuration::get('PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES');
+                    $currentCategoryId = $this->context->controller->getCategory()->id;
+
+                    foreach (explode(',', $categories) as $category) {
+                        if ($category == $currentCategoryId) {
+                            return true;
+                        }
+                    }
+                }
+
+                if ($controllerType == 'product') {
+                    $products = Configuration::get('PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS');
+                    $currentProductId = $this->context->controller->getProduct()->id;
+
+                    foreach (explode(',', $products) as $product) {
+                        if ($product == $currentProductId) {
+                            return true;
+                        }
+                    }
+                }
+            }
         }
+
+        return false;
+    }
+
+    /**
+     * showPopupInHook
+     *
+     * @return string
+     */
+    public function showPopupInHook()
+    {
+        $this->loadFrontAsset();
+        $this->displayWall();
+
+        return $this->display(__FILE__, 'views/templates/hook/displayWall.tpl');
     }
 
     public function displayWall()
@@ -536,9 +602,11 @@ class PsAgeChecker extends Module
     public function loadFrontAsset()
     {
         if (version_compare(_PS_VERSION_, '1.7.0.0') < 1) {
-            $this->context->controller->addCSS($this->css_path.'front.css');
-            $this->context->controller->addJS($this->js_path.'front.js');
-            $this->context->controller->addJS($this->js_path.'bootstrap-slider.js');
+            if ($this->currentPageIsUnderAgeChecker()) {
+                $this->context->controller->addCSS($this->css_path.'front.css');
+                $this->context->controller->addJS($this->js_path.'front.js');
+                $this->context->controller->addJS($this->js_path.'bootstrap-slider.js');
+            }
         }
     }
 
@@ -546,16 +614,16 @@ class PsAgeChecker extends Module
     public function hookActionFrontControllerSetMedia()
     {
         if (version_compare(_PS_VERSION_, '1.7.0.0') >= 0) {
-
-            $this->context->controller->registerStylesheet(
-                'psageverifymedia-front-css',
-                'modules/'.$this->name.'/views/css/front.css'
-            );
-            $this->context->controller->registerJavascript(
-                'psageverifymedia-front-js',
-                'modules/'.$this->name.'/views/js/front.js'
-            );
-
+            if ($this->currentPageIsUnderAgeChecker()) {
+                $this->context->controller->registerStylesheet(
+                    'psageverifymedia-front-css',
+                    'modules/'.$this->name.'/views/css/front.css'
+                );
+                $this->context->controller->registerJavascript(
+                    'psageverifymedia-front-js',
+                    'modules/'.$this->name.'/views/js/front.js'
+                );
+            }
         }
     }
 }

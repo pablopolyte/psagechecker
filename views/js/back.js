@@ -171,21 +171,6 @@ $(window).ready(function() {
         }
     });
 
-    function getObjects(obj, key, val, index) {
-        var objects = [];
-        var result = index;
-        for (var i in obj) {
-            if (!obj.hasOwnProperty(i)) continue;
-            if (typeof obj[i] == 'object') {
-                objects = objects.concat(getObjects(obj[i], key, val, i));
-            } else if (i == key && obj[key] == val) {
-                result = index;
-                vImagePreselection.items[result].isActive = 0;
-                //vImagePreselection.paginate.items.list[index].isActive = 0;
-            }
-        }
-    }
-
     function getImages() {
         $.ajax({
             type: 'POST',
@@ -246,32 +231,6 @@ $(window).ready(function() {
         });
     }
 
-    function disableImage(id, index) {
-        $.ajax({
-            type: 'POST',
-            dataType: 'JSON',
-            url: controller_url,
-            data: {
-                ajax: true,
-                action: 'DisableImage',
-                id: id,
-            },
-            success: function(data) {
-                if (data == 'disable') {
-                    showSuccessMessage(msgDisableImage);
-                    vImageManager.imageList[index].isActive = 0;
-                } else {
-                    vImageManager.imageList[index].isActive = 1;
-                    showSuccessMessage(msgEnableImage);
-                }
-                generateCache();
-            },
-            error: function(err) {
-                console.log(err);
-            }
-        });
-    }
-
     function removeImageByIdMedia(idMedia, index) {
         $.ajax({
             type: 'POST',
@@ -291,48 +250,6 @@ $(window).ready(function() {
             },
             error: function(err) {
                 console.log(err);
-            }
-        });
-    }
-
-    function removeImageById(id, idMedia) {
-        $.ajax({
-            type: 'POST',
-            dataType: 'JSON',
-            url: controller_url,
-            data: {
-                ajax: true,
-                action: 'RemoveImageById',
-                id: id,
-            },
-            success: function(data) {
-                getObjects(vImagePreselection.items, 'id', idMedia);
-                getImages();
-                generateCache();
-                showSuccessMessage(msgRemoveImage);
-            },
-            error: function(err) {
-                console.log(err);
-            }
-        });
-    }
-
-    function getAssignedProduct(idImage) {
-        $.ajax({
-            type: 'POST',
-            dataType: 'JSON',
-            url: controller_url,
-            data: {
-                ajax: true,
-                action: 'GetAssignedProduct',
-                id_image: idImage,
-            },
-            success: function(data) {
-                $('#product1').val(data[0].product1).trigger('change');
-                $('#product2').val(data[0].product2).trigger('change');
-            },
-            error: function(err) {
-                showErrorMessage('Something wrong happened. Please retry.');
             }
         });
     }
@@ -458,14 +375,85 @@ $(window).ready(function() {
         if ($(context).prop("checked") == false) { ajaxUnselectAllShop(); }
     }
 
+    function onJsTreeSelectCategories(event, data) {
+        var id = data.node.id.replace('category_','');
+        console.log(id);
+
+        $.ajax({
+            type: 'POST',
+            url: AjaxPsAgeCheckerController,
+            data: {
+                ajax: true,
+                action: 'AddCategory',
+                categoryId: id
+            },
+            success: function(response) {
+                if ('true' != response) {
+                    showErrorMessage('Something wrong happened. Please retry.');
+                }
+            },
+            error: function(err) {
+                showErrorMessage('Something wrong happened. Please retry.');
+            }
+        });
+    };
+
+    function onJsTreeUnselectCategories(event, data) {
+        var id = data.node.id.replace('category_','');
+        console.log(id);
+
+        $.ajax({
+            type: 'POST',
+            url: AjaxPsAgeCheckerController,
+            data: {
+                ajax: true,
+                action: 'RemoveCategory',
+                categoryId: id
+            },
+            success: function(response) {
+                if ('true' != response) {
+                    showErrorMessage('Something wrong happened. Please retry.');
+                }
+            },
+            error: function(err) {
+                showErrorMessage('Something wrong happened. Please retry.');
+            }
+        });
+    };
+
+    function initJsTreeCategories(html) {
+        $('#jstreecategories ul')
+        .empty()
+        .promise( $('#jstreecategories ul').append(html) )
+        .done(function() {
+            $('#jstreecategories').jstree({
+                "checkbox" : {
+                    "three_state" : false,
+                    "keep_selected_style" : true
+                },
+                "plugins" : ["checkbox"]
+            });
+
+            $('#jstreecategories')
+                .on("select_node.jstree", onJsTreeSelectCategories)
+                .on("deselect_node.jstree", onJsTreeUnselectCategories);
+        });
+    }
+
     function handleSuccessGetCategories(response) {
         var html = '',
             categories = JSON.parse(response);
 
         function handleNestedCategories(category) {
             for (key in categories[category]) {
+                var isSelected = '';
+                popupDisplaySelectedCategories.forEach(selectedCategory => {
+                    if (categories[category][key].id == selectedCategory.id) {
+                        isSelected = 'class="jstree-clicked"';
+                    }
+                });
                 html += '<ul>'
-                html += '<li id="category_'+ categories[category][key].id +'" >' + categories[category][key].name;
+                html += '<li id="category_'+ categories[category][key].id +'" ><a '+isSelected+' >' + categories[category][key].name +'</a>';
                 handleNestedCategories(categories[category][key].id);
                 html += '</li>';
                 html += '</ul>'
@@ -476,26 +464,23 @@ $(window).ready(function() {
             categories[key].forEach(category => {
                 // show only child of Home category
                 if (category.id_parent == PS_HOME_CATEGORY) {
-                    html += '<li id="category_'+ category.id +'" >' + category.name;
+                    var isSelected = '';
+                    popupDisplaySelectedCategories.forEach(selectedCategory => {
+                        if (category.id == selectedCategory.id) {
+                            isSelected = 'class="jstree-clicked"';
+                        }
+                    });
+
+                    html += '<li id="category_'+ category.id +'" ><a '+isSelected+' >' + category.name +'</a>';
+
+                    // recursive on all childrens
                     handleNestedCategories(category.id);
                     html += '</li>';
                 };
             });
         }
 
-        $('#jstreecategories ul')
-            .empty()
-            .promise( $('#jstreecategories ul').append(html) )
-            .done(function() {
-                $('#jstreecategories').jstree({
-                    "checkbox" : {
-                        "three_state" : false,
-                        "keep_selected_style" : false
-                    },
-                    "plugins" : ["checkbox"]
-                });
-            });
-
+        initJsTreeCategories(html);
         $('#PopupDisplaySelectCategories').removeClass('hide');
     }
 
@@ -522,10 +507,28 @@ $(window).ready(function() {
                         },
                         success: handleSuccessGetCategories,
                         error: function(err) {
-                            jAlert('Something wrong happened. Please retry.');
+                            showErrorMessage('Something wrong happened. Please retry.');
                         }
                     });
-                } else {
+                }
+
+                if ($(this).prop("checked") == false) {
+                    $.ajax({
+                        type: 'GET',
+                        url: AjaxPsAgeCheckerController,
+                        data: {
+                            ajax: true,
+                            action: 'RemoveAllCategories',
+                        },
+                        success: function(response) {
+                            if ('true' != response) {
+                                showErrorMessage('Something wrong happened. Please retry.');
+                            }
+                        },
+                        error: function(err) {
+                            showErrorMessage('Something wrong happened. Please retry.');
+                        }
+                    });
                     $('#PopupDisplaySelectCategories').addClass('hide');
                     $.jstree.reference('#jstreecategories').destroy();
                     $('#jstreecategories ul').empty();
@@ -557,18 +560,36 @@ $(window).ready(function() {
                 productId: id
             },
             success: function(response) {
-                console.log(response);
+                html = '<li id="'+ id +'">'+ name +'</li>';
+                $('#PopupDisplaySelectProducts ul#selectedProducts').append(html);
+                $(event.target).remove();
             },
             error: function(err) {
                 showErrorMessage('Something wrong happened. Please retry.');
             }
         });
-
-        html = '<li id="'+ id +'">'+ name +'</li>';
-
-        $('#PopupDisplaySelectProducts ul#selectedProducts').append(html);
-        $(event.target).remove();
     }
+
+    function onClickPopupDisplayUnselectProduct(event) {
+        var id = $(event.target).attr('id');
+
+        $.ajax({
+            type: 'GET',
+            url: AjaxPsAgeCheckerController,
+            data: {
+                ajax: true,
+                action: 'RemoveProduct',
+                productId: id
+            },
+            success: function(response) {
+                $(event.target).remove();
+            },
+            error: function(err) {
+                showErrorMessage('Something wrong happened. Please retry.');
+            }
+        });
+    }
+
 
     function onMouseEnterPopupDisplaySelectProduct(event) {
         $(event.target).css("background-color", "#25B9D7");
@@ -582,9 +603,10 @@ $(window).ready(function() {
         .on('mouseenter', '#PopupDisplaySelectProducts ul#resultProducts li', onMouseEnterPopupDisplaySelectProduct)
         .on('mouseleave', '#PopupDisplaySelectProducts ul#resultProducts li', onMouseLeavePopupDisplaySelectProduct)
         .on('click', '#PopupDisplaySelectProducts ul#resultProducts li', onClickPopupDisplaySelectProduct)
+        .on('click', '#PopupDisplaySelectProducts ul#selectedProducts li', onClickPopupDisplayUnselectProduct)
         .on('change', '.PopupDisplaySelector', onChangePopupDisplaySelector);
-        // .on('keyup', '#PopupDisplaySelectProducts input[type="text"]', throttle(onKeyUpPopupDisplaySelectProducts(event), 1000));
 
+    // throttle fuck up context/scope, need to fix this
     $(document).on('keyup', '#PopupDisplaySelectProducts input[type="text"]', throttle(function(event) {
         var $inputText = $('#PopupDisplaySelectProducts input[type="text"]');
         if ($inputText.val().length > 2) {
@@ -618,4 +640,19 @@ $(window).ready(function() {
             });
         }
     }, 1000));
+
+    if (!$('#PopupDisplaySelectCategories').hasClass('hide')) {
+        $.ajax({
+            type: 'GET',
+            url: AjaxPsAgeCheckerController,
+            data: {
+                ajax: true,
+                action: 'GetCategories',
+            },
+            success: handleSuccessGetCategories,
+            error: function(err) {
+                showErrorMessage('Something wrong happened. Please retry.');
+            }
+        });
+    }
 });

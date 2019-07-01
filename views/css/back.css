@@ -28,12 +28,10 @@
 #jason, #billy {
     border-top: solid 1px lightgrey;
 }
-
 .api-redirect-url {
     margin-top: 5px !important;
     font-weight: bold;
 }
-
 #myTab{
     margin-left: 138px;
 }
@@ -346,10 +344,7 @@ label > .input_img:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     transition: border-color ease-in-out 0.15s,box-shadow ease-in-out 0.15s
 }
 
-#PsAgeCheckerPopupDisplayLocation label{
-    font-weight: normal;
-}
-
-#PopupDisplaySelectProducts #selectedProducts{
-    color: #25B9D7;
-}
+#PsAgeCheckerPopupDisplayLocation label{ font-weight: normal; }
+#PopupDisplaySelectProducts #selectedProducts{ color: #25B9D7; }
+#PopupDisplaySelectProducts ul{ padding: 0; }
+#PopupDisplaySelectProducts ul li { list-style-type: none; cursor: pointer; padding: 0; }

@@ -54,6 +54,10 @@
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-7 col-lg-3">
+            <input id="PS_AGE_CHECKER_POPUP_DISPLAY_EVERYWHERE" class="hide" type="text" name="PS_AGE_CHECKER_POPUP_DISPLAY_EVERYWHERE"  value="{$popupDisplaySelectedEverywhere}">
+            <input id="PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES" class="hide" type="text" name="PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES"  value="{$configDisplaySelectedCategories}">
+            <input id="PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS" class="hide" type="text" name="PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS"  value="{$configDisplaySelectedProducts}">
+
             <label>
                 <input {if $popupDisplaySelectedEverywhere == 'true'}checked{/if} class="PopupDisplaySelector" type="checkbox" name="{l s='All shop' mod='psagechecker'}" value="all">
                 {l s='All shop' mod='psagechecker'}
@@ -77,7 +81,7 @@
                 <input type="text" name="{l s='Specific Product' mod='psagechecker'}" value="">
                 <ul id="selectedProducts">
                     {foreach from=$popupDisplaySelectedProducts key='key' item='product'}
-                        <li id="{$product->id}">{$product->name}</li>
+                        <li id="{$product->id}">ID: {$product->id} | Name: {$product->name}</li>
                     {/foreach}
                 </ul>
                 <ul id="resultProducts"></ul>

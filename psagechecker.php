@@ -51,6 +51,9 @@ class PsAgeChecker extends Module
         'confirm_button_text_color'   => 'PS_AGE_CHECKER_CONFIRM_BUTTON_TXT_COLOR',
         'deny_button_bground_color'   => 'PS_AGE_CHECKER_DENY_BUTTON_BACKGROUND_COLOR',
         'deny_button_text_color'      => 'PS_AGE_CHECKER_DENY_BUTTON_TXT_COLOR',
+        'popup_display_everywhere'    => 'PS_AGE_CHECKER_POPUP_DISPLAY_EVERYWHERE',
+        'popup_display_categories'    => 'PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES',
+        'popup_display_products'      => 'PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS',
     );
 
     public $fontsCss = array(
@@ -369,9 +372,9 @@ class PsAgeChecker extends Module
         }
 
         $popupDisplaySelectedProducts = array();
-        $configSelectedProducts = Configuration::get('PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS');
+        $configDisplaySelectedProducts = Configuration::get('PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS');
 
-        foreach (explode(',', $configSelectedProducts) as $idProduct) {
+        foreach (explode(',', $configDisplaySelectedProducts) as $idProduct) {
             $product = new PrestaShopCollection('Product', $id_lang);
             $product->where('id_product', '=', $idProduct);
             $product = $product->getFirst();
@@ -417,7 +420,9 @@ class PsAgeChecker extends Module
             'PS_AGE_CHECKER_OPACITY' => 1,
             'popupDisplaySelectedEverywhere' => Configuration::get('PS_AGE_CHECKER_POPUP_DISPLAY_EVERYWHERE'),
             'popupDisplaySelectedProducts' => $popupDisplaySelectedProducts,
+            'configDisplaySelectedProducts' => $configDisplaySelectedProducts,
             'popupDisplaySelectedCategories' => $popupDisplaySelectedCategories,
+            'configDisplaySelectedCategories' => $configDisplaySelectedCategories,
         ));
 
         $this->output .= $this->context->smarty->fetch($this->local_path.'views/templates/admin/menu.tpl');
@@ -425,16 +430,26 @@ class PsAgeChecker extends Module
         return $this->output;
     }
 
+    /**
+     * postProcess
+     * Handle post data from the configuration
+     *
+     * @return void
+     */
     public function postProcess()
     {
-        // conf form
         if (Tools::isSubmit('submitpsagecheckerModule')) {
             $errors = array();
             $languages = Language::getLanguages(false);
             $nbErrors = 0;
             if ($nbErrors == 0) {
                 foreach ($this->settings_conf as $value) {
-                    if ($value === 'PS_AGE_CHECKER_CUSTOM_TITLE' || $value === 'PS_AGE_CHECKER_CUSTOM_MSG' || $value === 'PS_AGE_CHECKER_DENY_MSG' || $value === 'PS_AGE_CHECKER_CONFIRM_BUTTON_TEXT' || $value === 'PS_AGE_CHECKER_DENY_BUTTON_TEXT') {
+                    if ($value === 'PS_AGE_CHECKER_CUSTOM_TITLE'
+                        || $value === 'PS_AGE_CHECKER_CUSTOM_MSG'
+                        || $value === 'PS_AGE_CHECKER_DENY_MSG'
+                        || $value === 'PS_AGE_CHECKER_CONFIRM_BUTTON_TEXT'
+                        || $value === 'PS_AGE_CHECKER_DENY_BUTTON_TEXT'
+                    ) {
                         $values = array();
                         foreach ($languages as $lang) {
                             $values[$value][$lang['id_lang']] = Tools::getValue($value.'_'.$lang['id_lang']);
@@ -499,7 +514,7 @@ class PsAgeChecker extends Module
 
     /**
      * currentPageIsUnderAgeChecker
-     * check if current page need to load the age checker popin
+     * Check if current page need to load the age checker popin
      *
      * @return bool
      */

@@ -318,45 +318,8 @@ $(window).ready(function() {
         }
     });
 
-    function ajaxUnselectAllShop() {
-        $.ajax({
-            type: 'POST',
-            url: AjaxPsAgeCheckerController,
-            data: {
-                ajax: true,
-                action: 'UnselectedAllShop'
-            },
-            success: function(response) {
-                if ('true' != response) {
-                    showErrorMessage('Something wrong happened. Please retry.');
-                }
-            },
-            error: function(err) {
-                showErrorMessage('Something wrong happened. Please retry.');
-            }
-        });
-    }
-
-    function ajaxSelectAllShop() {
-        $.ajax({
-            type: 'POST',
-            url: AjaxPsAgeCheckerController,
-            data: {
-                ajax: true,
-                action: 'SelectedAllShop'
-            },
-            success: function(response) {
-                if ('true' != response) {
-                    showErrorMessage('Something wrong happened. Please retry.');
-                }
-            },
-            error: function(err) {
-                showErrorMessage('Something wrong happened. Please retry.');
-            }
-        });
-    }
-
     function handleClickOnAllShop(context) {
+
         $('.PopupDisplaySelector').each(function(index) {
             if ($(this).prop("value") == 'all') { return; }
             $(this).prop("checked", false);
@@ -370,55 +333,38 @@ $(window).ready(function() {
         if (null != jsTreeCategories) {
             jsTreeCategories.destroy();
         }
-
-        if ($(context).prop("checked") == true) { ajaxSelectAllShop(); }
-        if ($(context).prop("checked") == false) { ajaxUnselectAllShop(); }
     }
 
     function onJsTreeSelectCategories(event, data) {
-        var id = data.node.id.replace('category_','');
-        console.log(id);
+        var id = data.node.id.replace('category_',''),
+            categoriesString = $('#PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES').val(),
+            categoriesArray = categoriesString.split(','),
+            isAlreadyPresent = false;
 
-        $.ajax({
-            type: 'POST',
-            url: AjaxPsAgeCheckerController,
-            data: {
-                ajax: true,
-                action: 'AddCategory',
-                categoryId: id
-            },
-            success: function(response) {
-                if ('true' != response) {
-                    showErrorMessage('Something wrong happened. Please retry.');
-                }
-            },
-            error: function(err) {
-                showErrorMessage('Something wrong happened. Please retry.');
-            }
+        categoriesArray.forEach(catId => {
+            if (catId == id) { isAlreadyPresent = true; }
         });
+
+        if (!isAlreadyPresent) {
+            categoriesArray.push(id);
+            categoriesString = categoriesArray.join(',');
+            $('#PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES').val(categoriesString);
+        };
     };
 
     function onJsTreeUnselectCategories(event, data) {
-        var id = data.node.id.replace('category_','');
-        console.log(id);
+        var id = data.node.id.replace('category_',''),
+            categoriesString = $('#PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES').val(),
+            categoriesArray = categoriesString.split(',');
 
-        $.ajax({
-            type: 'POST',
-            url: AjaxPsAgeCheckerController,
-            data: {
-                ajax: true,
-                action: 'RemoveCategory',
-                categoryId: id
-            },
-            success: function(response) {
-                if ('true' != response) {
-                    showErrorMessage('Something wrong happened. Please retry.');
-                }
-            },
-            error: function(err) {
-                showErrorMessage('Something wrong happened. Please retry.');
+        categoriesArray.forEach((catId, index) => {
+            if (catId == id) {
+                categoriesArray.splice(1 ,index);
+                index--;
             }
         });
+        categoriesString = categoriesArray.join(',');
+        $('#PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES').val(categoriesString);
     };
 
     function initJsTreeCategories(html) {
@@ -485,15 +431,17 @@ $(window).ready(function() {
     }
 
     function onChangePopupDisplaySelector(event) {
-
         // Clicked on all shop
         if ($(this).prop("value") == 'all' ) {
             handleClickOnAllShop(this);
+            $('#PS_AGE_CHECKER_POPUP_DISPLAY_EVERYWHERE').val('true');
+            $('#PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES').val('');
+            $('#PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS').val('');
         };
 
         if ($(this).prop("value") != 'all') {
+            $('#PS_AGE_CHECKER_POPUP_DISPLAY_EVERYWHERE').val('false');
             $('input.PopupDisplaySelector[value="all"]').prop("checked", false);
-            ajaxUnselectAllShop();
 
             // Handle click on categories
             if ($(this).prop("value") == 'categories') {
@@ -513,22 +461,7 @@ $(window).ready(function() {
                 }
 
                 if ($(this).prop("checked") == false) {
-                    $.ajax({
-                        type: 'GET',
-                        url: AjaxPsAgeCheckerController,
-                        data: {
-                            ajax: true,
-                            action: 'RemoveAllCategories',
-                        },
-                        success: function(response) {
-                            if ('true' != response) {
-                                showErrorMessage('Something wrong happened. Please retry.');
-                            }
-                        },
-                        error: function(err) {
-                            showErrorMessage('Something wrong happened. Please retry.');
-                        }
-                    });
+                    // remove AllCategories on inputCategories
                     $('#PopupDisplaySelectCategories').addClass('hide');
                     $.jstree.reference('#jstreecategories').destroy();
                     $('#jstreecategories ul').empty();
@@ -549,47 +482,42 @@ $(window).ready(function() {
     function onClickPopupDisplaySelectProduct(event) {
         var html = '',
             id = $(event.target).attr('id'),
-            name = $(event.target).text();
+            name = $(event.target).text(),
+            isAlreadyPresent = false,
+            productsString = $('#PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS').val(),
+            productsArray = productsString.split(',');
 
-        $.ajax({
-            type: 'GET',
-            url: AjaxPsAgeCheckerController,
-            data: {
-                ajax: true,
-                action: 'AddProduct',
-                productId: id
-            },
-            success: function(response) {
-                html = '<li id="'+ id +'">'+ name +'</li>';
-                $('#PopupDisplaySelectProducts ul#selectedProducts').append(html);
-                $(event.target).remove();
-            },
-            error: function(err) {
-                showErrorMessage('Something wrong happened. Please retry.');
-            }
+        html = '<li id="'+ id +'">'+ name +'</li>';
+        $('#PopupDisplaySelectProducts ul#selectedProducts').append(html);
+        $(event.target).remove();
+
+        productsArray.forEach(productId => {
+            if (productId == id) { isAlreadyPresent = true; }
         });
+
+        if (!isAlreadyPresent) {
+            productsArray.push(id);
+            productsString = productsArray.join(',');
+            $('#PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS').val(productsString);
+        };
     }
 
     function onClickPopupDisplayUnselectProduct(event) {
-        var id = $(event.target).attr('id');
+        var id = $(event.target).attr('id'),
+            productsString = $('#PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS').val(),
+            productsArray = productsString.split(',');
 
-        $.ajax({
-            type: 'GET',
-            url: AjaxPsAgeCheckerController,
-            data: {
-                ajax: true,
-                action: 'RemoveProduct',
-                productId: id
-            },
-            success: function(response) {
-                $(event.target).remove();
-            },
-            error: function(err) {
-                showErrorMessage('Something wrong happened. Please retry.');
+        $(event.target).remove();
+
+        productsArray.forEach((productId, index) => {
+            if (productId == id) {
+                productsArray.splice(1 ,index);
+                index--;
             }
         });
+        productsString = productsArray.join(',');
+        $('#PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS').val(productsString);
     }
-
 
     function onMouseEnterPopupDisplaySelectProduct(event) {
         $(event.target).css("background-color", "#25B9D7");
@@ -599,7 +527,19 @@ $(window).ready(function() {
         $(event.target).css("background-color", "none");
     }
 
+    function onMouseEnterPopupDisplaySelectedProduct(event) {
+        $(event.target).css("background-color", "#E08F95");
+        $(event.target).css("color", "black");
+    }
+
+    function onMouseLeavePopupDisplaySelectedProduct(event) {
+        $(event.target).css("background-color", "none");
+        $(event.target).css("color", "#25B9D7");
+    }
+
     $(document)
+        .on('mouseenter', '#PopupDisplaySelectProducts ul#selectedProducts li', onMouseEnterPopupDisplaySelectedProduct)
+        .on('mouseleave', '#PopupDisplaySelectProducts ul#selectedProducts li', onMouseLeavePopupDisplaySelectedProduct)
         .on('mouseenter', '#PopupDisplaySelectProducts ul#resultProducts li', onMouseEnterPopupDisplaySelectProduct)
         .on('mouseleave', '#PopupDisplaySelectProducts ul#resultProducts li', onMouseLeavePopupDisplaySelectProduct)
         .on('click', '#PopupDisplaySelectProducts ul#resultProducts li', onClickPopupDisplaySelectProduct)
@@ -626,7 +566,7 @@ $(window).ready(function() {
 
                     if (Array.isArray(products)) {
                         products.forEach(product => {
-                            html += '<li id="'+ product.id_product +'">'+ product.name +'</li>';
+                            html += '<li id="'+ product.id_product +'">ID: '+ product.id_product +' | Name: '+ product.name +'</li>';
                         });
                     } else {
                         html = '<li>No products found for '+ $('#PopupDisplaySelectProducts input[type="text"]').val() +'</li>';

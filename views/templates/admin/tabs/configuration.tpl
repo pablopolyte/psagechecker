@@ -53,7 +53,7 @@
                 </label>
             </div>
         </div>
-        <div class="col-xs-12 col-sm-12 col-md-7 col-lg-3">
+        <div class="col-xs-12 col-sm-12 col-md-7 col-lg-5">
             <input id="PS_AGE_CHECKER_POPUP_DISPLAY_EVERYWHERE" class="hide" type="text" name="PS_AGE_CHECKER_POPUP_DISPLAY_EVERYWHERE"  value="{$popupDisplaySelectedEverywhere}">
             <input id="PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES" class="hide" type="text" name="PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES"  value="{$configDisplaySelectedCategories}">
             <input id="PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS" class="hide" type="text" name="PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS"  value="{$configDisplaySelectedProducts}">
@@ -114,7 +114,7 @@
                 </label>
             </div>
         </div>
-        <div class="col-xs-12 col-sm-12 col-md-7 col-lg-3">
+        <div class="col-xs-12 col-sm-12 col-md-7 col-lg-9">
             <label>
                 <input type="radio" class="input_img js-show-all" name="PS_AGE_CHECKER_VERIFICATION_METHOD" value="0" {if $verification_method eq 0}checked="checked"{/if}/>
                 <img src="{$img_path}birth.png" width="150" height="150">
@@ -173,13 +173,19 @@
             <div class="form-group">
                 <div class="col-xs-12 col-sm-12 col-md-5 col-lg-3">
                     <div class="text-right">
-                        <label  class="control-label">
+                        <label class="control-label">
                                 {l s='Custom title' mod='psagechecker'}
                         </label>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-7 col-lg-6">
-                    <textarea class="autoload_rte" name="PS_AGE_CHECKER_CUSTOM_TITLE_{$language.id_lang|escape:'htmlall':'UTF-8'}" text="" cols="80" rows="2">{$custom_title[$language.id_lang]|escape:'htmlall':'UTF-8'}</textarea>
+                    <textarea
+                        class="autoload_rte {if $language.id_lang == $defaultFormLanguage}loadTinyMce{/if}"
+                        name="PS_AGE_CHECKER_CUSTOM_TITLE_{$language.id_lang|escape:'htmlall':'UTF-8'}"
+                        text="" cols="80" rows="2"
+                    >
+                        {$custom_title[$language.id_lang]|escape:'htmlall':'UTF-8'}
+                    </textarea>
                 </div>
                 {if $languages|count > 1}
                     <div class="col-xs-12 col-sm-12 col-md-7 col-lg-3">
@@ -189,7 +195,11 @@
                         </button>
                         <ul class="dropdown-menu">
                             {foreach from=$languages item=lang}
-                            <li><a class="currentLang" data-id="{$lang.id_lang|escape:'htmlall':'UTF-8'}" href="javascript:hideOtherLanguage('{$lang.id_lang|escape:'javascript'}');" tabindex="-1">{$lang.name|escape:'htmlall':'UTF-8'}</a></li>
+                            <li>
+                                <a class="currentLang" data-id="{$lang.id_lang|escape:'htmlall':'UTF-8'}" href="javascript:hideOtherLanguage('{$lang.id_lang|escape:'javascript'}');" tabindex="-1">
+                                    {$lang.name|escape:'htmlall':'UTF-8'}
+                                </a>
+                            </li>
                             {/foreach}
                         </ul>
                     </div>
@@ -210,12 +220,18 @@
                 <div class="col-xs-12 col-sm-12 col-md-5 col-lg-3">
                     <div class="text-right">
                         <label  class="control-label">
-                                {l s='Custom message' mod='psagechecker'}
+                            {l s='Custom message' mod='psagechecker'}
                         </label>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-7 col-lg-6">
-                    <textarea class="autoload_rte" name="PS_AGE_CHECKER_CUSTOM_MSG_{$language.id_lang|escape:'htmlall':'UTF-8'}" text="" rows="4" cols="80">{$custom_msg[$language.id_lang]|escape:'htmlall':'UTF-8'}</textarea>
+                    <textarea
+                        class="autoload_rte {if $language.id_lang == $defaultFormLanguage}loadTinyMce{/if}"
+                        name="PS_AGE_CHECKER_CUSTOM_MSG_{$language.id_lang|escape:'htmlall':'UTF-8'}"
+                        text="" rows="4" cols="80"
+                    >
+                        {$custom_msg[$language.id_lang]|escape:'htmlall':'UTF-8'}
+                    </textarea>
                 </div>
                 {if $languages|count > 1}
                     <div class="col-xs-12 col-sm-12 col-md-7 col-lg-3">
@@ -225,7 +241,11 @@
                         </button>
                         <ul class="dropdown-menu">
                             {foreach from=$languages item=lang}
-                            <li><a class="currentLang" data-id="{$lang.id_lang|escape:'htmlall':'UTF-8'}" href="javascript:hideOtherLanguage('{$lang.id_lang|escape:'javascript'}');" tabindex="-1">{$lang.name|escape:'htmlall':'UTF-8'}</a></li>
+                                <li>
+                                    <a class="currentLang" data-id="{$lang.id_lang|escape:'htmlall':'UTF-8'}" href="javascript:hideOtherLanguage('{$lang.id_lang|escape:'javascript'}');" tabindex="-1">
+                                        {$lang.name|escape:'htmlall':'UTF-8'}
+                                    </a>
+                                </li>
                             {/foreach}
                         </ul>
                     </div>
@@ -251,7 +271,13 @@
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-7 col-lg-6">
-                    <textarea class="autoload_rte" name="PS_AGE_CHECKER_DENY_MSG_{$language.id_lang|escape:'htmlall':'UTF-8'}" text="" rows="2" cols="80">{$deny_msg[$language.id_lang]|escape:'htmlall':'UTF-8'}</textarea>
+                    <textarea
+                        class="autoload_rte {if $language.id_lang == $defaultFormLanguage}loadTinyMce{/if}"
+                        name="PS_AGE_CHECKER_DENY_MSG_{$language.id_lang|escape:'htmlall':'UTF-8'}"
+                        text="" rows="2" cols="80"
+                    >
+                        {$deny_msg[$language.id_lang]|escape:'htmlall':'UTF-8'}
+                    </textarea>
                     <div class="help-block">
                         <p>{l s='This message will appear if the minimum age is not acquired' mod='psagechecker'}</p>
                     </div>
@@ -264,7 +290,11 @@
                         </button>
                         <ul class="dropdown-menu">
                             {foreach from=$languages item=lang}
-                            <li><a class="currentLang" data-id="{$lang.id_lang|escape:'htmlall':'UTF-8'}" href="javascript:hideOtherLanguage('{$lang.id_lang|escape:'javascript'}');" tabindex="-1">{$lang.name|escape:'htmlall':'UTF-8'}</a></li>
+                                <li>
+                                    <a class="currentLang" data-id="{$lang.id_lang|escape:'htmlall':'UTF-8'}" href="javascript:hideOtherLanguage('{$lang.id_lang|escape:'javascript'}');" tabindex="-1">
+                                        {$lang.name|escape:'htmlall':'UTF-8'}
+                                    </a>
+                                </li>
                             {/foreach}
                         </ul>
                     </div>
@@ -304,7 +334,11 @@
                         </button>
                         <ul class="dropdown-menu">
                             {foreach from=$languages item=lang}
-                            <li><a class="currentLang" data-id="{$lang.id_lang|escape:'htmlall':'UTF-8'}" href="javascript:hideOtherLanguage('{$lang.id_lang|escape:'javascript'}');" tabindex="-1">{$lang.name|escape:'htmlall':'UTF-8'}</a></li>
+                                <li>
+                                    <a class="currentLang" data-id="{$lang.id_lang|escape:'htmlall':'UTF-8'}" href="javascript:hideOtherLanguage('{$lang.id_lang|escape:'javascript'}');" tabindex="-1">
+                                        {$lang.name|escape:'htmlall':'UTF-8'}
+                                    </a>
+                                </li>
                             {/foreach}
                         </ul>
                     </div>
@@ -343,7 +377,11 @@
                         </button>
                         <ul class="dropdown-menu">
                             {foreach from=$languages item=lang}
-                            <li><a class="currentLang" data-id="{$lang.id_lang|escape:'htmlall':'UTF-8'}" href="javascript:hideOtherLanguage('{$lang.id_lang|escape:'javascript'}');" tabindex="-1">{$lang.name|escape:'htmlall':'UTF-8'}</a></li>
+                                <li>
+                                    <a class="currentLang" data-id="{$lang.id_lang|escape:'htmlall':'UTF-8'}" href="javascript:hideOtherLanguage('{$lang.id_lang|escape:'javascript'}');" tabindex="-1">
+                                        {$lang.name|escape:'htmlall':'UTF-8'}
+                                    </a>
+                                </li>
                             {/foreach}
                         </ul>
                     </div>

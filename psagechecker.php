@@ -100,7 +100,7 @@ class PsAgeChecker extends Module
         $this->logo_path = $this->_path.'logo.png';
         $this->module_path = $this->_path;
         $this->slides_path = dirname(__FILE__).'/img/';
-        $this->slides_url = 'modules/'.$this->name.'/img/';
+        $this->slides_url = $this->_path.'/img/';
 
         // Confirm uninstall
         $this->confirmUninstall = $this->l('Are you sure you want to uninstall this module?');

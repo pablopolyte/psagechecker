@@ -65,14 +65,12 @@ $(window).ready(function() {
     });
 
     // TODO: check why this is so slow AND fucking blocking ...
-    // this need to not load tiny mce on hidden textareas ...
-    // and also need to launch when lang is unhidden
 
-    // tinySetup({
-    //     height: 100,
-    //     editor_selector : "autoload_rte",
-    //     plugins : 'code advlist autolink link lists charmap print textcolor colorpicker style',
-    // });
+    tinySetup({
+        height: 100,
+        editor_selector : 'loadTinyMce',
+        plugins : 'code advlist autolink link lists charmap print textcolor colorpicker style',
+    });
 
     $('#product1').select2({
         placeholder: select2placeholder,
@@ -537,6 +535,33 @@ $(window).ready(function() {
         $(event.target).css("color", "#25B9D7");
     }
 
+    function onClickTranslatableDropdownMenu(event) {
+        var idLang = $(event.target).attr('data-id'),
+            $autoloads_rte = $('.autoload_rte.loadTinyMce');
+
+        for (let i = 0; i < $autoloads_rte.length; i++) {
+            console.log(i);
+            $($autoloads_rte[i]).removeClass('loadTinyMce');
+        }
+
+        // destroy all others tinyMce instances
+        for (let i = 0; i < tinyMCE.editors.length; i++) {
+            var ed_id = tinymce.editors[i].id;
+            tinyMCE.execCommand("mceRemoveEditor", true, ed_id);
+        }
+
+        $('textarea[name="PS_AGE_CHECKER_CUSTOM_TITLE_'+ idLang +'"]').addClass('loadTinyMce');
+        $('textarea[name="PS_AGE_CHECKER_CUSTOM_MSG_'+ idLang +'"]').addClass('loadTinyMce');
+        $('textarea[name="PS_AGE_CHECKER_DENY_MSG_'+ idLang +'"]').addClass('loadTinyMce');
+
+        tinySetup({
+            height: 100,
+            editor_selector : 'loadTinyMce',
+            plugins : 'code advlist autolink link lists charmap print textcolor colorpicker style',
+        });
+
+    }
+
     $(document)
         .on('mouseenter', '#PopupDisplaySelectProducts ul#selectedProducts li', onMouseEnterPopupDisplaySelectedProduct)
         .on('mouseleave', '#PopupDisplaySelectProducts ul#selectedProducts li', onMouseLeavePopupDisplaySelectedProduct)
@@ -544,6 +569,7 @@ $(window).ready(function() {
         .on('mouseleave', '#PopupDisplaySelectProducts ul#resultProducts li', onMouseLeavePopupDisplaySelectProduct)
         .on('click', '#PopupDisplaySelectProducts ul#resultProducts li', onClickPopupDisplaySelectProduct)
         .on('click', '#PopupDisplaySelectProducts ul#selectedProducts li', onClickPopupDisplayUnselectProduct)
+        .on('click', '#PS_AGE_CHECKER_SHOW_POPUP .translatable-field ul.dropdown-menu', onClickTranslatableDropdownMenu)
         .on('change', '.PopupDisplaySelector', onChangePopupDisplaySelector);
 
     // throttle fuck up context/scope, need to fix this

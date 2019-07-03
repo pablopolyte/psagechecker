@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 2007-2018 PrestaShop
  *
@@ -28,7 +29,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class PsAgeChecker extends Module
+class PsAgeChecker extends \Module
 {
     private $settings_conf = array(
         'show_popup'                  => 'PS_AGE_CHECKER_SHOW_POPUP',
@@ -116,26 +117,26 @@ class PsAgeChecker extends Module
      */
     public function install()
     {
-        // some stuff
-        Configuration::updateValue('PS_AGE_CHECKER_SHOW_POPUP', '0');
-        Configuration::updateValue('PS_AGE_CHECKER_AGE_MINIMUM', '18');
-        Configuration::updateValue('PS_AGE_CHECKER_METHOD', '0');
-        Configuration::updateValue('PS_AGE_CHECKER_POPUP_HEIGHT', '400');
-        Configuration::updateValue('PS_AGE_CHECKER_POPUP_WIDTH', '500');
-        Configuration::updateValue('PS_AGE_CHECKER_OPACITY', '70');
-        Configuration::updateValue('PS_AGE_CHECKER_CONFIRM_BUTTON_BACKGROUND_COLOR', '#006211');
-        Configuration::updateValue('PS_AGE_CHECKER_DENY_BUTTON_BACKGROUND_COLOR', '#686868');
-        Configuration::updateValue('PS_AGE_CHECKER_BACKGROUND_COLOR', '#3b3b3b');
-        Configuration::updateValue('PS_AGE_CHECKER_CONFIRM_BUTTON_TXT_COLOR', '#ffffff');
-        Configuration::updateValue('PS_AGE_CHECKER_DENY_BUTTON_TXT_COLOR', '#ffffff');
-        Configuration::updateValue('PS_AGE_CHECKER_SHOW_IMAGE', '0');
-        Configuration::updateValue('PS_AGE_CHECKER_DATE_INSTALL', (new DateTime('now'))->format('Y-m-d H:i:s'));
-        Configuration::updateValue('PS_AGE_CHECKER_POPUP_DISPLAY_EVERYWHERE', 'false');
-        Configuration::updateValue('PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES', '');
-        Configuration::updateValue('PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS', '');
+        \Configuration::updateValue('PS_AGE_CHECKER_SHOW_POPUP', '0');
+        \Configuration::updateValue('PS_AGE_CHECKER_AGE_MINIMUM', '18');
+        \Configuration::updateValue('PS_AGE_CHECKER_METHOD', '0');
+        \Configuration::updateValue('PS_AGE_CHECKER_POPUP_HEIGHT', '400');
+        \Configuration::updateValue('PS_AGE_CHECKER_POPUP_WIDTH', '500');
+        \Configuration::updateValue('PS_AGE_CHECKER_OPACITY', '70');
+        \Configuration::updateValue('PS_AGE_CHECKER_CONFIRM_BUTTON_BACKGROUND_COLOR', '#006211');
+        \Configuration::updateValue('PS_AGE_CHECKER_DENY_BUTTON_BACKGROUND_COLOR', '#686868');
+        \Configuration::updateValue('PS_AGE_CHECKER_BACKGROUND_COLOR', '#3b3b3b');
+        \Configuration::updateValue('PS_AGE_CHECKER_CONFIRM_BUTTON_TXT_COLOR', '#ffffff');
+        \Configuration::updateValue('PS_AGE_CHECKER_DENY_BUTTON_TXT_COLOR', '#ffffff');
+        \Configuration::updateValue('PS_AGE_CHECKER_SHOW_IMAGE', '0');
+        $now = new \DateTime('now');
+        \Configuration::updateValue('PS_AGE_CHECKER_DATE_INSTALL', $now->format('Y-m-d H:i:s'));
+        \Configuration::updateValue('PS_AGE_CHECKER_POPUP_DISPLAY_EVERYWHERE', 'false');
+        \Configuration::updateValue('PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES', '');
+        \Configuration::updateValue('PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS', '');
 
         $values = array();
-        $languages = Language::getLanguages(false);
+        $languages = \Language::getLanguages(false);
         foreach ($languages as $lang) {
             $values['PS_AGE_CHECKER_CUSTOM_TITLE'][$lang['id_lang']] = '<h1 style="#7d7d7d">The access of this website is not granted to underage users</h1>';
             $values['PS_AGE_CHECKER_CUSTOM_MSG'][$lang['id_lang']] = '<p><span style="color:#7d7d7d">In order to enter this site, please certify that you are of legal age to access a shop selling age restricted products</p></span>';
@@ -143,11 +144,11 @@ class PsAgeChecker extends Module
             $values['PS_AGE_CHECKER_CONFIRM_BUTTON_TEXT'][$lang['id_lang']] = 'I’m over 18, enter';
             $values['PS_AGE_CHECKER_DENY_BUTTON_TEXT'][$lang['id_lang']] = 'I’m underage';
         }
-        Configuration::updateValue('PS_AGE_CHECKER_CUSTOM_TITLE', $values['PS_AGE_CHECKER_CUSTOM_TITLE']);
-        Configuration::updateValue('PS_AGE_CHECKER_CUSTOM_MSG', $values['PS_AGE_CHECKER_CUSTOM_MSG']);
-        Configuration::updateValue('PS_AGE_CHECKER_DENY_MSG', $values['PS_AGE_CHECKER_DENY_MSG']);
-        Configuration::updateValue('PS_AGE_CHECKER_CONFIRM_BUTTON_TEXT', $values['PS_AGE_CHECKER_CONFIRM_BUTTON_TEXT']);
-        Configuration::updateValue('PS_AGE_CHECKER_DENY_BUTTON_TEXT', $values['PS_AGE_CHECKER_DENY_BUTTON_TEXT']);
+        \Configuration::updateValue('PS_AGE_CHECKER_CUSTOM_TITLE', $values['PS_AGE_CHECKER_CUSTOM_TITLE']);
+        \Configuration::updateValue('PS_AGE_CHECKER_CUSTOM_MSG', $values['PS_AGE_CHECKER_CUSTOM_MSG']);
+        \Configuration::updateValue('PS_AGE_CHECKER_DENY_MSG', $values['PS_AGE_CHECKER_DENY_MSG']);
+        \Configuration::updateValue('PS_AGE_CHECKER_CONFIRM_BUTTON_TEXT', $values['PS_AGE_CHECKER_CONFIRM_BUTTON_TEXT']);
+        \Configuration::updateValue('PS_AGE_CHECKER_DENY_BUTTON_TEXT', $values['PS_AGE_CHECKER_DENY_BUTTON_TEXT']);
 
         // register hook used by the module
         if (parent::install() &&
@@ -178,7 +179,7 @@ class PsAgeChecker extends Module
     public function uninstall()
     {
         foreach ($this->settings_conf as $value) {
-            Configuration::deleteByName($value);
+            \Configuration::deleteByName($value);
         }
 
         // unregister hook
@@ -203,11 +204,11 @@ class PsAgeChecker extends Module
      */
     public function installTab()
     {
-        $tab = new Tab();
+        $tab = new \Tab();
         $tab->active = 1;
         $tab->class_name = $this->controller_name;
         $tab->name = array();
-        foreach (Language::getLanguages(true) as $lang) {
+        foreach (\Language::getLanguages(true) as $lang) {
             $tab->name[$lang['id_lang']] = $this->name;
         }
         $tab->id_parent = -1;
@@ -225,12 +226,12 @@ class PsAgeChecker extends Module
      */
     public function uninstallTab()
     {
-        $id_tab = (int)Tab::getIdFromClassName($this->controller_name);
+        $id_tab = (int)\Tab::getIdFromClassName($this->controller_name);
 
         if ($id_tab) {
-            $tab = new Tab($id_tab);
+            $tab = new \Tab($id_tab);
 
-            if (Validate::isLoadedObject($tab)) {
+            if (\Validate::isLoadedObject($tab)) {
                 return ($tab->delete());
             } else {
                 $return = false;
@@ -247,7 +248,7 @@ class PsAgeChecker extends Module
      */
     public function loadAsset()
     {
-        $controller = Context::getContext()->controller;
+        $controller = \Context::getContext()->controller;
         // Load CSS
         $css = array(
             $this->css_path.'font-awesome.min.css',
@@ -289,9 +290,9 @@ class PsAgeChecker extends Module
         // Clean memory
         unset($jss, $css);
 
-        Media::addJsDef(array(
+        \Media::addJsDef(array(
             'AjaxPsAgeCheckerController' => $this->context->link->getAdminLink('AdminAjaxPsAgeChecker'),
-            'PS_HOME_CATEGORY' => Configuration::get('PS_HOME_CATEGORY')
+            'PS_HOME_CATEGORY' => \Configuration::get('PS_HOME_CATEGORY')
         ));
     }
 
@@ -301,7 +302,7 @@ class PsAgeChecker extends Module
     public function loadFaq()
     {
         require_once('classes/ApiFaq.php');
-        $api = new ApiFaq();
+        $api = new PrestaShop\Modules\PsAgeChecker\ApiFaq();
         $faq = $api->getData($this->module_key, $this->version);
 
         return $faq;
@@ -314,9 +315,9 @@ class PsAgeChecker extends Module
     {
         if ((bool)version_compare(_PS_VERSION_, '1.7', '>=')) {
             $params = array('configure' => $this->name);
-            $apiCallback = Context::getContext()->link->getAdminLink('AdminModules', true, false, $params);
+            $apiCallback = \Context::getContext()->link->getAdminLink('AdminModules', true, false, $params);
         } else {
-            $apiCallback = _PS_BASE_URL_.'/'.Context::getContext()->controller->admin_webpath.'/'.Context::getContext()->link->getAdminLink('AdminModules', true).'&configure='.$this->name.'&module_name='.$this->name;
+            $apiCallback = _PS_BASE_URL_.'/'.\Context::getContext()->controller->admin_webpath.'/'.\Context::getContext()->link->getAdminLink('AdminModules', true).'&configure='.$this->name.'&module_name='.$this->name;
         }
 
         $faq = $this->loadFaq();
@@ -324,36 +325,36 @@ class PsAgeChecker extends Module
         $this->postProcess($apiCallback);
 
         // some stuff useful in smarty
-        $context = Context::getContext();
+        $context = \Context::getContext();
         $id_lang = $this->context->language->id;
         $id_shop = $context->shop->id;
         if ($this->ps_version) {
             $params = array('configure' => $this->name);
-            $moduleAdminLink = Context::getContext()->link->getAdminLink('AdminModules', true, false, $params);
+            $moduleAdminLink = \Context::getContext()->link->getAdminLink('AdminModules', true, false, $params);
         } else {
-            $moduleAdminLink = Context::getContext()->link->getAdminLink('AdminModules', true).'&configure='.$this->name.'&module_name='.$this->name;
+            $moduleAdminLink = \Context::getContext()->link->getAdminLink('AdminModules', true).'&configure='.$this->name.'&module_name='.$this->name;
         }
         // controller ajax url
-        $link = new Link();
+        $link = new \Link();
         $controller_url = $link->getAdminLink($this->controller_name);
 
-        //get readme
-        $iso_lang = Language::getIsoById($id_lang);
+        // get readme
+        $iso_lang = \Language::getIsoById($id_lang);
         $doc = $this->docs_path.'readme_'.$iso_lang.'.pdf';
 
-        //get tuto
-        $iso_lang = Language::getIsoById($id_lang);
+        // get tuto
+        $iso_lang = \Language::getIsoById($id_lang);
         $tuto = $this->docs_path.'tuto/tuto_'.$iso_lang.'.pdf';
 
         // get current page
         $currentPage = 'conf';
-        $page = Tools::getValue('page');
+        $page = \Tools::getValue('page');
         if (!empty($page)) {
-            $currentPage = Tools::getValue('page');
+            $currentPage = \Tools::getValue('page');
         }
 
         $tmp = array();
-        $languages = Language::getLanguages(false);
+        $languages = \Language::getLanguages(false);
         foreach ($this->settings_conf as $index => $value) {
             if ($value === 'PS_AGE_CHECKER_CUSTOM_TITLE'
                 || $value === 'PS_AGE_CHECKER_CUSTOM_MSG'
@@ -362,20 +363,20 @@ class PsAgeChecker extends Module
                 || $value === 'PS_AGE_CHECKER_DENY_BUTTON_TEXT'
             ) {
                 foreach ($languages as $lang) {
-                    $tmp[$value][$lang['id_lang']] = Configuration::get($value, $lang['id_lang']);
+                    $tmp[$value][$lang['id_lang']] = \Configuration::get($value, $lang['id_lang']);
                     $this->context->smarty->assign($index, $tmp[$value]);
                 }
             } else {
-                $tmp[$value] = Configuration::get($value);
+                $tmp[$value] = \Configuration::get($value);
                 $this->context->smarty->assign($index, $tmp[$value]);
             }
         }
 
         $popupDisplaySelectedProducts = array();
-        $configDisplaySelectedProducts = Configuration::get('PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS');
+        $configDisplaySelectedProducts = \Configuration::get('PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS');
 
         foreach (explode(',', $configDisplaySelectedProducts) as $idProduct) {
-            $product = new PrestaShopCollection('Product', $id_lang);
+            $product = new \PrestaShopCollection('Product', $id_lang);
             $product->where('id_product', '=', $idProduct);
             $product = $product->getFirst();
             if ($product) {
@@ -384,15 +385,18 @@ class PsAgeChecker extends Module
         }
 
         $popupDisplaySelectedCategories = array();
-        $configDisplaySelectedCategories = Configuration::get('PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES');
+        $configDisplaySelectedCategories = \Configuration::get('PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES');
         foreach (explode(',', $configDisplaySelectedCategories) as $idCategory) {
-            $category = new PrestaShopCollection('Category', $id_lang);
+            $category = new \PrestaShopCollection('Category', $id_lang);
             $category->where('id_category', '=', $idCategory);
             $category = $category->getFirst();
             if ($category) {
                 $popupDisplaySelectedCategories[] = $category;
             }
         }
+        $showRateModule = \DateTime::createFromFormat('Y-m-d H:i:s', \Configuration::get('PS_AGE_CHECKER_DATE_INSTALL'));
+        $now = new \DateTime('now');
+        $showRateModule = (int)$now->diff($showRateModule)->format('%a') > 7 && (int)$now->diff($showRateModule)->format('%a') < 92;
 
         // assign var to smarty
         $this->context->smarty->assign(array(
@@ -411,6 +415,7 @@ class PsAgeChecker extends Module
             'logo_path' => $this->logo_path,
             'img_path' => $this->img_path,
             'languages' => $this->context->controller->getLanguages(),
+            'currentLangIsoCode' => $this->context->language->iso_code,
             'defaultFormLanguage' => (int) $this->context->employee->id_lang,
             'currentPage' => $currentPage,
             'ps_base_dir' => _PS_BASE_URL_,
@@ -418,11 +423,12 @@ class PsAgeChecker extends Module
             'isPs17' => $this->ps_version,
             'fonts' => $this->fonts,
             'PS_AGE_CHECKER_OPACITY' => 1,
-            'popupDisplaySelectedEverywhere' => Configuration::get('PS_AGE_CHECKER_POPUP_DISPLAY_EVERYWHERE'),
+            'popupDisplaySelectedEverywhere' => \Configuration::get('PS_AGE_CHECKER_POPUP_DISPLAY_EVERYWHERE'),
             'popupDisplaySelectedProducts' => $popupDisplaySelectedProducts,
             'configDisplaySelectedProducts' => $configDisplaySelectedProducts,
             'popupDisplaySelectedCategories' => $popupDisplaySelectedCategories,
             'configDisplaySelectedCategories' => $configDisplaySelectedCategories,
+            'showRateModule' => $showRateModule,
         ));
 
         $this->output .= $this->context->smarty->fetch($this->local_path.'views/templates/admin/menu.tpl');
@@ -438,9 +444,9 @@ class PsAgeChecker extends Module
      */
     public function postProcess()
     {
-        if (Tools::isSubmit('submitpsagecheckerModule')) {
+        if (\Tools::isSubmit('submitpsagecheckerModule')) {
             $errors = array();
-            $languages = Language::getLanguages(false);
+            $languages = \Language::getLanguages(false);
             $nbErrors = 0;
             if ($nbErrors == 0) {
                 foreach ($this->settings_conf as $value) {
@@ -452,11 +458,11 @@ class PsAgeChecker extends Module
                     ) {
                         $values = array();
                         foreach ($languages as $lang) {
-                            $values[$value][$lang['id_lang']] = Tools::getValue($value.'_'.$lang['id_lang']);
+                            $values[$value][$lang['id_lang']] = \Tools::getValue($value.'_'.$lang['id_lang']);
                         }
-                        Configuration::updateValue($value, $values[$value], true);
+                        \Configuration::updateValue($value, $values[$value], true);
                     } else {
-                        Configuration::updateValue($value, Tools::getValue($value));
+                        \Configuration::updateValue($value, \Tools::getValue($value));
                     }
                 }
                 $this->output .= $this->displayConfirmation($this->l('Saved with success !'));
@@ -466,25 +472,25 @@ class PsAgeChecker extends Module
 
             if (empty($_FILES['image']['name'] && $_FILES['image']['size'])) {
                 $errors[] = $this->l('You need to upload an image before saving the slide').' ('.$lang['iso_code'].')';
-            } elseif (empty(Tools::getValue('slide-image'))) {
+            } elseif (empty(\Tools::getValue('slide-image'))) {
                 $errors[] = $this->l('You need to upload an image before saving the slide').' ('.$lang['iso_code'].')';
             } else {
                 $filename = str_replace(' ', '', $_FILES['image']['name']);
-                $type = Tools::strtolower(Tools::substr(strrchr($filename, '.'), 1));
+                $type = \Tools::strtolower(\Tools::substr(strrchr($filename, '.'), 1));
                 $imagesize = @getimagesize($_FILES['image']['tmp_name']);
                 if (isset($_FILES['image']) &&
                     isset($_FILES['image']['tmp_name']) &&
                     !empty($_FILES['image']['tmp_name']) &&
                     !empty($imagesize) &&
-                    in_array(Tools::strtolower(Tools::substr(strrchr($imagesize['mime'], '/'), 1)), array('jpg','gif','jpeg','png')) &&
+                    in_array(\Tools::strtolower(\Tools::substr(strrchr($imagesize['mime'], '/'), 1)), array('jpg','gif','jpeg','png')) &&
                     in_array($type, array('jpg', 'gif', 'jpeg', 'png'))
                 ) {
-                    if ($error = ImageManager::validateUpload($_FILES['image'])) {
+                    if ($error = \ImageManager::validateUpload($_FILES['image'])) {
                         $errors[] = $error;
                     } elseif (!move_uploaded_file($_FILES['image']['tmp_name'], $this->slides_path.$filename)) {
                         $errors[] = $this->l('Error on upload.');
                     }
-                    Configuration::updateValue('PS_AGE_CHECKER_IMG', $filename);
+                    \Configuration::updateValue('PS_AGE_CHECKER_IMG', $filename);
                 } else {
                     if (!empty($_FILES['image']['tmp_name'])) {
                         $errors[] = $this->l('Only .jpg .gif .jpeg .png formats are allowed');
@@ -519,16 +525,16 @@ class PsAgeChecker extends Module
      * @return bool
      */
     private function currentPageIsUnderAgeChecker() {
-        $actif = Configuration::get('PS_AGE_CHECKER_SHOW_POPUP');
+        $actif = \Configuration::get('PS_AGE_CHECKER_SHOW_POPUP');
 
         if ($actif != 0) {
-            if (Configuration::get('PS_AGE_CHECKER_POPUP_DISPLAY_EVERYWHERE') == 'true') {
+            if (\Configuration::get('PS_AGE_CHECKER_POPUP_DISPLAY_EVERYWHERE') == 'true') {
                 return true;
             } else {
                 $controllerType = $this->context->controller->php_self;
 
                 if ($controllerType == 'category') {
-                    $categories = Configuration::get('PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES');
+                    $categories = \Configuration::get('PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES');
                     $currentCategoryId = $this->context->controller->getCategory()->id;
 
                     foreach (explode(',', $categories) as $category) {
@@ -539,7 +545,7 @@ class PsAgeChecker extends Module
                 }
 
                 if ($controllerType == 'product') {
-                    $products = Configuration::get('PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS');
+                    $products = \Configuration::get('PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS');
                     $currentProductId = $this->context->controller->getProduct()->id;
 
                     foreach (explode(',', $products) as $product) {
@@ -570,33 +576,33 @@ class PsAgeChecker extends Module
     public function displayWall()
     {
         $this->context->controller->addCSS($this->fontsCss);
-        $shop = new Shop((int)$this->context->shop->id);
-        $id_lang = Context::getContext()->language->id;
-        $img = $this->slides_url .'/'. Configuration::get('PS_AGE_CHECKER_IMG');
+        $shop = new \Shop((int)$this->context->shop->id);
+        $id_lang = \Context::getContext()->language->id;
+        $img = $this->slides_url .'/'. \Configuration::get('PS_AGE_CHECKER_IMG');
         /*if (validate::isCleanHtml(Configuration::get('PS_AGE_CHECKER_CUSTOM_TITLE', $id_lang))) {
             $assign = 'custom_tit' => Configuration::get('PS_AGE_CHECKER_CUSTOM_TITLE', $id_lang);
         }*/
 
         $this->context->smarty->assign(array(
-            'opacity' => Configuration::get('PS_AGE_CHECKER_OPACITY')/100,
-            'show_img' => Configuration::get('PS_AGE_CHECKER_SHOW_IMAGE'),
+            'opacity' => \Configuration::get('PS_AGE_CHECKER_OPACITY')/100,
+            'show_img' => \Configuration::get('PS_AGE_CHECKER_SHOW_IMAGE'),
             'img_upload' => $img,
-            'display_popup' => Configuration::get('PS_AGE_CHECKER_SHOW_POPUP'),
-            'age_required' => Configuration::get('PS_AGE_CHECKER_AGE_MINIMUM'),
-            'method' => Configuration::get('PS_AGE_CHECKER_VERIFICATION_METHOD'),
-            'popup_width' => Configuration::get('PS_AGE_CHECKER_POPUP_WIDTH'),
-            'popup_height' => Configuration::get('PS_AGE_CHECKER_POPUP_HEIGHT'),
-            'deny_txt_color' => Configuration::get('PS_AGE_CHECKER_DENY_BUTTON_TXT_COLOR'),
-            'confirm_txt_color' => Configuration::get('PS_AGE_CHECKER_CONFIRM_BUTTON_TXT_COLOR'),
-            'deny_bg_color' => Configuration::get('PS_AGE_CHECKER_DENY_BUTTON_BACKGROUND_COLOR'),
-            'confirm_bg_color' => Configuration::get('PS_AGE_CHECKER_CONFIRM_BUTTON_BACKGROUND_COLOR'),
-            'font_family' => Configuration::get('PS_AGE_CHECKER_FONTS'),
-            'popup_bg_color' => Configuration::get('PS_AGE_CHECKER_BACKGROUND_COLOR'),
-            'custom_tit' => Configuration::get('PS_AGE_CHECKER_CUSTOM_TITLE', $id_lang),
-            'custom_msg' => Configuration::get('PS_AGE_CHECKER_CUSTOM_MSG', $id_lang),
-            'deny_msg' => Configuration::get('PS_AGE_CHECKER_DENY_MSG', $id_lang),
-            'confirm_button' => Configuration::get('PS_AGE_CHECKER_CONFIRM_BUTTON_TEXT', $id_lang),
-            'deny_button' => Configuration::get('PS_AGE_CHECKER_DENY_BUTTON_TEXT', $id_lang),
+            'display_popup' => \Configuration::get('PS_AGE_CHECKER_SHOW_POPUP'),
+            'age_required' => \Configuration::get('PS_AGE_CHECKER_AGE_MINIMUM'),
+            'method' => \Configuration::get('PS_AGE_CHECKER_VERIFICATION_METHOD'),
+            'popup_width' => \Configuration::get('PS_AGE_CHECKER_POPUP_WIDTH'),
+            'popup_height' => \Configuration::get('PS_AGE_CHECKER_POPUP_HEIGHT'),
+            'deny_txt_color' => \Configuration::get('PS_AGE_CHECKER_DENY_BUTTON_TXT_COLOR'),
+            'confirm_txt_color' => \Configuration::get('PS_AGE_CHECKER_CONFIRM_BUTTON_TXT_COLOR'),
+            'deny_bg_color' => \Configuration::get('PS_AGE_CHECKER_DENY_BUTTON_BACKGROUND_COLOR'),
+            'confirm_bg_color' => \Configuration::get('PS_AGE_CHECKER_CONFIRM_BUTTON_BACKGROUND_COLOR'),
+            'font_family' => \Configuration::get('PS_AGE_CHECKER_FONTS'),
+            'popup_bg_color' => \Configuration::get('PS_AGE_CHECKER_BACKGROUND_COLOR'),
+            'custom_tit' => \Configuration::get('PS_AGE_CHECKER_CUSTOM_TITLE', $id_lang),
+            'custom_msg' => \Configuration::get('PS_AGE_CHECKER_CUSTOM_MSG', $id_lang),
+            'deny_msg' => \Configuration::get('PS_AGE_CHECKER_DENY_MSG', $id_lang),
+            'confirm_button' => \Configuration::get('PS_AGE_CHECKER_CONFIRM_BUTTON_TEXT', $id_lang),
+            'deny_button' => \Configuration::get('PS_AGE_CHECKER_DENY_BUTTON_TEXT', $id_lang),
             // 'show_custom_title' => Configuration::get('PS_INSTA_SHOW_ALBUM'),
             // 'custom_title' => Configuration::get('PS_INSTA_CUSTOM_TITLE', $id_lang),
             // 'custom_title_font_size' => Configuration::get('PS_INSTA_TITLE_TEXT_SIZE'),
@@ -607,7 +613,7 @@ class PsAgeChecker extends Module
             // 'custom_title_bis_font_text' => Configuration::get('PS_INSTA_CUSTOM_TITLE_COLOR_BIS'),
             // 'number_columns' => Configuration::get('PS_INSTA_NUMBER_COLUMNS'),
             // 'row' => Configuration::get('PS_INSTA_NUMBER_ROWS'),
-            'column' => Configuration::get('PS_INSTA_NUMBER_COLUMNS'),
+            'column' => \Configuration::get('PS_INSTA_NUMBER_COLUMNS'),
             'base_url' => $shop->getBaseURL(),
             'header' => 0,
         ));

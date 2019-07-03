@@ -348,3 +348,7 @@ label > .input_img:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 #PopupDisplaySelectProducts #selectedProducts{ color: #25B9D7; }
 #PopupDisplaySelectProducts ul{ padding: 0; }
 #PopupDisplaySelectProducts ul li { list-style-type: none; cursor: pointer; padding: 0; }
+#rateThisModule p{ text-align: right; font-size: 14px; }
+#rateThisModule .material-icons{ font-size: 14px; margin-left:10px; vertical-align: middle; }
+#rateThisModule img{ vertical-align: baseline; }
+#rateThisModule a{ font-weight: 600; }

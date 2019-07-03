@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 2007-2018 PrestaShop
  *
@@ -24,7 +25,7 @@
  *  International Registered Trademark & Property of PrestaShop SA
  */
 
-class AdminAjaxPsAgeCheckerController extends ModuleAdminController
+class AdminAjaxPsAgeCheckerController extends \ModuleAdminController
 {
     /**
      * ajaxProcessGetCategories
@@ -35,11 +36,11 @@ class AdminAjaxPsAgeCheckerController extends ModuleAdminController
     public function ajaxProcessGetCategories()
     {
         $currentIdLang = $this->context->language->id;
-        $categories = CategoryCore::getCategories($currentIdLang);
+        $categories = \CategoryCore::getCategories($currentIdLang);
         $cleanedCategories = array();
 
-        $rootCategory = Configuration::get('PS_ROOT_CATEGORY');
-        $homeCategory = Configuration::get('PS_HOME_CATEGORY');
+        $rootCategory = \Configuration::get('PS_ROOT_CATEGORY');
+        $homeCategory = \Configuration::get('PS_HOME_CATEGORY');
 
         foreach ($categories as $category) {
             if (current($category)['infos']['id_category'] === $rootCategory
@@ -67,8 +68,8 @@ class AdminAjaxPsAgeCheckerController extends ModuleAdminController
     public function ajaxProcessGetProductsByNameLike()
     {
         $currentIdLang = $this->context->language->id;
-        $searchTerm = Tools::getValue('searchTerm');
-        $results = Product::searchByName($currentIdLang, $searchTerm);
+        $searchTerm = \Tools::getValue('searchTerm');
+        $results = \Product::searchByName($currentIdLang, $searchTerm);
 
         $this->ajaxDie(json_encode($results));
     }

@@ -1,4 +1,7 @@
 <?php
+
+namespace PrestaShop\Modules\PsAgeChecker;
+
 /**
 * 2007-2016 PrestaShop
 *
@@ -23,8 +26,8 @@ class ApiFaq
         if (function_exists('curl_init') == false) {
             return false;
         }
-        $context = Context::getContext();
-        $iso_code = Language::getIsoById($context->language->id);
+        $context = \Context::getContext();
+        $iso_code = \Language::getIsoById($context->language->id);
         $url = "http://api.addons.prestashop.com/request/faq/$module_key/$version/$iso_code";
         $options = array(
             CURLOPT_URL            => $url,
@@ -35,10 +38,9 @@ class ApiFaq
         curl_setopt_array($CURL, $options);
         $content = curl_exec($CURL);
         curl_close($CURL);
-        if (!$content) {
-            return false;
-        }
-        $content = Tools::jsonDecode($content);
+        if (!$content) { return false; }
+
+        $content = \Tools::jsonDecode($content);
         if (!$content || empty($content->categories)) {
             return false;
         }

@@ -64,8 +64,6 @@ $(window).ready(function() {
         $('#CB-OPACITY').bootstrapSlider('setValue', $(this).val());
     });
 
-    // TODO: check why this is so slow AND fucking blocking ...
-
     tinySetup({
         height: 100,
         editor_selector : 'loadTinyMce',

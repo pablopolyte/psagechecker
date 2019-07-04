@@ -41,6 +41,6 @@ function upgrade_module_1_1_0($module)
     \Configuration::updateValue('PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES', '');
     \Configuration::updateValue('PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS', '');
 
-    \Tools::clearSmartyCache();
+    \Module::_clearCache();
 }
 

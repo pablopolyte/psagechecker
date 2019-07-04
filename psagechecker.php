@@ -55,6 +55,7 @@ class PsAgeChecker extends \Module
         'popup_display_everywhere'    => 'PS_AGE_CHECKER_POPUP_DISPLAY_EVERYWHERE',
         'popup_display_categories'    => 'PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES',
         'popup_display_products'      => 'PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS',
+        'psagechecker_date_install'   => 'PS_AGE_CHECKER_DATE_INSTALL',
     );
 
     public $fontsCss = array(

@@ -329,7 +329,7 @@ $(window).ready(function() {
         if (null != jsTreeCategories) {
             jsTreeCategories.destroy();
         }
-    }
+    };
 
     function onJsTreeSelectCategories(event, data) {
         var id = data.node.id.replace('category_',''),
@@ -380,7 +380,7 @@ $(window).ready(function() {
                 .on("select_node.jstree", onJsTreeSelectCategories)
                 .on("deselect_node.jstree", onJsTreeUnselectCategories);
         });
-    }
+    };
 
     function handleSuccessGetCategories(response) {
         var html = '',
@@ -424,7 +424,7 @@ $(window).ready(function() {
 
         initJsTreeCategories(html);
         $('#PopupDisplaySelectCategories').removeClass('hide');
-    }
+    };
 
     function onChangePopupDisplaySelector(event) {
         // Clicked on all shop
@@ -479,12 +479,13 @@ $(window).ready(function() {
         var html = '',
             id = $(event.target).attr('id'),
             name = $(event.target).text(),
+            imgLink = $(event.target).find('img').attr('src'),
             isAlreadyPresent = false,
             productsString = $('#PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS').val(),
             productsArray = productsString.split(',');
 
-        html = '<li id="'+ id +'">'+ name +'</li>';
-        $('#PopupDisplaySelectProducts ul#selectedProducts').append(html);
+        html = '<tr id="'+ id +'"><td>'+ id +'</td> <td><img class="img-thumbnail" src="'+ imgLink +'"></td> <td>'+ name +'</td> <td><i class="material-icons" data-id="'+ id +'">delete</i></td> </td>'+ name +'</tr>';
+        $('#PopupDisplaySelectProducts #selectedProducts tbody').append(html);
         $(event.target).remove();
 
         productsArray.forEach(productId => {
@@ -496,42 +497,33 @@ $(window).ready(function() {
             productsString = productsArray.join(',');
             $('#PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS').val(productsString);
         };
-    }
+    };
 
     function onClickPopupDisplayUnselectProduct(event) {
-        var id = $(event.target).attr('id'),
+        var id = $(event.target).attr('data-id'),
             productsString = $('#PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS').val(),
             productsArray = productsString.split(',');
 
-        $(event.target).remove();
+        $("#selectedProducts").find("tr#"+id).remove();
 
         productsArray.forEach((productId, index) => {
             if (productId == id) {
-                productsArray.splice(1 ,index);
+                productsArray.splice(index, 1);
                 index--;
             }
         });
+
         productsString = productsArray.join(',');
         $('#PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS').val(productsString);
-    }
+    };
 
     function onMouseEnterPopupDisplaySelectProduct(event) {
         $(event.target).css("background-color", "#25B9D7");
-    }
+    };
 
     function onMouseLeavePopupDisplaySelectProduct(event) {
         $(event.target).css("background-color", "none");
-    }
-
-    function onMouseEnterPopupDisplaySelectedProduct(event) {
-        $(event.target).css("background-color", "#E08F95");
-        $(event.target).css("color", "black");
-    }
-
-    function onMouseLeavePopupDisplaySelectedProduct(event) {
-        $(event.target).css("background-color", "none");
-        $(event.target).css("color", "#25B9D7");
-    }
+    };
 
     function onClickTranslatableDropdownMenu(event) {
         var idLang = $(event.target).attr('data-id'),
@@ -558,19 +550,24 @@ $(window).ready(function() {
             plugins : 'code advlist autolink link lists charmap print textcolor colorpicker style',
         });
 
+    };
+
+    function onClickBody(event) {
+        if (!$(event.target).is('li')) {
+            $('#resultProducts').addClass('hide');
+        }
     }
 
     $(document)
-        .on('mouseenter', '#PopupDisplaySelectProducts ul#selectedProducts li', onMouseEnterPopupDisplaySelectedProduct)
-        .on('mouseleave', '#PopupDisplaySelectProducts ul#selectedProducts li', onMouseLeavePopupDisplaySelectedProduct)
         .on('mouseenter', '#PopupDisplaySelectProducts ul#resultProducts li', onMouseEnterPopupDisplaySelectProduct)
         .on('mouseleave', '#PopupDisplaySelectProducts ul#resultProducts li', onMouseLeavePopupDisplaySelectProduct)
         .on('click', '#PopupDisplaySelectProducts ul#resultProducts li', onClickPopupDisplaySelectProduct)
-        .on('click', '#PopupDisplaySelectProducts ul#selectedProducts li', onClickPopupDisplayUnselectProduct)
+        .on('click', '#PopupDisplaySelectProducts #selectedProducts td i', onClickPopupDisplayUnselectProduct)
         .on('click', '#PS_AGE_CHECKER_SHOW_POPUP .translatable-field ul.dropdown-menu', onClickTranslatableDropdownMenu)
+        .on('click', 'body', onClickBody)
         .on('change', '.PopupDisplaySelector', onChangePopupDisplaySelector);
 
-    // throttle fuck up context/scope, need to fix this
+    // throttle fuck up context/scope
     $(document).on('keyup', '#PopupDisplaySelectProducts input[type="text"]', throttle(function(event) {
         var $inputText = $('#PopupDisplaySelectProducts input[type="text"]');
         if ($inputText.val().length > 2) {
@@ -590,8 +587,9 @@ $(window).ready(function() {
 
                     if (Array.isArray(products)) {
                         products.forEach(product => {
-                            html += '<li id="'+ product.id_product +'">ID: '+ product.id_product +' | Name: '+ product.name +'</li>';
+                            html += '<li id="'+ product.id_product +'"><img class="img-thumbnail" src="'+ product.imgLink +'"> '+ product.name +'</li>';
                         });
+                        $('#resultProducts').removeClass('hide');
                     } else {
                         html = '<li>No products found for '+ $('#PopupDisplaySelectProducts input[type="text"]').val() +'</li>';
                     }

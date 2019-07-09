@@ -345,9 +345,25 @@ label > .input_img:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 }
 
 #PsAgeCheckerPopupDisplayLocation label{ font-weight: normal; }
-#PopupDisplaySelectProducts #selectedProducts{ color: #25B9D7; }
-#PopupDisplaySelectProducts ul{ padding: 0; }
-#PopupDisplaySelectProducts ul li { list-style-type: none; cursor: pointer; padding: 0; }
+/* #PopupDisplaySelectProducts #selectedProducts{ color: #25B9D7; } */
+#PopupDisplaySelectProducts{ position: relative; }
+#PopupDisplaySelectProducts ul{ padding: 0;}
+#PopupDisplaySelectProducts ul li { list-style-type: none; cursor: pointer; padding: 5px; }
+#PsAgeCheckerPopupDisplayLocation #resultProducts img{ max-height: 50px; margin: 5px; }
+#PsAgeCheckerPopupDisplayLocation table img{ max-height: 75px; }
+#PsAgeCheckerPopupDisplayLocation #PopupDisplaySelectProducts table{ margin-top: 10px; }
+#PsAgeCheckerPopupDisplayLocation #resultProducts {
+    position: absolute;
+    background-color: #EFF1F2;
+    width: 100%;
+    overflow: scroll;
+    max-height: 185px;
+    border: 1px solid #bbcdd2;
+    z-index: 100;
+}
+#PsAgeCheckerPopupDisplayLocation #selectedProducts td i{ cursor: pointer; }
+#PsAgeCheckerPopupDisplayLocation #selectedProducts td i:hover { color: #E08F95; }
+
 #rateThisModule p{ text-align: right; font-size: 14px; }
 #rateThisModule .material-icons{ font-size: 14px; margin-left:10px; vertical-align: middle; }
 #rateThisModule img{ vertical-align: baseline; }

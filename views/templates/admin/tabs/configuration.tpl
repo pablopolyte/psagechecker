@@ -53,7 +53,7 @@
                 </label>
             </div>
         </div>
-        <div class="col-xs-12 col-sm-12 col-md-7 col-lg-5">
+        <div class="col-xs-12 col-sm-12 col-md-7 col-lg-4">
             <input id="PS_AGE_CHECKER_POPUP_DISPLAY_EVERYWHERE" class="hide" type="text" name="PS_AGE_CHECKER_POPUP_DISPLAY_EVERYWHERE"  value="{$popupDisplaySelectedEverywhere}">
             <input id="PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES" class="hide" type="text" name="PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES"  value="{$configDisplaySelectedCategories}">
             <input id="PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS" class="hide" type="text" name="PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS"  value="{$configDisplaySelectedProducts}">
@@ -77,14 +77,30 @@
                 <input {if $popupDisplaySelectedProducts|@count > 0}checked{/if} class="PopupDisplaySelector" type="checkbox" name="{l s='Specific Product' mod='psagechecker'}" value="products">
                 {l s='Specific Product' mod='psagechecker'}
             </label>
-            <div id="PopupDisplaySelectProducts" {if $popupDisplaySelectedProducts|@count == 0}class="hide"{/if} >
+            <div id="PopupDisplaySelectProducts" class="table-responsive {if $popupDisplaySelectedProducts|@count == 0}hide{/if}" >
                 <input type="text" name="{l s='Specific Product' mod='psagechecker'}" value="">
-                <ul id="selectedProducts">
-                    {foreach from=$popupDisplaySelectedProducts key='key' item='product'}
-                        <li id="{$product->id}">ID: {$product->id} | Name: {$product->name}</li>
-                    {/foreach}
-                </ul>
-                <ul id="resultProducts"></ul>
+                <ul id="resultProducts" class="hide"></ul>
+
+                <table class="table table-bordered" id="selectedProducts">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>{l s='Image' mod='psagechecker'}</th>
+                            <th>{l s='Name' mod='psagechecker'}</th>
+                            <th>{l s='Action' mod='psagechecker'}</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-hover">
+                        {foreach from=$popupDisplaySelectedProducts key='key' item='product'}
+                            <tr id="{$product->id}">
+                                <td>{$product->id}</td>
+                                <td><img class="img-fluid img-thumbnail" src="{$product->imgLink}"></td>
+                                <td>{$product->name}</td>
+                                <td><i class="material-icons" data-id="{$product->id}">delete</i></td>
+                            </tr>
+                        {/foreach}
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

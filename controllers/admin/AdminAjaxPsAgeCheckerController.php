@@ -71,6 +71,17 @@ class AdminAjaxPsAgeCheckerController extends \ModuleAdminController
         $searchTerm = \Tools::getValue('searchTerm');
         $results = \Product::searchByName($currentIdLang, $searchTerm);
 
+        foreach ($results as $key => $result) {
+            $product = new \PrestaShopCollection('Product', $currentIdLang);
+            $product->where('id_product', '=', $result['id_product']);
+            $product = $product->getFirst();
+            $idImage = $product->getCover($result['id_product']);
+            $link = new \Link();
+            $imgLink = \Tools::getProtocol().$link->getImageLink($product->link_rewrite, $idImage['id_image'], ImageType::getFormatedName('large'));
+
+            $results[$key]['imgLink'] = $imgLink;
+        }
+
         $this->ajaxDie(json_encode($results));
     }
 }

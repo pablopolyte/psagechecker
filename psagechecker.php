@@ -55,7 +55,6 @@ class PsAgeChecker extends \Module
         'popup_display_everywhere'    => 'PS_AGE_CHECKER_POPUP_DISPLAY_EVERYWHERE',
         'popup_display_categories'    => 'PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES',
         'popup_display_products'      => 'PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS',
-        'psagechecker_date_install'   => 'PS_AGE_CHECKER_DATE_INSTALL',
     );
 
     public $fontsCss = array(
@@ -182,6 +181,8 @@ class PsAgeChecker extends \Module
         foreach ($this->settings_conf as $value) {
             \Configuration::deleteByName($value);
         }
+
+        \Configuration::deleteByName('PS_AGE_CHECKER_DATE_INSTALL');
 
         // unregister hook
         if (parent::uninstall() &&
@@ -381,6 +382,9 @@ class PsAgeChecker extends \Module
             $product->where('id_product', '=', $idProduct);
             $product = $product->getFirst();
             if ($product) {
+                $idImage = $product->getCover($idProduct);
+                $imgLink = \Tools::getProtocol().$link->getImageLink($product->link_rewrite, $idImage['id_image'], ImageType::getFormatedName('large'));
+                $product->imgLink = $imgLink;
                 $popupDisplaySelectedProducts[] = $product;
             }
         }
@@ -395,8 +399,10 @@ class PsAgeChecker extends \Module
                 $popupDisplaySelectedCategories[] = $category;
             }
         }
+
         $showRateModule = \DateTime::createFromFormat('Y-m-d H:i:s', \Configuration::get('PS_AGE_CHECKER_DATE_INSTALL'));
         $now = new \DateTime('now');
+
         $showRateModule = (int)$now->diff($showRateModule)->format('%a') > 7 && (int)$now->diff($showRateModule)->format('%a') < 92;
 
         // assign var to smarty

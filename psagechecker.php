@@ -52,9 +52,6 @@ class PsAgeChecker extends \Module
         'confirm_button_text_color'   => 'PS_AGE_CHECKER_CONFIRM_BUTTON_TXT_COLOR',
         'deny_button_bground_color'   => 'PS_AGE_CHECKER_DENY_BUTTON_BACKGROUND_COLOR',
         'deny_button_text_color'      => 'PS_AGE_CHECKER_DENY_BUTTON_TXT_COLOR',
-        'popup_display_everywhere'    => 'PS_AGE_CHECKER_POPUP_DISPLAY_EVERYWHERE',
-        'popup_display_categories'    => 'PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES',
-        'popup_display_products'      => 'PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS',
     );
 
     public $fontsCss = array(
@@ -183,6 +180,9 @@ class PsAgeChecker extends \Module
         }
 
         \Configuration::deleteByName('PS_AGE_CHECKER_DATE_INSTALL');
+        \Configuration::deleteByName('PS_AGE_CHECKER_POPUP_DISPLAY_EVERYWHERE');
+        \Configuration::deleteByName('PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES');
+        \Configuration::deleteByName('PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS');
 
         // unregister hook
         if (parent::uninstall() &&
@@ -509,6 +509,10 @@ class PsAgeChecker extends \Module
                     $this->output .= $this->displayError($errors);
                 }
             }
+
+            \Configuration::updateValue('PS_AGE_CHECKER_POPUP_DISPLAY_EVERYWHERE', \Tools::getValue('PS_AGE_CHECKER_POPUP_DISPLAY_EVERYWHERE'));
+            \Configuration::updateValue('PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES', \Tools::getValue('PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES'));
+            \Configuration::updateValue('PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS', \Tools::getValue('PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS'));
         }
     }
 

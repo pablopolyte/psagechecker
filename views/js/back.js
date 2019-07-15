@@ -262,7 +262,7 @@ $(window).ready(function() {
             success: function(data) {
             },
             error: function(err) {
-                showErrorMessage('Something wrong happened. Please retry.');
+                showErrorMessage(tradSmthWrongHappenedTryAgain);
             }
         });
     }
@@ -451,7 +451,7 @@ $(window).ready(function() {
                         },
                         success: handleSuccessGetCategories,
                         error: function(err) {
-                            showErrorMessage('Something wrong happened. Please retry.');
+                            showErrorMessage(tradSmthWrongHappenedTryAgain);
                         }
                     });
                 }
@@ -597,7 +597,7 @@ $(window).ready(function() {
                     $('#PopupDisplaySelectProducts ul#resultProducts').append(html);
                 },
                 error: function(err) {
-                    showErrorMessage('Something wrong happened. Please retry.');
+                    showErrorMessage(tradSmthWrongHappenedTryAgain);
                 }
             });
         }
@@ -613,7 +613,7 @@ $(window).ready(function() {
             },
             success: handleSuccessGetCategories,
             error: function(err) {
-                showErrorMessage('Something wrong happened. Please retry.');
+                showErrorMessage(tradSmthWrongHappenedTryAgain);
             }
         });
     }

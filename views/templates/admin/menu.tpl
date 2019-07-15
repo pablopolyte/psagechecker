@@ -78,5 +78,6 @@
     var sweetAlertMessage = "{/literal}{l s='The product will be disabled and untagged.' mod='psagechecker'}{literal}";
     var select2placeholder = "{/literal}{l s='Select a product' mod='psagechecker'}{literal}";
     var select2noResult = "{/literal}{l s='No results found' mod='psagechecker'}{literal}";
+    var tradSmthWrongHappenedTryAgain = "{/literal}{l s='Something wrong happened. Please try again.' mod='psagechecker'}{literal}";
 </script>
 {/literal}

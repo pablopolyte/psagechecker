@@ -477,7 +477,7 @@ class PsAgeChecker extends \Module
                 $this->output .= $this->displayError($errors);
             }
 
-            if (empty($_FILES['image']['name'] && $_FILES['image']['size'])) {
+            if (empty($_FILES['image']['name']) && empty($_FILES['image']['size'])) {
                 $errors[] = $this->l('You need to upload an image before saving the slide').' ('.$lang['iso_code'].')';
             } elseif (empty(\Tools::getValue('slide-image'))) {
                 $errors[] = $this->l('You need to upload an image before saving the slide').' ('.$lang['iso_code'].')';

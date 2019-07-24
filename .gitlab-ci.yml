@@ -29,7 +29,7 @@ deploy-artifact-release:
   image: php:7.2
   stage: deploy
   script: |
-    php composer.phar install
+    php composer.phar install --no-dev -o
     rm .prettyci.composer.json
     rm .php_cs.cache
     rm .php_cs.dist

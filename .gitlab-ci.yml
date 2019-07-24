@@ -17,7 +17,6 @@ php-cs-fixer-7-2:
   script: |
     php composer.phar install --dev
     php -d memory_limit=-1 vendor/bin/php-cs-fixer fix --dry-run --diff --using-cache=no --diff-format udiff
-  allow_failure: true
 
 phpstan-classes-php-7-2:
   image: php:7.2
@@ -25,66 +24,21 @@ phpstan-classes-php-7-2:
   script: |
     php composer.phar install --dev
     php -d memory_limit=-1 vendor/bin/phpstan analyse -c tests/phpstan/phpstan.neon ./ --no-progress --
-  allow_failure: true
 
 deploy-artifact-release:
   image: php:7.2
   stage: deploy
   script: |
     php composer.phar install
+    rm .prettyci.composer.json
     rm .php_cs.cache
     rm .php_cs.dist
     rm .gitlab-ci.yml
     rm .editorconfig
-    rm .git
+    rm -rf .git
     rm .gitignore
     rm -rf tests
 
   artifacts:
     paths:
     - ./
-
-    # php-cs-fixer-sf-controllers:
-#   image: jakzal/phpqa:1.21.3
-#   stage: tests
-#   script: php-cs-fixer fix --dry-run --diff --rules=@Symfony ./controllers
-#   allow_failure: true
-
-# phpcs-PSR2-classes:
-#   image: jakzal/phpqa:1.21.3
-#   stage: tests
-#   script: phpcs --standard=PSR2 ./classes
-#   allow_failure: true
-
-# phpcs-PSR2-controllers:
-#   image: jakzal/phpqa:1.21.3
-#   stage: tests
-#   script: phpcs --standard=PSR2 ./controllers
-#   allow_failure: true
-
-
-
-
-# phpstan-controllers:
-#   image: jakzal/phpqa:1.21.3
-#   stage: tests
-#   script: phpstan analyse --level 1 ./controllers/
-#   allow_failure: true
-
-# php-metrics-classes:
-#   image: jakzal/phpqa:1.21.3
-#   stage: tests
-#   script: phpmetrics --report-html=var/php-metrics ./classes/
-#   artifacts:
-#     paths:
-#       - var/php-metrics/
-#   allow_failure: true
-
-# php-metrics-controllers:
-#   image: jakzal/phpqa:1.21.3
-#   stage: tests
-#   script: phpmetrics --report-html=var/php-metrics ./controllers/
-#   artifacts:
-#     paths:
-#       - var/php-metrics/
-#   allow_failure: true

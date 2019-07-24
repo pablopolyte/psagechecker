@@ -17,8 +17,6 @@ namespace PrestaShop\Modules\PsAgeChecker;
 * International Registered Trademark & Property of PrestaShop SA
 */
 
-// require_once(dirname(__FILE__).'/../../../config/config.inc.php');
-
 class ApiFaq
 {
     public function getData($module_key, $version)

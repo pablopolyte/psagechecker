@@ -15,14 +15,16 @@
 
 <div class="panel col-lg-10 right-panel">
     <h3>
-        <i class="fa fa-question-circle"></i> {l s='Help for the psagechecker module' mod='psagechecker'} <small>{$module_display|escape:'htmlall':'UTF-8'}</small>
+        <i class="fa fa-question-circle"></i>
+        {l s='Help for the psagechecker module' mod='psagechecker'}
+        <small>{$module_display|escape:'htmlall':'UTF-8'}</small>
     </h3>
-    <div class="helpContentParent">
-        <div class="helpContentLeft">
-            <div class="left">
+    <div class="row">
+        <div class="col-xs-4">
+            <div class="col-xs-4">
                 <img src="{$logo_path|escape:'htmlall':'UTF-8'}" alt=""/>
             </div>
-            <div class="right">
+            <div class="col-xs-8 borderRightSolid">
                 <p><span class="data_label" style="color:#00aff0;"><b>{l s='This module allows you to :' mod='psagechecker'}</b></span></p>
                 <br>
                 <div>
@@ -51,7 +53,7 @@
                 </div>
             </div>
         </div>
-        <div class="helpContentRight">
+        <div class="col-xs-8">
             <div class="helpContentRight-sub">
                 <b>{l s='Need help ?' mod='psagechecker'}</b><br>
                 {l s='Find here the documentation of this module' mod='psagechecker'}

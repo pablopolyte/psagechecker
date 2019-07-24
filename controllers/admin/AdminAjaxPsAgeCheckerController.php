@@ -24,7 +24,6 @@
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
 class AdminAjaxPsAgeCheckerController extends \ModuleAdminController
 {
     /**
@@ -45,7 +44,9 @@ class AdminAjaxPsAgeCheckerController extends \ModuleAdminController
         foreach ($categories as $category) {
             if (current($category)['infos']['id_category'] === $rootCategory
                 || current($category)['infos']['id_category'] === $homeCategory
-            ) { continue; };
+            ) {
+                continue;
+            }
 
             foreach ($category as $cat) {
                 $cleanedCategories[$cat['infos']['id_parent']][] = array(
@@ -77,7 +78,7 @@ class AdminAjaxPsAgeCheckerController extends \ModuleAdminController
             $product = $product->getFirst();
             $idImage = $product->getCover($result['id_product']);
             $link = new \Link();
-            $imgLink = \Tools::getProtocol().$link->getImageLink($product->link_rewrite, $idImage['id_image'], ImageType::getFormatedName('large'));
+            $imgLink = \Tools::getProtocol() . $link->getImageLink($product->link_rewrite, $idImage['id_image'], ImageType::getFormatedName('large'));
 
             $results[$key]['imgLink'] = $imgLink;
         }

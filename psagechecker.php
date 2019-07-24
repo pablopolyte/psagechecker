@@ -24,7 +24,6 @@
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -32,26 +31,26 @@ if (!defined('_PS_VERSION_')) {
 class PsAgeChecker extends \Module
 {
     private $settings_conf = array(
-        'show_popup'                  => 'PS_AGE_CHECKER_SHOW_POPUP',
-        'minimum_age'                 => 'PS_AGE_CHECKER_AGE_MINIMUM',
-        'verification_method'         => 'PS_AGE_CHECKER_VERIFICATION_METHOD',
-        'number_columns'              => 'PS_AGE_CHECKER_NUMBER_COLUMNS',
-        'select_fonts'                => 'PS_AGE_CHECKER_FONTS',
-        'custom_title'                => 'PS_AGE_CHECKER_CUSTOM_TITLE',
-        'custom_msg'                  => 'PS_AGE_CHECKER_CUSTOM_MSG',
-        'deny_msg'                    => 'PS_AGE_CHECKER_DENY_MSG',
-        'confirm_button_text'         => 'PS_AGE_CHECKER_CONFIRM_BUTTON_TEXT',
-        'deny_button_text'            => 'PS_AGE_CHECKER_DENY_BUTTON_TEXT',
-        'popup_height'                => 'PS_AGE_CHECKER_POPUP_HEIGHT',
-        'popup_width'                 => 'PS_AGE_CHECKER_POPUP_WIDTH',
-        'background_color'            => 'PS_AGE_CHECKER_BACKGROUND_COLOR',
-        'opacity_slider'              => 'PS_AGE_CHECKER_OPACITY',
-        'show_image'                  => 'PS_AGE_CHECKER_SHOW_IMAGE',
-        'image'                       => 'slide-image',
-        'confirm_button_bground_color'=> 'PS_AGE_CHECKER_CONFIRM_BUTTON_BACKGROUND_COLOR',
-        'confirm_button_text_color'   => 'PS_AGE_CHECKER_CONFIRM_BUTTON_TXT_COLOR',
-        'deny_button_bground_color'   => 'PS_AGE_CHECKER_DENY_BUTTON_BACKGROUND_COLOR',
-        'deny_button_text_color'      => 'PS_AGE_CHECKER_DENY_BUTTON_TXT_COLOR',
+        'show_popup' => 'PS_AGE_CHECKER_SHOW_POPUP',
+        'minimum_age' => 'PS_AGE_CHECKER_AGE_MINIMUM',
+        'verification_method' => 'PS_AGE_CHECKER_VERIFICATION_METHOD',
+        'number_columns' => 'PS_AGE_CHECKER_NUMBER_COLUMNS',
+        'select_fonts' => 'PS_AGE_CHECKER_FONTS',
+        'custom_title' => 'PS_AGE_CHECKER_CUSTOM_TITLE',
+        'custom_msg' => 'PS_AGE_CHECKER_CUSTOM_MSG',
+        'deny_msg' => 'PS_AGE_CHECKER_DENY_MSG',
+        'confirm_button_text' => 'PS_AGE_CHECKER_CONFIRM_BUTTON_TEXT',
+        'deny_button_text' => 'PS_AGE_CHECKER_DENY_BUTTON_TEXT',
+        'popup_height' => 'PS_AGE_CHECKER_POPUP_HEIGHT',
+        'popup_width' => 'PS_AGE_CHECKER_POPUP_WIDTH',
+        'background_color' => 'PS_AGE_CHECKER_BACKGROUND_COLOR',
+        'opacity_slider' => 'PS_AGE_CHECKER_OPACITY',
+        'show_image' => 'PS_AGE_CHECKER_SHOW_IMAGE',
+        'image' => 'slide-image',
+        'confirm_button_bground_color' => 'PS_AGE_CHECKER_CONFIRM_BUTTON_BACKGROUND_COLOR',
+        'confirm_button_text_color' => 'PS_AGE_CHECKER_CONFIRM_BUTTON_TXT_COLOR',
+        'deny_button_bground_color' => 'PS_AGE_CHECKER_DENY_BUTTON_BACKGROUND_COLOR',
+        'deny_button_text_color' => 'PS_AGE_CHECKER_DENY_BUTTON_TXT_COLOR',
     );
 
     public $fontsCss = array(
@@ -88,17 +87,17 @@ class PsAgeChecker extends \Module
 
         $this->displayName = $this->l('Age Verification Popup');
         $this->description = $this->l('This module allows you to check your visitors age by displaying an age verification popup as soon as they reach your store');
-        $this->ps_version = (bool)version_compare(_PS_VERSION_, '1.7', '>=');
+        $this->ps_version = (bool) version_compare(_PS_VERSION_, '1.7', '>=');
 
         // Settings paths
-        $this->js_path = $this->_path.'views/js/';
-        $this->css_path = $this->_path.'views/css/';
-        $this->img_path = $this->_path.'views/img/';
-        $this->docs_path = $this->_path.'docs/';
-        $this->logo_path = $this->_path.'logo.png';
+        $this->js_path = $this->_path . 'views/js/';
+        $this->css_path = $this->_path . 'views/css/';
+        $this->img_path = $this->_path . 'views/img/';
+        $this->docs_path = $this->_path . 'docs/';
+        $this->logo_path = $this->_path . 'logo.png';
         $this->module_path = $this->_path;
-        $this->slides_path = dirname(__FILE__).'/img/';
-        $this->slides_url = $this->_path.'/img/';
+        $this->slides_path = dirname(__FILE__) . '/img/';
+        $this->slides_url = $this->_path . '/img/';
 
         // Confirm uninstall
         $this->confirmUninstall = $this->l('Are you sure you want to uninstall this module?');
@@ -110,6 +109,7 @@ class PsAgeChecker extends \Module
      * install()
      *
      * @param none
+     *
      * @return bool
      */
     public function install()
@@ -171,6 +171,7 @@ class PsAgeChecker extends \Module
      * uninstall()
      *
      * @param none
+     *
      * @return bool
      */
     public function uninstall()
@@ -187,7 +188,6 @@ class PsAgeChecker extends \Module
         // unregister hook
         if (parent::uninstall() &&
             $this->uninstallTab()) {
-
             return true;
         } else {
             $this->_errors[] = $this->l('There was an error during the desinstallation. Please contact us through Addons website');
@@ -202,6 +202,7 @@ class PsAgeChecker extends \Module
      * This method is often use to create an ajax controller
      *
      * @param none
+     *
      * @return bool
      */
     public function installTab()
@@ -217,24 +218,25 @@ class PsAgeChecker extends \Module
         $tab->module = $this->name;
         $result = $tab->add();
 
-        return ($result);
+        return $result;
     }
 
     /**
      * uninstall tab
      *
      * @param none
+     *
      * @return bool
      */
     public function uninstallTab()
     {
-        $id_tab = (int)\Tab::getIdFromClassName($this->controller_name);
+        $id_tab = (int) \Tab::getIdFromClassName($this->controller_name);
 
         if ($id_tab) {
             $tab = new \Tab($id_tab);
 
             if (\Validate::isLoadedObject($tab)) {
-                return ($tab->delete());
+                return $tab->delete();
             } else {
                 $return = false;
             }
@@ -242,7 +244,7 @@ class PsAgeChecker extends \Module
             $return = true;
         }
 
-        return ($return);
+        return $return;
     }
 
     /**
@@ -253,34 +255,34 @@ class PsAgeChecker extends \Module
         $controller = \Context::getContext()->controller;
         // Load CSS
         $css = array(
-            $this->css_path.'font-awesome.min.css',
-            $this->css_path.'faq.css',
-            $this->css_path.'menu.css',
-            $this->css_path.'bootstrap-slider.css',
-            $this->css_path.'back.css',
-            $this->css_path.'select2.min.css',
-            $this->css_path.'select2-bootstrap.min.css',
-            $this->css_path.$this->name.'.css',
+            $this->css_path . 'font-awesome.min.css',
+            $this->css_path . 'faq.css',
+            $this->css_path . 'menu.css',
+            $this->css_path . 'bootstrap-slider.css',
+            $this->css_path . 'back.css',
+            $this->css_path . 'select2.min.css',
+            $this->css_path . 'select2-bootstrap.min.css',
+            $this->css_path . $this->name . '.css',
             $this->fontsCss,
-            $this->css_path.'front.css',
-            $this->css_path.'jstree.min.css',
+            $this->css_path . 'front.css',
+            $this->css_path . 'jstree.min.css',
         );
 
         $this->context->controller->addCSS($css, 'all');
 
         // Load JS
         $jss = array(
-            $this->js_path.'vue.min.js',
-            $this->js_path.'vue-paginate.min.js',
-            $this->js_path.'faq.js',
-            $this->js_path.'menu.js',
-            $this->js_path.'bootstrap-slider.js',
-            $this->js_path.'back.js',
-            $this->js_path.'sweetalert.min.js',
-            $this->js_path.'select2.full.min.js',
-            $this->js_path.'jstree.min.js',
-            _PS_ROOT_DIR_.'js/tiny_mce/tiny_mce.js',
-            _PS_ROOT_DIR_.'js/admin/tinymce.inc.js',
+            $this->js_path . 'vue.min.js',
+            $this->js_path . 'vue-paginate.min.js',
+            $this->js_path . 'faq.js',
+            $this->js_path . 'menu.js',
+            $this->js_path . 'bootstrap-slider.js',
+            $this->js_path . 'back.js',
+            $this->js_path . 'sweetalert.min.js',
+            $this->js_path . 'select2.full.min.js',
+            $this->js_path . 'jstree.min.js',
+            _PS_ROOT_DIR_ . 'js/tiny_mce/tiny_mce.js',
+            _PS_ROOT_DIR_ . 'js/admin/tinymce.inc.js',
         );
 
         // prestashop plugin
@@ -294,7 +296,7 @@ class PsAgeChecker extends \Module
 
         \Media::addJsDef(array(
             'AjaxPsAgeCheckerController' => $this->context->link->getAdminLink('AdminAjaxPsAgeChecker'),
-            'PS_HOME_CATEGORY' => \Configuration::get('PS_HOME_CATEGORY')
+            'PS_HOME_CATEGORY' => \Configuration::get('PS_HOME_CATEGORY'),
         ));
     }
 
@@ -303,7 +305,7 @@ class PsAgeChecker extends \Module
      */
     public function loadFaq()
     {
-        require_once('classes/ApiFaq.php');
+        require_once 'classes/ApiFaq.php';
         $api = new PrestaShop\Modules\PsAgeChecker\ApiFaq();
         $faq = $api->getData($this->module_key, $this->version);
 
@@ -315,11 +317,11 @@ class PsAgeChecker extends \Module
      */
     public function getContent()
     {
-        if ((bool)version_compare(_PS_VERSION_, '1.7', '>=')) {
+        if ((bool) version_compare(_PS_VERSION_, '1.7', '>=')) {
             $params = array('configure' => $this->name);
             $apiCallback = \Context::getContext()->link->getAdminLink('AdminModules', true, false, $params);
         } else {
-            $apiCallback = _PS_BASE_URL_.'/'.\Context::getContext()->controller->admin_webpath.'/'.\Context::getContext()->link->getAdminLink('AdminModules', true).'&configure='.$this->name.'&module_name='.$this->name;
+            $apiCallback = _PS_BASE_URL_ . '/' . \Context::getContext()->controller->admin_webpath . '/' . \Context::getContext()->link->getAdminLink('AdminModules', true) . '&configure=' . $this->name . '&module_name=' . $this->name;
         }
 
         $faq = $this->loadFaq();
@@ -334,7 +336,7 @@ class PsAgeChecker extends \Module
             $params = array('configure' => $this->name);
             $moduleAdminLink = \Context::getContext()->link->getAdminLink('AdminModules', true, false, $params);
         } else {
-            $moduleAdminLink = \Context::getContext()->link->getAdminLink('AdminModules', true).'&configure='.$this->name.'&module_name='.$this->name;
+            $moduleAdminLink = \Context::getContext()->link->getAdminLink('AdminModules', true) . '&configure=' . $this->name . '&module_name=' . $this->name;
         }
         // controller ajax url
         $link = new \Link();
@@ -342,11 +344,11 @@ class PsAgeChecker extends \Module
 
         // get readme
         $iso_lang = \Language::getIsoById($id_lang);
-        $doc = $this->docs_path.'readme_'.$iso_lang.'.pdf';
+        $doc = $this->docs_path . 'readme_' . $iso_lang . '.pdf';
 
         // get tuto
         $iso_lang = \Language::getIsoById($id_lang);
-        $tuto = $this->docs_path.'tuto/tuto_'.$iso_lang.'.pdf';
+        $tuto = $this->docs_path . 'tuto/tuto_' . $iso_lang . '.pdf';
 
         // get current page
         $currentPage = 'conf';
@@ -383,7 +385,7 @@ class PsAgeChecker extends \Module
             $product = $product->getFirst();
             if ($product) {
                 $idImage = $product->getCover($idProduct);
-                $imgLink = \Tools::getProtocol().$link->getImageLink($product->link_rewrite, $idImage['id_image'], ImageType::getFormatedName('large'));
+                $imgLink = \Tools::getProtocol() . $link->getImageLink($product->link_rewrite, $idImage['id_image'], ImageType::getFormatedName('large'));
                 $product->imgLink = $imgLink;
                 $popupDisplaySelectedProducts[] = $product;
             }
@@ -403,7 +405,7 @@ class PsAgeChecker extends \Module
         $showRateModule = \DateTime::createFromFormat('Y-m-d H:i:s', \Configuration::get('PS_AGE_CHECKER_DATE_INSTALL'));
         $now = new \DateTime('now');
 
-        $showRateModule = (int)$now->diff($showRateModule)->format('%a') > 7 && (int)$now->diff($showRateModule)->format('%a') < 92;
+        $showRateModule = (int) $now->diff($showRateModule)->format('%a') > 7 && (int) $now->diff($showRateModule)->format('%a') < 92;
 
         // assign var to smarty
         $this->context->smarty->assign(array(
@@ -438,7 +440,7 @@ class PsAgeChecker extends \Module
             'showRateModule' => $showRateModule,
         ));
 
-        $this->output .= $this->context->smarty->fetch($this->local_path.'views/templates/admin/menu.tpl');
+        $this->output .= $this->context->smarty->fetch($this->local_path . 'views/templates/admin/menu.tpl');
 
         return $this->output;
     }
@@ -446,8 +448,6 @@ class PsAgeChecker extends \Module
     /**
      * postProcess
      * Handle post data from the configuration
-     *
-     * @return void
      */
     public function postProcess()
     {
@@ -465,7 +465,7 @@ class PsAgeChecker extends \Module
                     ) {
                         $values = array();
                         foreach ($languages as $lang) {
-                            $values[$value][$lang['id_lang']] = \Tools::getValue($value.'_'.$lang['id_lang']);
+                            $values[$value][$lang['id_lang']] = \Tools::getValue($value . '_' . $lang['id_lang']);
                         }
                         \Configuration::updateValue($value, $values[$value], true);
                     } else {
@@ -478,9 +478,9 @@ class PsAgeChecker extends \Module
             }
 
             if (empty($_FILES['image']['name']) && empty($_FILES['image']['size'])) {
-                $errors[] = $this->l('You need to upload an image before saving the slide').' ('.$lang['iso_code'].')';
+                $errors[] = $this->l('You need to upload an image before saving the slide') . ' (' . $lang['iso_code'] . ')';
             } elseif (empty(\Tools::getValue('slide-image'))) {
-                $errors[] = $this->l('You need to upload an image before saving the slide').' ('.$lang['iso_code'].')';
+                $errors[] = $this->l('You need to upload an image before saving the slide') . ' (' . $lang['iso_code'] . ')';
             } else {
                 $filename = str_replace(' ', '', $_FILES['image']['name']);
                 $type = \Tools::strtolower(\Tools::substr(strrchr($filename, '.'), 1));
@@ -489,12 +489,12 @@ class PsAgeChecker extends \Module
                     isset($_FILES['image']['tmp_name']) &&
                     !empty($_FILES['image']['tmp_name']) &&
                     !empty($imagesize) &&
-                    in_array(\Tools::strtolower(\Tools::substr(strrchr($imagesize['mime'], '/'), 1)), array('jpg','gif','jpeg','png')) &&
+                    in_array(\Tools::strtolower(\Tools::substr(strrchr($imagesize['mime'], '/'), 1)), array('jpg', 'gif', 'jpeg', 'png')) &&
                     in_array($type, array('jpg', 'gif', 'jpeg', 'png'))
                 ) {
                     if ($error = \ImageManager::validateUpload($_FILES['image'])) {
                         $errors[] = $error;
-                    } elseif (!move_uploaded_file($_FILES['image']['tmp_name'], $this->slides_path.$filename)) {
+                    } elseif (!move_uploaded_file($_FILES['image']['tmp_name'], $this->slides_path . $filename)) {
                         $errors[] = $this->l('Error on upload.');
                     }
                     \Configuration::updateValue('PS_AGE_CHECKER_IMG', $filename);
@@ -520,6 +520,7 @@ class PsAgeChecker extends \Module
      * hookdisplayTop
      *
      * @param mixed $params
+     *
      * @return void|string
      */
     public function hookdisplayTop($params)
@@ -535,7 +536,8 @@ class PsAgeChecker extends \Module
      *
      * @return bool
      */
-    private function currentPageIsUnderAgeChecker() {
+    private function currentPageIsUnderAgeChecker()
+    {
         $actif = \Configuration::get('PS_AGE_CHECKER_SHOW_POPUP');
 
         if ($actif != 0) {
@@ -587,15 +589,15 @@ class PsAgeChecker extends \Module
     public function displayWall()
     {
         $this->context->controller->addCSS($this->fontsCss);
-        $shop = new \Shop((int)$this->context->shop->id);
+        $shop = new \Shop((int) $this->context->shop->id);
         $id_lang = \Context::getContext()->language->id;
-        $img = $this->slides_url .'/'. \Configuration::get('PS_AGE_CHECKER_IMG');
+        $img = $this->slides_url . '/' . \Configuration::get('PS_AGE_CHECKER_IMG');
         /*if (validate::isCleanHtml(Configuration::get('PS_AGE_CHECKER_CUSTOM_TITLE', $id_lang))) {
             $assign = 'custom_tit' => Configuration::get('PS_AGE_CHECKER_CUSTOM_TITLE', $id_lang);
         }*/
 
         $this->context->smarty->assign(array(
-            'opacity' => \Configuration::get('PS_AGE_CHECKER_OPACITY')/100,
+            'opacity' => \Configuration::get('PS_AGE_CHECKER_OPACITY') / 100,
             'show_img' => \Configuration::get('PS_AGE_CHECKER_SHOW_IMAGE'),
             'img_upload' => $img,
             'display_popup' => \Configuration::get('PS_AGE_CHECKER_SHOW_POPUP'),
@@ -635,9 +637,9 @@ class PsAgeChecker extends \Module
     {
         if (version_compare(_PS_VERSION_, '1.7.0.0') < 1) {
             if ($this->currentPageIsUnderAgeChecker()) {
-                $this->context->controller->addCSS($this->css_path.'front.css');
-                $this->context->controller->addJS($this->js_path.'front.js');
-                $this->context->controller->addJS($this->js_path.'bootstrap-slider.js');
+                $this->context->controller->addCSS($this->css_path . 'front.css');
+                $this->context->controller->addJS($this->js_path . 'front.js');
+                $this->context->controller->addJS($this->js_path . 'bootstrap-slider.js');
             }
         }
     }
@@ -649,11 +651,11 @@ class PsAgeChecker extends \Module
             if ($this->currentPageIsUnderAgeChecker()) {
                 $this->context->controller->registerStylesheet(
                     'psageverifymedia-front-css',
-                    'modules/'.$this->name.'/views/css/front.css'
+                    'modules/' . $this->name . '/views/css/front.css'
                 );
                 $this->context->controller->registerJavascript(
                     'psageverifymedia-front-js',
-                    'modules/'.$this->name.'/views/js/front.js'
+                    'modules/' . $this->name . '/views/js/front.js'
                 );
             }
         }

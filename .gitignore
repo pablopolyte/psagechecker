@@ -1,6 +1,4 @@
-/cache/*
+cache/*
 !/cache/index.php
-config.xml
-config_fr.xml
 vendor/
 .php_cs.cache

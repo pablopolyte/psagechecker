@@ -31,14 +31,19 @@ deploy-artifact-release:
   script: |
     php composer.phar install --no-dev -o
     rm .prettyci.composer.json
-    rm .php_cs.cache
     rm .php_cs.dist
     rm .gitlab-ci.yml
     rm .editorconfig
     rm -rf .git
     rm .gitignore
     rm -rf tests
+    rm composer.phar
+    mkdir ../psagecheckertemp
+    mv * ../psagecheckertemp
+    mkdir psagechecker
+    mv ../psagecheckertemp/* psagechecker
 
   artifacts:
+    name: psagechecker
     paths:
-    - ./
+    - psagechecker

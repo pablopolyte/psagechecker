@@ -523,7 +523,7 @@ class PsAgeChecker extends \Module
      *
      * @return void|string
      */
-    public function hookdisplayTop($params)
+    public function hookDisplayTop($params)
     {
         if ($this->currentPageIsUnderAgeChecker()) {
             return $this->showPopupInHook();

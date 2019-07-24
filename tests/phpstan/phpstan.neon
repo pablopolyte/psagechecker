@@ -8,4 +8,4 @@ parameters:
 		- vendor/
 		- translations/
 
-	level: 1
+	level: 7

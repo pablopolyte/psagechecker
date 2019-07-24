@@ -9,7 +9,7 @@ require __DIR__ . '/vendor/prestashop/php-coding-standards/src/CsFixer/Config.ph
 $config = new \PrestaShop\CodingStandards\CsFixer\Config();
 
 $config
-    ->setUsingCache(true)
+    ->setUsingCache(false)
     ->getFinder()
     ->in(__DIR__)
     ->exclude('translations')

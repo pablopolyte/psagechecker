@@ -345,7 +345,6 @@ label > .input_img:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
 }
 
 #PsAgeCheckerPopupDisplayLocation label{ font-weight: normal; }
-/* #PopupDisplaySelectProducts #selectedProducts{ color: #25B9D7; } */
 #PopupDisplaySelectProducts{ position: relative; }
 #PopupDisplaySelectProducts ul{ padding: 0;}
 #PopupDisplaySelectProducts ul li { list-style-type: none; cursor: pointer; padding: 5px; }

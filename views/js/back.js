@@ -26,6 +26,27 @@
 * to avoid any conflicts with others containers.
 */
 
+const throttle = (func, limit) => {
+    let lastFunc
+    let lastRan
+    return function() {
+        const context = this
+        const args = arguments
+        if (!lastRan) {
+        func.apply(context, args)
+        lastRan = Date.now()
+        } else {
+        clearTimeout(lastFunc)
+        lastFunc = setTimeout(function() {
+            if ((Date.now() - lastRan) >= limit) {
+            func.apply(context, args)
+            lastRan = Date.now()
+            }
+        }, limit - (Date.now() - lastRan))
+        }
+    }
+}
+
 $(window).ready(function() {
     controller_url = controller_url.replace(/\amp;/g,'');
 
@@ -43,10 +64,9 @@ $(window).ready(function() {
         $('#CB-OPACITY').bootstrapSlider('setValue', $(this).val());
     });
 
-
     tinySetup({
         height: 100,
-        editor_selector : "autoload_rte",
+        editor_selector : 'loadTinyMce',
         plugins : 'code advlist autolink link lists charmap print textcolor colorpicker style',
     });
 
@@ -54,6 +74,7 @@ $(window).ready(function() {
         placeholder: select2placeholder,
         allowClear: true
     });
+
     $('#product2').select2({
         placeholder: select2placeholder,
         allowClear: true
@@ -146,22 +167,6 @@ $(window).ready(function() {
         }
     });
 
-
-    function getObjects(obj, key, val, index) {
-        var objects = [];
-        var result = index;
-        for (var i in obj) {
-            if (!obj.hasOwnProperty(i)) continue;
-            if (typeof obj[i] == 'object') {
-                objects = objects.concat(getObjects(obj[i], key, val, i));
-            } else if (i == key && obj[key] == val) {
-                result = index;
-                vImagePreselection.items[result].isActive = 0;
-                //vImagePreselection.paginate.items.list[index].isActive = 0;
-            }
-        }
-    }
-
     function getImages() {
         $.ajax({
             type: 'POST',
@@ -222,32 +227,6 @@ $(window).ready(function() {
         });
     }
 
-    function disableImage(id, index) {
-        $.ajax({
-            type: 'POST',
-            dataType: 'JSON',
-            url: controller_url,
-            data: {
-                ajax: true,
-                action: 'DisableImage',
-                id: id,
-            },
-            success: function(data) {
-                if (data == 'disable') {
-                    showSuccessMessage(msgDisableImage);
-                    vImageManager.imageList[index].isActive = 0;
-                } else {
-                    vImageManager.imageList[index].isActive = 1;
-                    showSuccessMessage(msgEnableImage);
-                }
-                generateCache();
-            },
-            error: function(err) {
-                console.log(err);
-            }
-        });
-    }
-
     function removeImageByIdMedia(idMedia, index) {
         $.ajax({
             type: 'POST',
@@ -271,48 +250,6 @@ $(window).ready(function() {
         });
     }
 
-    function removeImageById(id, idMedia) {
-        $.ajax({
-            type: 'POST',
-            dataType: 'JSON',
-            url: controller_url,
-            data: {
-                ajax: true,
-                action: 'RemoveImageById',
-                id: id,
-            },
-            success: function(data) {
-                getObjects(vImagePreselection.items, 'id', idMedia);
-                getImages();
-                generateCache();
-                showSuccessMessage(msgRemoveImage);
-            },
-            error: function(err) {
-                console.log(err);
-            }
-        });
-    }
-
-    function getAssignedProduct(idImage) {
-        $.ajax({
-            type: 'POST',
-            dataType: 'JSON',
-            url: controller_url,
-            data: {
-                ajax: true,
-                action: 'GetAssignedProduct',
-                id_image: idImage,
-            },
-            success: function(data) {
-                $('#product1').val(data[0].product1).trigger('change');
-                $('#product2').val(data[0].product2).trigger('change');
-            },
-            error: function(err) {
-                console.log(err);
-            }
-        });
-    }
-
     function generateCache() {
         $.ajax({
             type: 'POST',
@@ -325,20 +262,20 @@ $(window).ready(function() {
             success: function(data) {
             },
             error: function(err) {
-                console.log(err);
+                showErrorMessage(tradSmthWrongHappenedTryAgain);
             }
         });
     }
 
     $(document).on('change', '.slide_image', function (e) {
-
         readURL(this, $(this).attr('data-preview'));
     });
+
     function readURL(input, id) {
         if (input.files && input.files[0]) {
 
             var reader = new FileReader();
- 
+
             reader.onload = function (e) {
                 if ($('#'+id).hasClass('hide')) {
                     $('#'+id).removeClass('hide');
@@ -377,5 +314,307 @@ $(window).ready(function() {
         }
     });
 
+    function handleClickOnAllShop(context) {
 
+        $('.PopupDisplaySelector').each(function(index) {
+            if ($(this).prop("value") == 'all') { return; }
+            $(this).prop("checked", false);
+        });
+
+        $('#PopupDisplaySelectCategories').addClass('hide');
+        $('#PopupDisplaySelectProducts').addClass('hide');
+        $('#jstreecategories ul').empty();
+
+        var jsTreeCategories = $.jstree.reference('#jstreecategories');
+        if (null != jsTreeCategories) {
+            jsTreeCategories.destroy();
+        }
+    };
+
+    function onJsTreeSelectCategories(event, data) {
+        var id = data.node.id.replace('category_',''),
+            categoriesString = $('#PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES').val(),
+            categoriesArray = categoriesString.split(','),
+            isAlreadyPresent = false;
+
+        categoriesArray.forEach(catId => {
+            if (catId == id) { isAlreadyPresent = true; }
+        });
+
+        if (!isAlreadyPresent) {
+            categoriesArray.push(id);
+            categoriesString = categoriesArray.join(',');
+            $('#PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES').val(categoriesString);
+        };
+    };
+
+    function onJsTreeUnselectCategories(event, data) {
+        var id = data.node.id.replace('category_',''),
+            categoriesString = $('#PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES').val(),
+            categoriesArray = categoriesString.split(',');
+
+        categoriesArray.forEach((catId, index) => {
+            if (catId == id) {
+                categoriesArray.splice(1 ,index);
+                index--;
+            }
+        });
+        categoriesString = categoriesArray.join(',');
+        $('#PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES').val(categoriesString);
+    };
+
+    function initJsTreeCategories(html) {
+        $('#jstreecategories ul')
+        .empty()
+        .promise( $('#jstreecategories ul').append(html) )
+        .done(function() {
+            $('#jstreecategories').jstree({
+                "checkbox" : {
+                    "three_state" : false,
+                    "keep_selected_style" : true
+                },
+                "plugins" : ["checkbox"]
+            });
+
+            $('#jstreecategories')
+                .on("select_node.jstree", onJsTreeSelectCategories)
+                .on("deselect_node.jstree", onJsTreeUnselectCategories);
+        });
+    };
+
+    function handleSuccessGetCategories(response) {
+        var html = '',
+            categories = JSON.parse(response);
+
+        function handleNestedCategories(category) {
+            for (key in categories[category]) {
+                var isSelected = '';
+                popupDisplaySelectedCategories.forEach(selectedCategory => {
+                    if (categories[category][key].id == selectedCategory.id) {
+                        isSelected = 'class="jstree-clicked"';
+                    }
+                });
+                html += '<ul>'
+                html += '<li id="category_'+ categories[category][key].id +'" ><a '+isSelected+' >' + categories[category][key].name +'</a>';
+                handleNestedCategories(categories[category][key].id);
+                html += '</li>';
+                html += '</ul>'
+            }
+        };
+
+        for (key in categories) {
+            categories[key].forEach(category => {
+                // show only child of Home category
+                if (category.id_parent == PS_HOME_CATEGORY) {
+                    var isSelected = '';
+                    popupDisplaySelectedCategories.forEach(selectedCategory => {
+                        if (category.id == selectedCategory.id) {
+                            isSelected = 'class="jstree-clicked"';
+                        }
+                    });
+
+                    html += '<li id="category_'+ category.id +'" ><a '+isSelected+' >' + category.name +'</a>';
+
+                    // recursive on all childrens
+                    handleNestedCategories(category.id);
+                    html += '</li>';
+                };
+            });
+        }
+
+        initJsTreeCategories(html);
+        $('#PopupDisplaySelectCategories').removeClass('hide');
+    };
+
+    function onChangePopupDisplaySelector(event) {
+        // Clicked on all shop
+        if ($(this).prop("value") == 'all' ) {
+            handleClickOnAllShop(this);
+            $('#PS_AGE_CHECKER_POPUP_DISPLAY_EVERYWHERE').val('true');
+            $('#PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES').val('');
+            $('#PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS').val('');
+        };
+
+        if ($(this).prop("value") != 'all') {
+            $('#PS_AGE_CHECKER_POPUP_DISPLAY_EVERYWHERE').val('false');
+            $('input.PopupDisplaySelector[value="all"]').prop("checked", false);
+
+            // Handle click on categories
+            if ($(this).prop("value") == 'categories') {
+                if ($(this).prop("checked") == true) {
+                    $.ajax({
+                        type: 'GET',
+                        url: AjaxPsAgeCheckerController,
+                        data: {
+                            ajax: true,
+                            action: 'GetCategories',
+                        },
+                        success: handleSuccessGetCategories,
+                        error: function(err) {
+                            showErrorMessage(tradSmthWrongHappenedTryAgain);
+                        }
+                    });
+                }
+
+                if ($(this).prop("checked") == false) {
+                    // remove AllCategories on inputCategories
+                    $('#PopupDisplaySelectCategories').addClass('hide');
+                    $.jstree.reference('#jstreecategories').destroy();
+                    $('#jstreecategories ul').empty();
+                }
+            }
+
+            // Handle click on products
+            if ($(this).prop("value") == 'products') {
+                if ($(this).prop("checked") == true) {
+                    $('#PopupDisplaySelectProducts').removeClass('hide');
+                } else {
+                    $('#PopupDisplaySelectProducts').addClass('hide');
+                }
+            }
+        };
+    };
+
+    function onClickPopupDisplaySelectProduct(event) {
+        var html = '',
+            id = $(event.target).attr('id'),
+            name = $(event.target).text(),
+            imgLink = $(event.target).find('img').attr('src'),
+            isAlreadyPresent = false,
+            productsString = $('#PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS').val(),
+            productsArray = productsString.split(',');
+
+        html = '<tr id="'+ id +'"><td>'+ id +'</td> <td><img class="img-thumbnail" src="'+ imgLink +'"></td> <td>'+ name +'</td> <td><i class="material-icons" data-id="'+ id +'">delete</i></td> </td>'+ name +'</tr>';
+        $('#PopupDisplaySelectProducts #selectedProducts tbody').append(html);
+        $(event.target).remove();
+
+        productsArray.forEach(productId => {
+            if (productId == id) { isAlreadyPresent = true; }
+        });
+
+        if (!isAlreadyPresent) {
+            productsArray.push(id);
+            productsString = productsArray.join(',');
+            $('#PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS').val(productsString);
+        };
+    };
+
+    function onClickPopupDisplayUnselectProduct(event) {
+        var id = $(event.target).attr('data-id'),
+            productsString = $('#PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS').val(),
+            productsArray = productsString.split(',');
+
+        $("#selectedProducts").find("tr#"+id).remove();
+
+        productsArray.forEach((productId, index) => {
+            if (productId == id) {
+                productsArray.splice(index, 1);
+                index--;
+            }
+        });
+
+        productsString = productsArray.join(',');
+        $('#PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS').val(productsString);
+    };
+
+    function onMouseEnterPopupDisplaySelectProduct(event) {
+        $(event.target).css("background-color", "#25B9D7");
+    };
+
+    function onMouseLeavePopupDisplaySelectProduct(event) {
+        $(event.target).css("background-color", "none");
+    };
+
+    function onClickTranslatableDropdownMenu(event) {
+        var idLang = $(event.target).attr('data-id'),
+            $autoloads_rte = $('.autoload_rte.loadTinyMce');
+
+        for (let i = 0; i < $autoloads_rte.length; i++) {
+            console.log(i);
+            $($autoloads_rte[i]).removeClass('loadTinyMce');
+        }
+
+        // destroy all others tinyMce instances
+        for (let i = 0; i < tinyMCE.editors.length; i++) {
+            var ed_id = tinymce.editors[i].id;
+            tinyMCE.execCommand("mceRemoveEditor", true, ed_id);
+        }
+
+        $('textarea[name="PS_AGE_CHECKER_CUSTOM_TITLE_'+ idLang +'"]').addClass('loadTinyMce');
+        $('textarea[name="PS_AGE_CHECKER_CUSTOM_MSG_'+ idLang +'"]').addClass('loadTinyMce');
+        $('textarea[name="PS_AGE_CHECKER_DENY_MSG_'+ idLang +'"]').addClass('loadTinyMce');
+
+        tinySetup({
+            height: 100,
+            editor_selector : 'loadTinyMce',
+            plugins : 'code advlist autolink link lists charmap print textcolor colorpicker style',
+        });
+
+    };
+
+    function onClickBody(event) {
+        if (!$(event.target).is('li')) {
+            $('#resultProducts').addClass('hide');
+        }
+    }
+
+    $(document)
+        .on('mouseenter', '#PopupDisplaySelectProducts ul#resultProducts li', onMouseEnterPopupDisplaySelectProduct)
+        .on('mouseleave', '#PopupDisplaySelectProducts ul#resultProducts li', onMouseLeavePopupDisplaySelectProduct)
+        .on('click', '#PopupDisplaySelectProducts ul#resultProducts li', onClickPopupDisplaySelectProduct)
+        .on('click', '#PopupDisplaySelectProducts #selectedProducts td i', onClickPopupDisplayUnselectProduct)
+        .on('click', '#PS_AGE_CHECKER_SHOW_POPUP .translatable-field ul.dropdown-menu', onClickTranslatableDropdownMenu)
+        .on('click', 'body', onClickBody)
+        .on('change', '.PopupDisplaySelector', onChangePopupDisplaySelector);
+
+    // throttle fuck up context/scope
+    $(document).on('keyup', '#PopupDisplaySelectProducts input[type="text"]', throttle(function(event) {
+        var $inputText = $('#PopupDisplaySelectProducts input[type="text"]');
+        if ($inputText.val().length > 2) {
+            $.ajax({
+                type: 'GET',
+                url: AjaxPsAgeCheckerController,
+                data: {
+                    ajax: true,
+                    action: 'GetProductsByNameLike',
+                    searchTerm: $inputText.val()
+                },
+                success: function(response) {
+                    var html = '',
+                    products = JSON.parse(response);
+
+                    $('#PopupDisplaySelectProducts ul#resultProducts').empty();
+
+                    if (Array.isArray(products)) {
+                        products.forEach(product => {
+                            html += '<li id="'+ product.id_product +'"><img class="img-thumbnail" src="'+ product.imgLink +'"> '+ product.name +'</li>';
+                        });
+                        $('#resultProducts').removeClass('hide');
+                    } else {
+                        html = '<li>No products found for '+ $('#PopupDisplaySelectProducts input[type="text"]').val() +'</li>';
+                    }
+
+                    $('#PopupDisplaySelectProducts ul#resultProducts').append(html);
+                },
+                error: function(err) {
+                    showErrorMessage(tradSmthWrongHappenedTryAgain);
+                }
+            });
+        }
+    }, 1000));
+
+    if (!$('#PopupDisplaySelectCategories').hasClass('hide')) {
+        $.ajax({
+            type: 'GET',
+            url: AjaxPsAgeCheckerController,
+            data: {
+                ajax: true,
+                action: 'GetCategories',
+            },
+            success: handleSuccessGetCategories,
+            error: function(err) {
+                showErrorMessage(tradSmthWrongHappenedTryAgain);
+            }
+        });
+    }
 });

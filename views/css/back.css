@@ -28,12 +28,10 @@
 #jason, #billy {
     border-top: solid 1px lightgrey;
 }
-
 .api-redirect-url {
     margin-top: 5px !important;
     font-weight: bold;
 }
-
 #myTab{
     margin-left: 138px;
 }
@@ -345,3 +343,27 @@ label > .input_img:checked + img{ /* (RADIO CHECKED) IMAGE STYLES */
     -o-transition: border-color ease-in-out 0.15s,box-shadow ease-in-out 0.15s;
     transition: border-color ease-in-out 0.15s,box-shadow ease-in-out 0.15s
 }
+
+#PsAgeCheckerPopupDisplayLocation label{ font-weight: normal; }
+#PopupDisplaySelectProducts{ position: relative; }
+#PopupDisplaySelectProducts ul{ padding: 0;}
+#PopupDisplaySelectProducts ul li { list-style-type: none; cursor: pointer; padding: 5px; }
+#PsAgeCheckerPopupDisplayLocation #resultProducts img{ max-height: 50px; margin: 5px; }
+#PsAgeCheckerPopupDisplayLocation table img{ max-height: 75px; }
+#PsAgeCheckerPopupDisplayLocation #PopupDisplaySelectProducts table{ margin-top: 10px; }
+#PsAgeCheckerPopupDisplayLocation #resultProducts {
+    position: absolute;
+    background-color: #EFF1F2;
+    width: 100%;
+    overflow: scroll;
+    max-height: 185px;
+    border: 1px solid #bbcdd2;
+    z-index: 100;
+}
+#PsAgeCheckerPopupDisplayLocation #selectedProducts td i{ cursor: pointer; }
+#PsAgeCheckerPopupDisplayLocation #selectedProducts td i:hover { color: #E08F95; }
+
+#rateThisModule p{ text-align: right; font-size: 14px; }
+#rateThisModule .material-icons{ font-size: 14px; margin-left:10px; vertical-align: middle; }
+#rateThisModule img{ vertical-align: baseline; }
+#rateThisModule a{ font-weight: 600; }

@@ -32,30 +32,8 @@
     background: #f7f7f7;
     margin: 10px 0;
 }
-
-.helpContentParent {
-    overflow:hidden;
-}
-.helpContentLeft {
-    float:left;
-    width:30%;
+.borderRightSolid{
     border-right:1px solid #555;
-    overflow:hidden;
-}
-.helpContentLeft > .left {
-    float:left;
-    width:20%;
-}
-.helpContentLeft > .right {
-    float:left;
-    width:66%;
-    text-align: justify;
-    text-justify: inter-word;
-}
-.helpContentRight {
-    float:right;
-    width:70%;
-    /*border-left:1px solid #16222c;*/
 }
 .helpContentRight-sub{
     margin-left:50px;
@@ -66,7 +44,6 @@
     margin-right: 10px;
     width: 20px;
     height: 20px;
-    /*padding: 8px;*/
     background: #fff;
     border: 2px solid #666;
     color: #555;

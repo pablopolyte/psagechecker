@@ -1,0 +1,4 @@
+cache/*
+!/cache/index.php
+vendor/
+.php_cs.cache

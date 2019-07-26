@@ -1,0 +1,11 @@
+parameters:
+	bootstrap: tests/phpstan/bootstrap.php
+	paths:
+		- classes
+		- controllers
+		- psagechecker.php
+	excludes_analyse:
+		- vendor/
+		- translations/
+
+	level: 7

@@ -35,7 +35,7 @@ class AdminAjaxPsAgeCheckerController extends \ModuleAdminController
     public function ajaxProcessGetCategories()
     {
         $currentIdLang = $this->context->language->id;
-        $categories = \CategoryCore::getCategories($currentIdLang);
+        $categories = \Category::getCategories($currentIdLang);
         $cleanedCategories = array();
 
         $rootCategory = \Configuration::get('PS_ROOT_CATEGORY');

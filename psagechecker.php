@@ -69,7 +69,7 @@ class PsAgeChecker extends \Module
         // Settings
         $this->name = 'psagechecker';
         $this->tab = 'social_networks';
-        $this->version = '1.0.1';
+        $this->version = '1.1.0';
         $this->author = 'PrestaShop';
         $this->need_instance = 0;
 

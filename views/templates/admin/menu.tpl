@@ -48,6 +48,18 @@
         {/if}
     </div>
 
+    {if $showRateModule == true }
+        <div id="rateThisModule">
+            <p>
+                <img src="{$img_path}star_img.png" alt="Shinning Star">
+                {l s='Enjoy this module ?' mod='psagechecker'}
+                <a target="_blank" href="https://addons.prestashop.com/{$currentLangIsoCode}/ratings.php">
+                    {l s='Leave a review on Addons Marketplace' mod='psagechecker'}
+                </a>
+            </p>
+        </div>
+    {/if}
+
 </div>
 
 {* Use this if you want to send php var to your js *}
@@ -66,5 +78,6 @@
     var sweetAlertMessage = "{/literal}{l s='The product will be disabled and untagged.' mod='psagechecker'}{literal}";
     var select2placeholder = "{/literal}{l s='Select a product' mod='psagechecker'}{literal}";
     var select2noResult = "{/literal}{l s='No results found' mod='psagechecker'}{literal}";
+    var tradSmthWrongHappenedTryAgain = "{/literal}{l s='Something wrong happened. Please try again.' mod='psagechecker'}{literal}";
 </script>
 {/literal}

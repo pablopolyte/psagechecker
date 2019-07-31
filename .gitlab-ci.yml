@@ -11,6 +11,25 @@ before_script:
   - php composer-setup.php
   - php -r "unlink('composer-setup.php'); unlink('installer.sig');"
 
+test:php-5.3-(unofficial):
+  image: tomsowerby/php-5.3:cli
+  stage: tests
+  script:
+  # Check incompatible syntax with old PHP version
+  - bash -c '! (find . -name "*.php" ! -path "./vendor/*" ! -path "./tests/*" -print0 | xargs -0 -n1 -P4 php -l | grep "Parse error")'
+
+test:php-5.4:
+  image: php:5.4
+  stage: tests
+  script:
+  - bash -c '! (find . -name "*.php" ! -path "./vendor/*" ! -path "./tests/*" -print0 | xargs -0 -n1 -P4 php -l | grep "Parse error")'
+
+test:php-7.2:
+  image: php:7.2
+  stage: tests
+  script:
+  - bash -c '! (find . -name "*.php" ! -path "./vendor/*" ! -path "./tests/*" -print0 | xargs -0 -n1 -P4 php -l | grep "Parse error")'
+
 php-cs-fixer-7-2:
   image: php:7.2
   stage: tests
@@ -18,32 +37,34 @@ php-cs-fixer-7-2:
     php composer.phar install --dev
     php -d memory_limit=-1 vendor/bin/php-cs-fixer fix --dry-run --diff --using-cache=no --diff-format udiff
 
-phpstan-classes-php-7-2:
-  image: php:7.2
+phpstan-php-7-2:
+  variables:
+    _PS_ROOT_DIR_: /var/www/html/
+  image: prestashop/prestashop:1.7-7.2-apache
   stage: tests
   script: |
     php composer.phar install --dev
-    php -d memory_limit=-1 vendor/bin/phpstan analyse -c tests/phpstan/phpstan.neon ./ --no-progress --
+    ln -s /builds/ps-addons/$CI_PROJECT_NAME /var/www/html/modules/$CI_PROJECT_NAME
+    php -d memory_limit=-1 vendor/bin/phpstan analyse --configuration=/var/www/html/modules/$CI_PROJECT_NAME/tests/phpstan/phpstan.neon
 
 deploy-artifact-release:
   image: php:7.2
   stage: deploy
   script: |
     php composer.phar install --no-dev -o
-    rm .prettyci.composer.json
-    rm .php_cs.dist
-    rm .gitlab-ci.yml
-    rm .editorconfig
+    rm -f .php_cs.dist
+    rm -f .gitlab-ci.yml
+    rm -f .editorconfig
     rm -rf .git
-    rm .gitignore
+    rm -f .gitignore
     rm -rf tests
     rm composer.phar
-    mkdir ../psagecheckertemp
-    mv * ../psagecheckertemp
-    mkdir psagechecker
-    mv ../psagecheckertemp/* psagechecker
+    mkdir ../module
+    mv * ../module
+    mkdir $CI_PROJECT_NAME
+    mv ../module/* $CI_PROJECT_NAME
 
   artifacts:
-    name: psagechecker
+    name: $CI_PROJECT_NAME
     paths:
-    - psagechecker
+    - $CI_PROJECT_NAME

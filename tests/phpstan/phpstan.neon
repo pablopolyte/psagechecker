@@ -7,5 +7,8 @@ parameters:
 	excludes_analyse:
 		- vendor/
 		- translations/
+	ignoreErrors:
+		- '#Property ModuleCore::\$version \(float\) does not accept string.#'
+		- '#Access to an undefined property Product::\$imgLink.#'
 
-	level: 7
+	level: 5

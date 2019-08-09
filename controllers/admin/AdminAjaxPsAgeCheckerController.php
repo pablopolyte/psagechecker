@@ -42,8 +42,9 @@ class AdminAjaxPsAgeCheckerController extends \ModuleAdminController
         $homeCategory = \Configuration::get('PS_HOME_CATEGORY');
 
         foreach ($categories as $category) {
-            if (current($category)['infos']['id_category'] === $rootCategory
-                || current($category)['infos']['id_category'] === $homeCategory
+            $currentCat = current($category);
+            if ($currentCat['infos']['id_category'] === $rootCategory
+                || $currentCat['infos']['id_category'] === $homeCategory
             ) {
                 continue;
             }
@@ -73,9 +74,10 @@ class AdminAjaxPsAgeCheckerController extends \ModuleAdminController
         $results = \Product::searchByName($currentIdLang, $searchTerm);
 
         foreach ($results as $key => $result) {
-            $product = new \PrestaShopCollection('Product', $currentIdLang);
-            $product->where('id_product', '=', $result['id_product']);
-            $product = $product->getFirst();
+            $products = new \PrestaShopCollection('Product', $currentIdLang);
+            $products->where('id_product', '=', $result['id_product']);
+            /** @var \Product $product */
+            $product = $products->getFirst();
             $idImage = $product->getCover($result['id_product']);
             $link = new \Link();
             $imgLink = \Tools::getProtocol() . $link->getImageLink($product->link_rewrite, $idImage['id_image'], ImageType::getFormatedName('large'));

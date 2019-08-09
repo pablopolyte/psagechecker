@@ -2,3 +2,4 @@ cache/*
 !/cache/index.php
 vendor/
 .php_cs.cache
+node_modules

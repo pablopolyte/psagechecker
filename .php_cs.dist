@@ -1,8 +1,5 @@
 <?php
 
-var_dump( getcwd());
-var_dump( __DIR__);
-
 require __DIR__ . '/vendor/autoload.php';
 require __DIR__ . '/vendor/prestashop/php-coding-standards/src/CsFixer/Config.php';
 

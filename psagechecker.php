@@ -219,7 +219,7 @@ class PsAgeChecker extends \Module
         $tab = new \Tab();
         $tab->active = true;
         $tab->class_name = $this->controller_name;
-        $tab->name = ' ';
+        $tab->name = array();
         foreach (\Language::getLanguages(true) as $lang) {
             $tab->name[$lang['id_lang']] = $this->name;
         }

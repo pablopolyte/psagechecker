@@ -84,7 +84,7 @@ class PsAgeChecker extends \Module
         // Settings
         $this->name = 'psagechecker';
         $this->tab = 'social_networks';
-        $this->version = '1.1.0';
+        $this->version = '1.1.1';
         $this->author = 'PrestaShop';
         $this->need_instance = 0;
 
@@ -219,7 +219,7 @@ class PsAgeChecker extends \Module
         $tab = new \Tab();
         $tab->active = true;
         $tab->class_name = $this->controller_name;
-        $tab->name = '';
+        $tab->name = array();
         foreach (\Language::getLanguages(true) as $lang) {
             $tab->name[$lang['id_lang']] = $this->name;
         }
@@ -259,7 +259,7 @@ class PsAgeChecker extends \Module
      */
     public function loadAsset()
     {
-        $controller = \Context::getContext()->controller;
+        $controller = $this->context->controller;
         // Load CSS
         $css = array(
             $this->css_path . 'font-awesome.min.css',
@@ -326,9 +326,9 @@ class PsAgeChecker extends \Module
     {
         if ($this->ps_version) {
             $params = array('configure' => $this->name);
-            $apiCallback = \Context::getContext()->link->getAdminLink('AdminModules', true, false, $params);
+            $apiCallback = $this->context->link->getAdminLink('AdminModules', true, false, $params);
         } else {
-            $apiCallback = _PS_BASE_URL_ . '/' . \Context::getContext()->controller->admin_webpath . '/' . \Context::getContext()->link->getAdminLink('AdminModules', true) . '&configure=' . $this->name . '&module_name=' . $this->name;
+            $apiCallback = _PS_BASE_URL_ . '/' . $this->context->controller->admin_webpath . '/' . $this->context->link->getAdminLink('AdminModules', true) . '&configure=' . $this->name . '&module_name=' . $this->name;
         }
 
         $faq = $this->loadFaq();
@@ -336,14 +336,13 @@ class PsAgeChecker extends \Module
         $this->postProcess();
 
         // some stuff useful in smarty
-        $context = \Context::getContext();
         $id_lang = $this->context->language->id;
-        $id_shop = $context->shop->id;
+        $id_shop = $this->context->shop->id;
         if ($this->ps_version) {
             $params = array('configure' => $this->name);
-            $moduleAdminLink = \Context::getContext()->link->getAdminLink('AdminModules', true, false, $params);
+            $moduleAdminLink = $this->context->link->getAdminLink('AdminModules', true, false, $params);
         } else {
-            $moduleAdminLink = \Context::getContext()->link->getAdminLink('AdminModules', true) . '&configure=' . $this->name . '&module_name=' . $this->name;
+            $moduleAdminLink = $this->context->link->getAdminLink('AdminModules', true) . '&configure=' . $this->name . '&module_name=' . $this->name;
         }
         // controller ajax url
         $link = new \Link();
@@ -391,10 +390,12 @@ class PsAgeChecker extends \Module
             $products->where('id_product', '=', $idProduct);
             /** @var \Product $product */
             $product = $products->getFirst();
-            $idImage = $product->getCover($idProduct);
-            $imgLink = \Tools::getProtocol() . $link->getImageLink($product->link_rewrite, $idImage['id_image'], ImageType::getFormatedName('large'));
-            $product->imgLink = $imgLink;
-            $popupDisplaySelectedProducts[] = $product;
+            if (false != $product) {
+                $idImage = $product->getCover($idProduct);
+                $imgLink = \Tools::getProtocol() . $link->getImageLink($product->link_rewrite, $idImage['id_image'], ImageType::getFormatedName('large'));
+                $product->imgLink = $imgLink;
+                $popupDisplaySelectedProducts[] = $product;
+            }
         }
 
         $popupDisplaySelectedCategories = array();
@@ -600,7 +601,7 @@ class PsAgeChecker extends \Module
     {
         $this->context->controller->addCSS($this->fontsCss);
         $shop = new \Shop((int) $this->context->shop->id);
-        $id_lang = \Context::getContext()->language->id;
+        $id_lang = $this->context->language->id;
         $img = $this->slides_url . '/' . \Configuration::get('PS_AGE_CHECKER_IMG');
 
         $this->context->smarty->assign(array(

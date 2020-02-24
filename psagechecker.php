@@ -77,14 +77,21 @@ class PsAgeChecker extends \Module
         'https://fonts.googleapis.com/css?family=Forum', // font-family: 'Forum', serif;
     );
 
-    public $fonts = array(1 => 'Roboto', 2 => 'Hind', 3 => 'Maven Pro', 4 => 'Noto Serif', 5 => 'Bitter', 6 => 'Forum');
+    public $fonts = array(
+        1 => 'Roboto',
+        2 => 'Hind',
+        3 => 'Maven Pro',
+        4 => 'Noto Serif',
+        5 => 'Bitter',
+        6 => 'Forum',
+    );
 
     public function __construct()
     {
         // Settings
         $this->name = 'psagechecker';
         $this->tab = 'social_networks';
-        $this->version = '1.1.1';
+        $this->version = '1.1.2';
         $this->author = 'PrestaShop';
         $this->need_instance = 0;
 
@@ -163,7 +170,7 @@ class PsAgeChecker extends \Module
         // register hook used by the module
         if (parent::install() &&
             $this->installTab() &&
-            $this->registerHook('displayTop') &&
+            $this->registerHook('displayBanner') &&
             $this->registerHook('displayFooterProduct')
         ) {
             if ($this->ps_version) {
@@ -526,11 +533,11 @@ class PsAgeChecker extends \Module
     }
 
     /**
-     * hookdisplayTop
+     * hookDisplayBanner
      *
      * @return void|string
      */
-    public function hookDisplayTop()
+    public function hookDisplayBanner()
     {
         if ($this->currentPageIsUnderAgeChecker()) {
             return $this->showPopupInHook();
@@ -591,7 +598,6 @@ class PsAgeChecker extends \Module
      */
     public function showPopupInHook()
     {
-        $this->loadFrontAsset();
         $this->displayWall();
 
         return $this->display(__FILE__, 'views/templates/hook/displayWall.tpl');
@@ -631,31 +637,27 @@ class PsAgeChecker extends \Module
     }
 
     // load css and js in front -> ps16 only
-    public function loadFrontAsset()
+    public function hookHeader()
     {
-        if (!$this->ps_version) {
-            if ($this->currentPageIsUnderAgeChecker()) {
-                $this->context->controller->addCSS($this->css_path . 'front.css');
-                $this->context->controller->addJS($this->js_path . 'front.js');
-                $this->context->controller->addJS($this->js_path . 'bootstrap-slider.js');
-            }
+        if (!$this->ps_version && $this->currentPageIsUnderAgeChecker()) {
+            $this->context->controller->addCSS($this->css_path . 'front.css');
+            $this->context->controller->addJS($this->js_path . 'front.js');
+            $this->context->controller->addJS($this->js_path . 'bootstrap-slider.js');
         }
     }
 
     // load css and js in front -> ps17 only
     public function hookActionFrontControllerSetMedia()
     {
-        if ($this->ps_version) {
-            if ($this->currentPageIsUnderAgeChecker()) {
-                $this->context->controller->registerStylesheet(
-                    'psageverifymedia-front-css',
-                    'modules/' . $this->name . '/views/css/front.css'
-                );
-                $this->context->controller->registerJavascript(
-                    'psageverifymedia-front-js',
-                    'modules/' . $this->name . '/views/js/front.js'
-                );
-            }
+        if ($this->ps_version && $this->currentPageIsUnderAgeChecker()) {
+            $this->context->controller->registerStylesheet(
+                'psageverifymedia-front-css',
+                'modules/' . $this->name . '/views/css/front.css'
+            );
+            $this->context->controller->registerJavascript(
+                'psageverifymedia-front-js',
+                'modules/' . $this->name . '/views/js/front.js'
+            );
         }
     }
 }

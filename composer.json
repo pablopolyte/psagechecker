@@ -19,5 +19,7 @@
             "controllers",
             "classes"
         ]
-    }
+    },
+    "author": "PrestaShop",
+    "license": "AFL-3.0"
 }

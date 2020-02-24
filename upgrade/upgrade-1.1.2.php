@@ -17,21 +17,11 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  * International Registered Trademark & Property of PrestaShop SA
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
 function upgrade_module_1_1_2($module)
 {
-    // if ps 1.7
-    if ($module->ps_version) {
-        Hook::unregisterHook($module, 'displayTop');
-        Hook::registerHook($module, 'displayBanner');
-    } else {
-        $module->unregisterHook('displayTop');
-        $module->registerHook('displayBanner');
-    }
-
-    return true;
+    return $module->unregisterHook('displayTop') && $module->registerHook('displayBanner');
 }

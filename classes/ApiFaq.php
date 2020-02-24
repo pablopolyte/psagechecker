@@ -18,7 +18,6 @@
  * International Registered Trademark & Property of PrestaShop SA
  */
 
-
 namespace PrestaShop\Modules\PsAgeChecker;
 
 /**

@@ -56,6 +56,7 @@ $(window).ready(function() {
             } else {
                 setCookie("psagechecker", "on", d);
                 $("#psagechecker_block").addClass('psagechecker-hide');
+                $('body').css('overflow', 'initial');
             }
         } else {
             $(".deny_msg_age_verify").removeClass('psagechecker-hide');

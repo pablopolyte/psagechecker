@@ -20,19 +20,8 @@
 if (!defined('_PS_VERSION_')) {
     exit;
 }
-/**
- * This function updates your module from previous versions to the version 1.1,
- * usefull when you modify your database, or register a new hook ...
- * Don't forget to create one file per version.
- */
-function upgrade_module_1_1_0($module)
-{
-    $now = new \DateTime('now');
-    \Configuration::updateValue('PS_AGE_CHECKER_DATE_INSTALL', $now->format('Y-m-d H:i:s'));
-    \Configuration::updateValue('PS_AGE_CHECKER_POPUP_DISPLAY_EVERYWHERE', 'true');
-    \Configuration::updateValue('PS_AGE_CHECKER_POPUP_DISPLAY_EVERYWHERE', 'true');
-    \Configuration::updateValue('PS_AGE_CHECKER_POPUP_DISPLAY_CATEGORIES', '');
-    \Configuration::updateValue('PS_AGE_CHECKER_POPUP_DISPLAY_PRODUCTS', '');
 
-    return true;
+function upgrade_module_1_1_2($module)
+{
+    return $module->unregisterHook('displayTop') && $module->registerHook('displayBanner');
 }

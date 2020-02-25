@@ -10,6 +10,7 @@ $config
     ->getFinder()
     ->in(__DIR__)
     ->exclude('translations')
+    ->exclude('tests')
     ->exclude('vendor');
 
 return $config;
